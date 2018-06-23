@@ -1,0 +1,23 @@
+{
+  "name": "face-api.js-github.io",
+  "version": "0.0.0",
+  "author": "justadudewhohacks",
+  "license": "MIT",
+  "scripts": {
+    "dev": "gatsby develop",
+    "build": "gatsby build --prefix-paths",
+    "start": "gatsby serve"
+  },
+  "dependencies": {
+    "@types/node": "^10.3.5",
+    "@types/react": "^16.4.1",
+    "@types/react-dom": "^16.0.6",
+    "face-api.js": "^0.3.0",
+    "gatsby": "^1.9.273",
+    "gatsby-link": "^1.6.45",
+    "gatsby-plugin-typescript": "^1.4.20",
+    "gatsby-source-filesystem": "^1.5.39",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
+  }
+}
