@@ -12,6 +12,7 @@ const theme = createMuiTheme({
       dark: cyan[700]
     }
   },
+  sideMenuWidth: '240px'
 });
 
 function createPageContext() {

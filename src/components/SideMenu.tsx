@@ -1,70 +1,70 @@
-import { AppBar, Divider, Drawer, Hidden, IconButton, List, ListItem, Toolbar } from '@material-ui/core';
-import * as React from 'react';
+import { Divider, Drawer, Hidden, IconButton, List, ListItem } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
+import * as React from 'react';
 
 type SideMenuProps = {
   items: string[]
-}
-
-type SideMenuState = {
   isOpen: boolean
+  classes: any
+  onToggle: () => any
 }
 
-export class SideMenu extends React.Component<SideMenuProps, SideMenuState> {
-  state = {
-    isOpen: false,
+const styles = (theme: any) => ({
+  paper: {
+    width: theme.sideMenuWidth
   }
+})
 
-  toggle = () => {
-    this.setState(state => ({ isOpen: !state.isOpen }))
-  }
-
-  render() {
+class SideMenuComponent extends React.Component<SideMenuProps> {
+  renderDrawer(isSm: boolean) {
     const menu = (
       <div>
-        <div />
-        <span> this is going to be a header </span>
+        {
+          isSm &&
+            <IconButton
+              aria-label="open drawer"
+              onClick={this.props.onToggle}
+            >
+              <MenuIcon />
+            </IconButton>
+        }
+        <span> face-api.js </span>
         <Divider />
         <List>{this.props.items.map(item => <ListItem key={item}> { item } </ListItem>)} </List>
       </div>
     )
 
     return (
+      <Drawer
+        anchor="left"
+        variant={isSm ? 'temporary' : 'permanent'}
+        open={this.props.isOpen}
+        onClose={isSm ? this.props.onToggle : () => {}}
+        ModalProps={{
+          keepMounted: true
+        }}
+        classes={{
+          paper: this.props.classes.paper
+        }}
+      >
+        { menu }
+      </Drawer>
+    )
+  }
+
+  render() {
+    return (
       <div>
-        <AppBar>
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={this.toggle}
-            >
-              <MenuIcon />
-            </IconButton>
-              Responsive drawer
-          </Toolbar>
-        </AppBar>
         <Hidden mdUp>
-          <Drawer
-            variant="temporary"
-            anchor="left"
-            open={this.state.isOpen}
-            onClose={this.toggle}
-            ModalProps={{
-              keepMounted: true
-            }}
-          >
-            { menu }
-          </Drawer>
+          { this.renderDrawer(true) }
         </Hidden>
-        <Hidden smDown implementation="css">
-          <Drawer
-            variant="permanent"
-            open
-          >
-            { menu }
-          </Drawer>
+        <Hidden smDown>
+          { this.renderDrawer(false) }
         </Hidden>
       </div>
     )
   }
 }
+
+export const SideMenu = withStyles(styles)(SideMenuComponent)

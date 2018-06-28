@@ -39,7 +39,7 @@ module.exports = class extends React.Component<HtmlProps, void> {
           <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
           {css}
           <style dangerouslySetInnerHTML={{
-            __html: 'html { font-family: \'Open Sans\', sans-serif; }'
+            __html: 'html { font-family: \'Open Sans\', sans-serif; } body { margin: 0; padding: 0; }'
           }} />
         </head>
         <body>
