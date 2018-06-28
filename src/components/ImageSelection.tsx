@@ -2,16 +2,16 @@ import { FormControl, FormHelperText, Input, InputLabel, MenuItem, Select } from
 import * as React from 'react';
 
 type ImageSelectionProps = {
-  defaultValue: string
   items: string[]
+  selectedImage: string
   onChange: (value: string) => void
 }
 
-export const ImageSelection = ({ defaultValue, items, onChange }: ImageSelectionProps) =>
+export const ImageSelection = ({ items, selectedImage, onChange }: ImageSelectionProps) =>
   <FormControl>
     <InputLabel htmlFor="age-helper">Age</InputLabel>
     <Select
-      value={defaultValue}
+      value={selectedImage}
       onChange={e => onChange(e.target.value)}
       input={<Input name="age" id="age-helper" />}
     >
