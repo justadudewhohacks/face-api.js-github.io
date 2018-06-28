@@ -3,8 +3,15 @@ import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import * as React from 'react';
 
+import { StyledLink } from './StyledLink';
+
+export type MenuItem = {
+  itemName: string
+  linkTo: string
+}
+
 type SideMenuProps = {
-  items: string[]
+  items: MenuItem[]
   isOpen: boolean
   classes: any
   onToggle: () => any
@@ -31,7 +38,18 @@ class SideMenuComponent extends React.Component<SideMenuProps> {
         }
         <span> face-api.js </span>
         <Divider />
-        <List>{this.props.items.map(item => <ListItem key={item}> { item } </ListItem>)} </List>
+        <List>
+          {
+            this.props.items.map(
+              item =>
+                <ListItem key={item.linkTo}>
+                  <StyledLink to={item.linkTo}>
+                    { item.itemName }
+                  </StyledLink>
+                </ListItem>
+            )
+          }
+        </List>
       </div>
     )
 

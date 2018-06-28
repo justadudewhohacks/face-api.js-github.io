@@ -2,19 +2,25 @@ import { IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import * as React from 'react';
+import styled from 'styled-components';
 
 import { SideMenu } from '../components/SideMenu';
 
-const EXAMPLES = [
-  'Face Detection',
-  'Face Landmarks',
-  'Face Recognition',
-  'Face Similarity',
-  'Face Detection and Recognition'
+const PageHeader = styled.h3`
+  text-align: center;
+`
+
+const MENU_ITEMS = [
+  { itemName: 'Face Detection', linkTo: 'face_detection' },
+  { itemName: 'Face Landmarks', linkTo: 'face_landmarks' },
+  { itemName: 'Face Similarity', linkTo: 'face_similarity' },
+  { itemName: 'Face Recognition', linkTo: 'face_recognition' },
+  { itemName: 'Face Detection and Recognition', linkTo: 'face_detection_and_recognition' }
 ]
 
 const styles = (theme: any) => ({
   pageContent: {
+    padding: '10px',
     marginLeft: '0px',
     [theme.breakpoints.up('md')]: {
       marginLeft: theme.sideMenuWidth
@@ -48,11 +54,11 @@ class PageLayoutComponent extends React.Component<PageLayoutProps, PageLayoutSta
         >
           <MenuIcon />
         </IconButton>
-        <h3 style={{ textAlign: 'center' }}>
+        <PageHeader>
           face-api.js playground
-        </h3>
+        </PageHeader>
         <SideMenu
-          items={EXAMPLES}
+          items={MENU_ITEMS}
           isOpen={this.state.isSideMenuOpen}
           onToggle={this.toggle}
         />
