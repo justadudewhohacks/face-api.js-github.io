@@ -4,9 +4,9 @@ import * as React from 'react';
 import { ImageWithOverlay } from './ImageWithOverlay';
 
 type FaceDetectionProps = {
-  faceDetectionNet?: faceapi.FaceDetectionNet
   minDetectionScore: number
   imageSrc: string
+  faceDetectionNet?: faceapi.FaceDetectionNet
   maxImageWidth?: number
 }
 
@@ -19,17 +19,14 @@ export class FaceDetection extends React.Component<FaceDetectionProps> {
   overlay: HTMLCanvasElement | undefined
   inputImg: HTMLImageElement | undefined
 
-  updateFaceLocations(locations: faceapi.FaceDetection[]) {
+  async detectAndDrawFaceLocations() {
+    const locations = await this.props.faceDetectionNet.locateFaces(this.inputImg, this.props.minDetectionScore)
+
     const { width, height } = this.inputImg
     this.overlay.width = width
     this.overlay.height = height
     this.overlay.getContext('2d').clearRect(0, 0, width, height)
     faceapi.drawDetection(this.overlay, locations.map(loc => loc.forSize(width, height)))
-  }
-
-  async locateFaces() {
-    const locations = await this.props.faceDetectionNet.locateFaces(this.inputImg, this.props.minDetectionScore)
-    this.updateFaceLocations(locations)
   }
 
   componentDidUpdate(prevProps: FaceDetectionProps) {
@@ -41,7 +38,7 @@ export class FaceDetection extends React.Component<FaceDetectionProps> {
       prevProps.faceDetectionNet !== this.props.faceDetectionNet
       || prevProps.imageSrc !== this.props.imageSrc
     ) {
-      this.locateFaces()
+      this.detectAndDrawFaceLocations()
     }
   }
 

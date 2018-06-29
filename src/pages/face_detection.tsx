@@ -14,12 +14,18 @@ type FaceDetectionPageState = {
   faceDetectionNet?: faceapi.FaceDetectionNet
 }
 
-const SELECTABLE_ITEMS = [1, 2, 3, 4, 5].map(idx => `images/bbt${idx}.jpg`)
+const SELECTABLE_ITEMS = [1, 2, 3, 4, 5]
+  .map(idx => `bbt${idx}.jpg`)
+  .map(label => ({
+    label,
+    url: `images/${label}`
+  }))
 
 export default class extends React.Component<FaceDetectionPageProps, FaceDetectionPageState> {
+
   state: FaceDetectionPageState = {
     minDetectionScore: 0.5,
-    selectedImage: SELECTABLE_ITEMS[0]
+    selectedImage: SELECTABLE_ITEMS[0].url
   }
 
   async loadModels() {
@@ -46,7 +52,7 @@ export default class extends React.Component<FaceDetectionPageProps, FaceDetecti
         <ImageSelection
           items={SELECTABLE_ITEMS}
           selectedImage={this.state.selectedImage}
-          onChange={(selectedImage: string) => this.setState({ selectedImage })}
+          onChange={selectedImage => this.setState({ selectedImage })}
         />
       </Root>
     )

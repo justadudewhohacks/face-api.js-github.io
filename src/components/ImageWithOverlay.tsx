@@ -8,11 +8,6 @@ type FaceDetectionImageProps = {
   maxImageWidth?: number
 }
 export class ImageWithOverlay extends React.Component<FaceDetectionImageProps> {
-
-  static defaultProps = {
-    maxWidth: 800
-  }
-
   public render() {
     return(
       <div style={{ position: 'relative' }}>

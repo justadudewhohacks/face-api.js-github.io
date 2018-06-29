@@ -11,11 +11,11 @@ const PageHeader = styled.h3`
 `
 
 const MENU_ITEMS = [
-  { itemName: 'Face Detection', linkTo: 'face_detection' },
-  { itemName: 'Face Landmarks', linkTo: 'face_landmarks' },
-  { itemName: 'Face Similarity', linkTo: 'face_similarity' },
-  { itemName: 'Face Recognition', linkTo: 'face_recognition' },
-  { itemName: 'Face Detection and Recognition', linkTo: 'face_detection_and_recognition' }
+  { label: 'Face Detection', linkTo: 'face_detection' },
+  { label: 'Face Landmarks', linkTo: 'face_landmarks' },
+  { label: 'Face Similarity', linkTo: 'face_similarity' },
+  { label: 'Face Recognition', linkTo: 'face_recognition' },
+  { label: 'Face Detection and Recognition', linkTo: 'face_detection_and_recognition' }
 ]
 
 const styles = (theme: any) => ({
@@ -41,7 +41,7 @@ class PageLayoutComponent extends React.Component<PageLayoutProps, PageLayoutSta
     isSideMenuOpen: false
   }
 
-  toggle = () => {
+  toggleMenu = () => {
     this.setState(state => ({ isSideMenuOpen: !state.isSideMenuOpen }))
   }
 
@@ -50,7 +50,7 @@ class PageLayoutComponent extends React.Component<PageLayoutProps, PageLayoutSta
       <div>
         <IconButton
           aria-label="open drawer"
-          onClick={this.toggle}
+          onClick={this.toggleMenu}
         >
           <MenuIcon />
         </IconButton>
@@ -60,7 +60,7 @@ class PageLayoutComponent extends React.Component<PageLayoutProps, PageLayoutSta
         <SideMenu
           items={MENU_ITEMS}
           isOpen={this.state.isSideMenuOpen}
-          onToggle={this.toggle}
+          onToggle={this.toggleMenu}
         />
         <div className={this.props.classes.pageContent}>
           { this.props.children }

@@ -1,8 +1,13 @@
 import { FormControl, FormHelperText, Input, InputLabel, MenuItem, Select } from '@material-ui/core';
 import * as React from 'react';
 
+export type ImageSelectionItem = {
+  url: string
+  label: string
+}
+
 type ImageSelectionProps = {
-  items: string[]
+  items: ImageSelectionItem[]
   selectedImage: string
   onChange: (value: string) => void
 }
@@ -18,10 +23,10 @@ export const ImageSelection = ({ items, selectedImage, onChange }: ImageSelectio
       {
         items.map(item =>
           <MenuItem
-            key={item}
-            value={item}
+            key={item.url}
+            value={item.url}
           >
-            {item}
+            { item.label }
           </MenuItem>
         )
       }

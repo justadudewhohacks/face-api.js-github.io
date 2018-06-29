@@ -6,7 +6,7 @@ import * as React from 'react';
 import { StyledLink } from './StyledLink';
 
 export type MenuItem = {
-  itemName: string
+  label: string
   linkTo: string
 }
 
@@ -44,7 +44,7 @@ class SideMenuComponent extends React.Component<SideMenuProps> {
               item =>
                 <ListItem key={item.linkTo}>
                   <StyledLink to={item.linkTo}>
-                    { item.itemName }
+                    { item.label }
                   </StyledLink>
                 </ListItem>
             )
