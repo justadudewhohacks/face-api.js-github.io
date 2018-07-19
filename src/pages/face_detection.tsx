@@ -1,31 +1,43 @@
 import * as faceapi from 'face-api.js';
 import * as React from 'react';
 
-import { FaceDetection } from '../components/FaceDetection';
-import { ImageSelection } from '../components/ImageSelection';
+import { SelectableImage } from '../components/SelectableImage';
+import { EXAMPLE_IMAGES } from '../const';
+import { withFaceDetections } from '../hocs/withFaceDetections';
+import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
 
 type FaceDetectionPageProps = {
 }
 
 type FaceDetectionPageState = {
+  inputImg: ImageWrap
   minDetectionScore: number
-  selectedImage: string
   faceDetectionNet?: faceapi.FaceDetectionNet
+  overlay?: HTMLCanvasElement
 }
 
-const SELECTABLE_ITEMS = [1, 2, 3, 4, 5]
-  .map(idx => `bbt${idx}.jpg`)
-  .map(label => ({
-    label,
-    url: `images/${label}`
-  }))
+interface FaceDetectionProps {
+  overlay?: HTMLCanvasElement
+}
+
+const FaceDetection = withFaceDetections<FaceDetectionProps>((props) => {
+  if (props.overlay && props.faceDetections) {
+    const { width, height } = props.overlay
+    props.overlay.getContext('2d').clearRect(0, 0, width, height)
+    faceapi.drawDetection(
+      props.overlay,
+      props.faceDetections.map(det => det.forSize(width, height))
+    )
+  }
+  return null
+})
 
 export default class extends React.Component<FaceDetectionPageProps, FaceDetectionPageState> {
 
   state: FaceDetectionPageState = {
-    minDetectionScore: 0.5,
-    selectedImage: SELECTABLE_ITEMS[0].url
+    inputImg: new ImageWrap(EXAMPLE_IMAGES[0].url),
+    minDetectionScore: 0.7,
   }
 
   async loadModels() {
@@ -43,16 +55,18 @@ export default class extends React.Component<FaceDetectionPageProps, FaceDetecti
   public render() {
     return(
       <Root>
-        <FaceDetection
-          faceDetectionNet={this.state.faceDetectionNet}
-          imageSrc={this.state.selectedImage}
-          minDetectionScore={this.state.minDetectionScore}
+        <SelectableImage
+          items={EXAMPLE_IMAGES}
+          imageSrc={this.state.inputImg.imageSrc}
+          onChangeSelection={src => this.setState({ inputImg: this.state.inputImg.withImageSrc(src) })}
+          onRefs={({ img, overlay }) => this.setState({ inputImg: this.state.inputImg.withImage(img), overlay })}
           maxImageWidth={800}
         />
-        <ImageSelection
-          items={SELECTABLE_ITEMS}
-          selectedImage={this.state.selectedImage}
-          onChange={selectedImage => this.setState({ selectedImage })}
+        <FaceDetection
+          img={this.state.inputImg}
+          faceDetectionNet={this.state.faceDetectionNet}
+          minConfidence={0.7}
+          overlay={this.state.overlay}
         />
       </Root>
     )

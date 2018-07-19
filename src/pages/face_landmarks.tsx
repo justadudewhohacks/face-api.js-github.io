@@ -1,36 +1,46 @@
+import { Checkbox, FormControlLabel } from '@material-ui/core';
 import * as faceapi from 'face-api.js';
 import * as React from 'react';
 
-import { ImageSelection } from '../components/ImageSelection';
+import { SelectableImage } from '../components/SelectableImage';
+import { ALIGNED_FACE_IMAGES } from '../const';
+import { withFaceLandmarks } from '../hocs/withFaceLandmarks';
+import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
-import { FaceLandmarks } from '../components/FaceLandmarks';
-import { FormControlLabel, Checkbox } from '@material-ui/core';
 
 type FaceLandmarksPageProps = {
 }
 
 type FaceLandmarksPageState = {
-  selectedImage: string
+  inputImg: ImageWrap
   drawLines: boolean
   faceLandmarkNet?: faceapi.FaceLandmarkNet
+  overlay?: HTMLCanvasElement
 }
 
-const SELECTABLE_ITEMS = ['amy', 'bernadette', 'howard', 'leonard', 'penny', 'raj', 'sheldon', 'stuart']
-  .map(
-    clazz => [1, 2, 3, 4, 5]
-      .map(idx => `${clazz}${idx}.png`)
-      .map(label => ({
-        label,
-        url: `images/${clazz}/${label}`
-      }))
-  )
-  .reduce((flat, arr) => flat.concat(arr), [])
+interface FaceLandmarksProps {
+  drawLines: boolean
+  overlay?: HTMLCanvasElement
+}
+
+const FaceLandmarks = withFaceLandmarks<FaceLandmarksProps>((props) => {
+  if (props.overlay && props.faceLandmarks) {
+    const { width, height } = props.overlay
+    props.overlay.getContext('2d').clearRect(0, 0, width, height)
+    faceapi.drawLandmarks(
+      props.overlay,
+      props.faceLandmarks.map(l => l.forSize(width, height)),
+      { drawLines: props.drawLines }
+    )
+  }
+  return null
+})
 
 export default class extends React.Component<FaceLandmarksPageProps, FaceLandmarksPageState> {
 
   state: FaceLandmarksPageState = {
-    selectedImage: SELECTABLE_ITEMS[0].url,
-    drawLines: false
+    inputImg: new ImageWrap(ALIGNED_FACE_IMAGES[0].url),
+    drawLines: true
   }
 
   async loadModels() {
@@ -52,16 +62,12 @@ export default class extends React.Component<FaceLandmarksPageProps, FaceLandmar
   public render() {
     return(
       <Root>
-        <FaceLandmarks
-          faceLandmarkNet={this.state.faceLandmarkNet}
-          imageSrc={this.state.selectedImage}
-          maxImageWidth={800}
-          drawLines={this.state.drawLines}
-        />
-        <ImageSelection
-          items={SELECTABLE_ITEMS}
-          selectedImage={this.state.selectedImage}
-          onChange={selectedImage => this.setState({ selectedImage })}
+        <SelectableImage
+          items={ALIGNED_FACE_IMAGES}
+          imageSrc={this.state.inputImg.imageSrc}
+          onChangeSelection={src => this.setState({ inputImg: this.state.inputImg.withImageSrc(src) })}
+          onRefs={({ img, overlay }) => this.setState({ inputImg: this.state.inputImg.withImage(img), overlay })}
+          maxImageWidth={150}
         />
         <FormControlLabel
           control={
@@ -72,6 +78,12 @@ export default class extends React.Component<FaceLandmarksPageProps, FaceLandmar
             />
           }
           label="Draw Lines"
+        />
+        <FaceLandmarks
+          imgs={[this.state.inputImg]}
+          faceLandmarkNet={this.state.faceLandmarkNet}
+          drawLines={this.state.drawLines}
+          overlay={this.state.overlay}
         />
       </Root>
     )
