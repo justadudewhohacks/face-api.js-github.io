@@ -5,7 +5,7 @@ import { ImageWrap } from '../ImageWrap';
 
 export interface WithFaceLandmarksProps {
   imgs: ImageWrap[]
-  faceLandmarkNet: faceapi.FaceLandmarkNet | undefined
+  faceLandmarkNet?: faceapi.FaceLandmarkNet
 }
 
 export interface WithFaceLandmarksState {

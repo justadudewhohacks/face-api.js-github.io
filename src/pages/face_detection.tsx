@@ -3,17 +3,20 @@ import * as React from 'react';
 
 import { SelectableImage } from '../components/SelectableImage';
 import { EXAMPLE_IMAGES } from '../const';
-import { withFaceDetections } from '../hocs/withFaceDetections';
+import { withFaceDetections, WithFaceDetectionsProps } from '../hocs/withFaceDetections';
+import { withModels } from '../hocs/withModels';
 import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
 
 type FaceDetectionPageProps = {
+  faceDetectionNet: faceapi.FaceDetectionNet | null
+  faceLandmarkNet: faceapi.FaceLandmarkNet | null
+  faceRecognitionNet: faceapi.FaceRecognitionNet | null
 }
 
 type FaceDetectionPageState = {
   inputImg: ImageWrap
   minDetectionScore: number
-  faceDetectionNet?: faceapi.FaceDetectionNet
   overlay?: HTMLCanvasElement
 }
 
@@ -21,17 +24,21 @@ interface FaceDetectionProps {
   overlay?: HTMLCanvasElement
 }
 
-const FaceDetection = withFaceDetections<FaceDetectionProps>((props) => {
-  if (props.overlay && props.faceDetections) {
-    const { width, height } = props.overlay
-    props.overlay.getContext('2d').clearRect(0, 0, width, height)
-    faceapi.drawDetection(
-      props.overlay,
-      props.faceDetections.map(det => det.forSize(width, height))
-    )
-  }
-  return null
-})
+const FaceDetection = withModels<FaceDetectionProps & WithFaceDetectionsProps>(
+  withFaceDetections<FaceDetectionProps>(
+    (props) => {
+      if (props.overlay && props.faceDetections) {
+        const { width, height } = props.overlay
+        props.overlay.getContext('2d').clearRect(0, 0, width, height)
+        faceapi.drawDetection(
+          props.overlay,
+          props.faceDetections.map(det => det.forSize(width, height))
+        )
+      }
+      return null
+    }
+  )
+)
 
 export default class extends React.Component<FaceDetectionPageProps, FaceDetectionPageState> {
 
@@ -40,19 +47,11 @@ export default class extends React.Component<FaceDetectionPageProps, FaceDetecti
     minDetectionScore: 0.7,
   }
 
-  async loadModels() {
-    const faceDetectionNet = new faceapi.FaceDetectionNet()
-    await faceDetectionNet.load('models')
-    this.setState({ faceDetectionNet })
-  }
-
-  componentWillMount() {
-    if (typeof window != 'undefined' && window.document) {
-      this.loadModels()
-    }
-  }
-
   public render() {
+    if (!(typeof window !== 'undefined' && window.document) ){
+      return null
+    }
+
     return(
       <Root>
         <SelectableImage
@@ -63,8 +62,8 @@ export default class extends React.Component<FaceDetectionPageProps, FaceDetecti
           maxImageWidth={800}
         />
         <FaceDetection
+          faceDetectionModelUrl="models"
           img={this.state.inputImg}
-          faceDetectionNet={this.state.faceDetectionNet}
           minConfidence={0.7}
           overlay={this.state.overlay}
         />

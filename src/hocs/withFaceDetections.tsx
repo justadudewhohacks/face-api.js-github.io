@@ -39,7 +39,7 @@ export const withFaceDetections = <InputProps extends {}>(
       })
     }
 
-    render() {      console.log(this.state.faceDetections)
+    render() {
       return (
         <Component
           {...this.props}

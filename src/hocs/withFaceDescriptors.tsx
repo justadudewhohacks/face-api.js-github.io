@@ -5,7 +5,7 @@ import { ImageWrap } from '../ImageWrap';
 
 export interface WithFaceDescriptorsProps {
   imgs: ImageWrap[]
-  faceRecognitionNet: faceapi.FaceRecognitionNet | undefined
+  faceRecognitionNet?: faceapi.FaceRecognitionNet
 }
 
 export interface WithFaceDescriptorsState {

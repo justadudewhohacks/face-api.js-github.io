@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText, Input, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { FormControl, FormHelperText, Input, MenuItem, Select } from '@material-ui/core';
 import * as React from 'react';
 
 export type ImageSelectionItem = {
@@ -14,11 +14,10 @@ type ImageSelectionProps = {
 
 export const ImageSelection = ({ items, selectedImage, onChange }: ImageSelectionProps) =>
   <FormControl>
-    <InputLabel htmlFor="age-helper">Age</InputLabel>
     <Select
       value={selectedImage}
       onChange={e => onChange(e.target.value)}
-      input={<Input name="age" id="age-helper" />}
+      input={<Input />}
     >
       {
         items.map(item =>
