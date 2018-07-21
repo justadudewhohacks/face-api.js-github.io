@@ -4,8 +4,8 @@ import * as React from 'react';
 
 import { SelectableImage } from '../components/SelectableImage';
 import { ALIGNED_FACE_IMAGES } from '../const';
-import { withFaceLandmarks, WithFaceLandmarksProps } from '../hocs/withFaceLandmarks';
-import { withModels } from '../hocs/withModels';
+import { DetectFaceLandmarks } from '../facc/DetectFaceLandmarks';
+import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
 
@@ -18,26 +18,6 @@ type FaceLandmarksPageState = {
   drawLines: boolean
   overlay?: HTMLCanvasElement
 }
-
-interface FaceLandmarksProps {
-  drawLines: boolean
-  overlay?: HTMLCanvasElement
-}
-
-const FaceLandmarks = withModels<FaceLandmarksProps & WithFaceLandmarksProps>(
-  withFaceLandmarks<FaceLandmarksProps>((props) => {
-    if (props.overlay && props.faceLandmarks) {
-      const { width, height } = props.overlay
-      props.overlay.getContext('2d').clearRect(0, 0, width, height)
-      faceapi.drawLandmarks(
-        props.overlay,
-        props.faceLandmarks.map(l => l.forSize(width, height)),
-        { drawLines: props.drawLines }
-      )
-    }
-    return null
-  }
-))
 
 export default class extends React.Component<FaceLandmarksPageProps, FaceLandmarksPageState> {
 
@@ -74,12 +54,33 @@ export default class extends React.Component<FaceLandmarksPageProps, FaceLandmar
           }
           label="Draw Lines"
         />
-        <FaceLandmarks
-          faceLandmarkModelUrl="models"
-          imgs={[this.state.inputImg]}
-          drawLines={this.state.drawLines}
-          overlay={this.state.overlay}
-        />
+        <LoadModels faceLandmarkModelUrl="models">
+        {
+          ({ faceLandmarkNet }) =>
+            <DetectFaceLandmarks
+              imgs={[this.state.inputImg]}
+              faceLandmarkNet={faceLandmarkNet}
+            >
+            {
+              (faceLandmarks) => {console.log(faceLandmarks)
+                const { overlay, drawLines } = this.state
+
+                if (overlay && faceLandmarks) {
+                  const { width, height } = overlay
+                  overlay.getContext('2d').clearRect(0, 0, width, height)
+                  faceapi.drawLandmarks(
+                    overlay,
+                    faceLandmarks.map(l => l.forSize(width, height)),
+                    { drawLines }
+                  )
+                }
+
+                return null
+              }
+            }
+            </DetectFaceLandmarks>
+        }
+        </LoadModels>
       </Root>
     )
   }

@@ -3,8 +3,8 @@ import * as React from 'react';
 
 import { SelectableImage } from '../components/SelectableImage';
 import { EXAMPLE_IMAGES } from '../const';
-import { withFaceDetections, WithFaceDetectionsProps } from '../hocs/withFaceDetections';
-import { withModels } from '../hocs/withModels';
+import { DetectFaces } from '../facc/DetectFaces';
+import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
 
@@ -19,26 +19,6 @@ type FaceDetectionPageState = {
   minDetectionScore: number
   overlay?: HTMLCanvasElement
 }
-
-interface FaceDetectionProps {
-  overlay?: HTMLCanvasElement
-}
-
-const FaceDetection = withModels<FaceDetectionProps & WithFaceDetectionsProps>(
-  withFaceDetections<FaceDetectionProps>(
-    (props) => {
-      if (props.overlay && props.faceDetections) {
-        const { width, height } = props.overlay
-        props.overlay.getContext('2d').clearRect(0, 0, width, height)
-        faceapi.drawDetection(
-          props.overlay,
-          props.faceDetections.map(det => det.forSize(width, height))
-        )
-      }
-      return null
-    }
-  )
-)
 
 export default class extends React.Component<FaceDetectionPageProps, FaceDetectionPageState> {
 
@@ -61,12 +41,33 @@ export default class extends React.Component<FaceDetectionPageProps, FaceDetecti
           onRefs={({ img, overlay }) => this.setState({ inputImg: this.state.inputImg.withImage(img), overlay })}
           maxImageWidth={800}
         />
-        <FaceDetection
-          faceDetectionModelUrl="models"
-          img={this.state.inputImg}
-          minConfidence={0.7}
-          overlay={this.state.overlay}
-        />
+        <LoadModels faceDetectionModelUrl="models">
+        {
+          ({ faceDetectionNet }) =>
+            <DetectFaces
+              faceDetectionNet={faceDetectionNet}
+              img={this.state.inputImg}
+              minConfidence={0.7}
+            >
+            {
+              (faceDetections) => {
+                const { overlay } = this.state
+
+                if (overlay && faceDetections) {
+                  const { width, height } = overlay
+                  overlay.getContext('2d').clearRect(0, 0, width, height)
+                  faceapi.drawDetection(
+                    overlay,
+                    faceDetections.map(det => det.forSize(width, height))
+                  )
+                }
+
+                return null
+              }
+            }
+            </DetectFaces>
+        }
+        </LoadModels>
       </Root>
     )
   }

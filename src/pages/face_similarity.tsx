@@ -1,16 +1,12 @@
-import { FormControl, Input, InputLabel } from '@material-ui/core';
 import * as faceapi from 'face-api.js';
 import * as React from 'react';
 
+import { FaceSimilarity } from '../components/FaceSimilarity';
 import { SelectableImage } from '../components/SelectableImage';
 import { SideBySide } from '../components/SideBySide';
 import { ALIGNED_FACE_IMAGES } from '../const';
-import {
-  withFaceDescriptors,
-  WithFaceDescriptorsInjectedProps,
-  WithFaceDescriptorsProps,
-} from '../hocs/withFaceDescriptors';
-import { withModels } from '../hocs/withModels';
+import { ComputeFaceDescriptors } from '../facc/ComputeFaceDescriptors';
+import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
 
@@ -22,23 +18,6 @@ type FaceSimilarityPageState = {
   inputImg1: ImageWrap
   inputImg2: ImageWrap
 }
-
-const FaceSimilarity = withModels<WithFaceDescriptorsProps>(
-  withFaceDescriptors<{}>((props: WithFaceDescriptorsInjectedProps) =>
-    <FormControl>
-      <InputLabel htmlFor="distance">
-        Distance:
-      </InputLabel>
-      <Input
-        id="distance"
-        value={
-          props.faceDescriptors
-            ? faceapi.euclideanDistance(props.faceDescriptors[0], props.faceDescriptors[1])
-            : '-'
-        }
-      />
-    </FormControl>
-))
 
 export default class extends React.Component<FaceSimilarityPageProps, FaceSimilarityPageState> {
 
@@ -70,10 +49,34 @@ export default class extends React.Component<FaceSimilarityPageProps, FaceSimila
             maxImageWidth={150}
           />
         </SideBySide>
-        <FaceSimilarity
-          faceRecognitionModelUrl="models"
-          imgs={[this.state.inputImg1, this.state.inputImg2]}
-        />
+        <LoadModels faceRecognitionModelUrl="models">
+          {
+            ({ faceRecognitionNet }) =>
+              <ComputeFaceDescriptors
+                imgs={[this.state.inputImg1, this.state.inputImg2]}
+                faceRecognitionNet={faceRecognitionNet}
+              >
+              {
+                (faceDescriptors) => {
+                  if (!faceDescriptors) {
+                    return null
+                  }
+
+                  const distance = faceapi.euclideanDistance(
+                    faceDescriptors[0],
+                    faceDescriptors[1]
+                  )
+                  return (
+                    <FaceSimilarity
+                      text={`${faceapi.round(distance)}`}
+                      isMatch={distance < 0.6}
+                    />
+                  )
+                }
+              }
+              </ComputeFaceDescriptors>
+          }
+        </LoadModels>
       </Root>
     )
   }
