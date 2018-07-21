@@ -38,7 +38,6 @@ export class ComputeRefDescriptors extends React.Component<ComputeRefDescriptors
     }
 
     async initRefDescriptors() {
-
       const refDescriptors = await Promise.all(
         this.props.refDataSources.map(async ({ label, url }) => {
           const img = await faceapi.bufferToImage(await (await fetch(url)).blob())

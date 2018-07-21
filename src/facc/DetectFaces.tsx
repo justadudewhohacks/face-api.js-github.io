@@ -21,6 +21,10 @@ export class DetectFaces extends React.Component<DetectFacesProps, DetectFacesSt
     }
 
     async detectFaces() {
+      if (!this.props.img.isLoaded) {
+        return
+      }
+
       const faceDetections = await this.props.faceDetectionNet.locateFaces(this.props.img.img, this.props.minConfidence)
 
       this.setState({

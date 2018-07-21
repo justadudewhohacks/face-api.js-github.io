@@ -15,15 +15,11 @@ export class ImageWrap {
     return this._img
   }
 
-  public withImageSrc(imageSrc: string): ImageWrap {
-    return new ImageWrap(imageSrc, this.img)
+  public get isLoaded(): boolean {
+    return this.img instanceof HTMLImageElement
   }
 
   public withImage(img: HTMLImageElement): ImageWrap {
     return new ImageWrap(this.imageSrc, img)
-  }
-
-  public isLoaded(): boolean {
-    return this.img instanceof HTMLImageElement
   }
 }

@@ -32,9 +32,8 @@ export default class extends React.Component<FaceRecognitionPageProps, FaceRecog
       <Root>
         <SelectableImage
           items={ALIGNED_FACE_IMAGES}
-          imageSrc={this.state.inputImg.imageSrc}
-          onChangeSelection={src => this.setState({ inputImg: this.state.inputImg.withImageSrc(src) })}
-          onRefs={({ img }) => this.setState({ inputImg: this.state.inputImg.withImage(img) })}
+          initialImageSrc={this.state.inputImg.imageSrc}
+          onLoaded={({ img: inputImg }) => this.setState({ inputImg })}
           maxImageWidth={150}
         />
         <LoadModels faceRecognitionModelUrl="models">

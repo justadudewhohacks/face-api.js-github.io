@@ -36,9 +36,8 @@ export default class extends React.Component<FaceDetectionPageProps, FaceDetecti
       <Root>
         <SelectableImage
           items={EXAMPLE_IMAGES}
-          imageSrc={this.state.inputImg.imageSrc}
-          onChangeSelection={src => this.setState({ inputImg: this.state.inputImg.withImageSrc(src) })}
-          onRefs={({ img, overlay }) => this.setState({ inputImg: this.state.inputImg.withImage(img), overlay })}
+          initialImageSrc={this.state.inputImg.imageSrc}
+          onLoaded={({ img: inputImg, overlay }) => this.setState({ inputImg, overlay })}
           maxImageWidth={800}
         />
         <LoadModels faceDetectionModelUrl="models">

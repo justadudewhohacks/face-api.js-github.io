@@ -39,9 +39,8 @@ export default class extends React.Component<FaceLandmarksPageProps, FaceLandmar
       <Root>
         <SelectableImage
           items={ALIGNED_FACE_IMAGES}
-          imageSrc={this.state.inputImg.imageSrc}
-          onChangeSelection={src => this.setState({ inputImg: this.state.inputImg.withImageSrc(src) })}
-          onRefs={({ img, overlay }) => this.setState({ inputImg: this.state.inputImg.withImage(img), overlay })}
+          initialImageSrc={this.state.inputImg.imageSrc}
+          onLoaded={({ img: inputImg, overlay }) => this.setState({ inputImg, overlay })}
           maxImageWidth={150}
         />
         <FormControlLabel
@@ -62,7 +61,7 @@ export default class extends React.Component<FaceLandmarksPageProps, FaceLandmar
               faceLandmarkNet={faceLandmarkNet}
             >
             {
-              (faceLandmarks) => {console.log(faceLandmarks)
+              (faceLandmarks) => {
                 const { overlay, drawLines } = this.state
 
                 if (overlay && faceLandmarks) {

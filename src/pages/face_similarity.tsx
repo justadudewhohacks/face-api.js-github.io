@@ -36,16 +36,14 @@ export default class extends React.Component<FaceSimilarityPageProps, FaceSimila
         <SideBySide>
           <SelectableImage
             items={ALIGNED_FACE_IMAGES}
-            imageSrc={this.state.inputImg1.imageSrc}
-            onChangeSelection={src => this.setState({ inputImg1: this.state.inputImg1.withImageSrc(src) })}
-            onRefs={({ img }) => this.setState({ inputImg1: this.state.inputImg1.withImage(img) })}
+            initialImageSrc={this.state.inputImg1.imageSrc}
+            onLoaded={({ img: inputImg1 }) => this.setState({ inputImg1 })}
             maxImageWidth={150}
           />
           <SelectableImage
             items={ALIGNED_FACE_IMAGES}
-            imageSrc={this.state.inputImg2.imageSrc}
-            onChangeSelection={src => this.setState({ inputImg2: this.state.inputImg2.withImageSrc(src) })}
-            onRefs={({ img }) => this.setState({ inputImg2: this.state.inputImg2.withImage(img) })}
+            initialImageSrc={this.state.inputImg2.imageSrc}
+            onLoaded={({ img: inputImg2 }) => this.setState({ inputImg2 })}
             maxImageWidth={150}
           />
         </SideBySide>

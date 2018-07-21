@@ -20,6 +20,10 @@ export class DetectFaceLandmarks extends React.Component<DetectFaceLandmarksProp
     }
 
     async detectFaceLandmarks() {
+      if (!this.props.imgs.every(img => img.isLoaded)) {
+        return
+      }
+
       const faceLandmarks = await Promise.all(
         this.props.imgs.map(({ img }) => {
           return this.props.faceLandmarkNet.detectLandmarks(img) as Promise<faceapi.FaceLandmarks68>

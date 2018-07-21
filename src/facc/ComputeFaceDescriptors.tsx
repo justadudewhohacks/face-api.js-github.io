@@ -20,6 +20,9 @@ export class ComputeFaceDescriptors extends React.Component<ComputeFaceDescripto
     }
 
     async computeDescriptors(prevImgs?: ImageWrap[]) {
+      if (!this.props.imgs.every(img => img.isLoaded)) {
+        return
+      }
 
       const faceDescriptors = await Promise.all(
         this.props.imgs.map((imgWrap, idx) => {

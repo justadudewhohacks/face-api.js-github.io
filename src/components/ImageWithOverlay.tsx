@@ -1,15 +1,18 @@
 import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
+import { ImageWrap } from '../ImageWrap';
+
 export type ImageWithOverlayProps = {
   imageSrc: string
-  onRefs: (refs: { img: HTMLImageElement, overlay: HTMLCanvasElement}) => any
+  onLoaded: (refs: { img: ImageWrap, overlay: HTMLCanvasElement}) => any
   maxImageWidth?: number
 }
 
 export class ImageWithOverlay extends React.Component<ImageWithOverlayProps> {
   img: HTMLImageElement | undefined
   overlay: HTMLCanvasElement | undefined
+  isLoaded: boolean = false
 
   constructor(props: ImageWithOverlayProps) {
     super(props)
@@ -17,33 +20,44 @@ export class ImageWithOverlay extends React.Component<ImageWithOverlayProps> {
     this.onImageLoaded = this.onImageLoaded.bind(this)
     this.onImageRef = this.onImageRef.bind(this)
     this.onCanvasRef = this.onCanvasRef.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
 
-  onRef() {
-    const { img, overlay } = this
+  onChange() {
+    const { img, overlay, isLoaded } = this
 
-    if (img && overlay) {
-      this.props.onRefs({ img, overlay })
+    if (img && overlay && isLoaded) {
+      this.overlay.height = this.img.height
+      this.overlay.width = this.img.width
+      this.props.onLoaded({ img: new ImageWrap(this.props.imageSrc, img), overlay })
     }
   }
 
   onImageLoaded() {
-    this.overlay.height = this.img.height
-    this.overlay.width = this.img.width
+    this.isLoaded = true
+    this.onChange()
   }
 
   onImageRef(el: HTMLImageElement) {
     this.img = el
-    this.onRef()
+    this.onChange()
   }
 
   onCanvasRef(el: HTMLCanvasElement) {
     this.overlay = el
-    this.onRef()
+    this.onChange()
   }
 
   shouldComponentUpdate(nextProps: ImageWithOverlayProps) {
     return nextProps.imageSrc !== this.props.imageSrc
+  }
+
+  componentDidUpdate() {
+    this.onChange()
+  }
+
+  componentDidMount() {
+    this.onChange()
   }
 
   public render() {
