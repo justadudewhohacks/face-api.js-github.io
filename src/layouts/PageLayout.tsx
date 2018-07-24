@@ -15,7 +15,8 @@ const MENU_ITEMS = [
   { label: 'Face Detection', linkTo: 'face_detection' },
   { label: 'Face Landmarks', linkTo: 'face_landmarks' },
   { label: 'Face Similarity', linkTo: 'face_similarity' },
-  { label: 'Face Recognition', linkTo: 'face_recognition' }
+  { label: 'Face Recognition - SSD Face Detector', linkTo: 'face_recognition' },
+  { label: 'Face Recognition - MTCNN Face Detector', linkTo: 'face_recognition_mtcnn' }
 ]
 
 const styles = (theme: any) => ({

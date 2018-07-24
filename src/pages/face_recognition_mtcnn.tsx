@@ -3,7 +3,7 @@ import * as React from 'react';
 import { DisplayFullFaceDescriptions } from '../components/DisplayFullFaceDescriptions';
 import { SelectableImage } from '../components/SelectableImage';
 import { ALIGNED_FACE_IMAGES_BY_CLASS, EXAMPLE_IMAGES } from '../const';
-import { AllFaces } from '../facc/AllFaces';
+import { AllFacesMtcnn } from '../facc/AllFacesMtcnn';
 import { ComputeRefDescriptors } from '../facc/ComputeRefDescriptors';
 import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
@@ -14,7 +14,7 @@ type FaceRecognitionPageProps = {
 
 type FaceRecognitionPageState = {
   inputImg: ImageWrap
-  minDetectionScore: number
+  minFaceSize: number
   overlay?: HTMLCanvasElement
 }
 
@@ -22,7 +22,7 @@ export default class extends React.Component<FaceRecognitionPageProps, FaceRecog
 
   state: FaceRecognitionPageState = {
     inputImg: new ImageWrap(EXAMPLE_IMAGES[0].url),
-    minDetectionScore: 0.5
+    minFaceSize: 40
   }
 
   public render() {
@@ -39,8 +39,7 @@ export default class extends React.Component<FaceRecognitionPageProps, FaceRecog
           maxImageWidth={800}
         />
         <LoadModels
-          faceDetectionModelUrl="models"
-          faceLandmarkModelUrl="models"
+          mtcnnModelUrl="models"
           faceRecognitionModelUrl="models"
         >
         {
@@ -51,10 +50,10 @@ export default class extends React.Component<FaceRecognitionPageProps, FaceRecog
             >
             {
               getBestMatch =>
-                <AllFaces
+                <AllFacesMtcnn
                   img={this.state.inputImg}
                   detectionParams={{
-                    minConfidence: this.state.minDetectionScore
+                    minFaceSize: this.state.minFaceSize
                   }}
                 >
                 {
@@ -63,10 +62,10 @@ export default class extends React.Component<FaceRecognitionPageProps, FaceRecog
                       fullFaceDescriptions={fullFaceDescriptions}
                       overlay={this.state.overlay}
                       getBestMatch={getBestMatch}
-                      withScore
+                      drawLandmarks
                     />
                 }
-                </AllFaces>
+                </AllFacesMtcnn>
             }
             </ComputeRefDescriptors>
         }
