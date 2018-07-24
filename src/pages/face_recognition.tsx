@@ -1,10 +1,9 @@
 import * as faceapi from 'face-api.js';
 import * as React from 'react';
 
-import { FaceSimilarity } from '../components/FaceSimilarity';
 import { SelectableImage } from '../components/SelectableImage';
-import { ALIGNED_FACE_IMAGES, ALIGNED_FACE_IMAGES_BY_CLASS } from '../const';
-import { ComputeFaceDescriptors } from '../facc/ComputeFaceDescriptors';
+import { ALIGNED_FACE_IMAGES_BY_CLASS, EXAMPLE_IMAGES } from '../const';
+import { AllFaces } from '../facc/AllFaces';
 import { ComputeRefDescriptors } from '../facc/ComputeRefDescriptors';
 import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
@@ -15,12 +14,15 @@ type FaceRecognitionPageProps = {
 
 type FaceRecognitionPageState = {
   inputImg: ImageWrap
+  minDetectionScore: number
+  overlay?: HTMLCanvasElement
 }
 
 export default class extends React.Component<FaceRecognitionPageProps, FaceRecognitionPageState> {
 
   state: FaceRecognitionPageState = {
-    inputImg: new ImageWrap(ALIGNED_FACE_IMAGES_BY_CLASS[0][1].url)
+    inputImg: new ImageWrap(EXAMPLE_IMAGES[0].url),
+    minDetectionScore: 0.5
   }
 
   public render() {
@@ -31,12 +33,16 @@ export default class extends React.Component<FaceRecognitionPageProps, FaceRecog
     return(
       <Root>
         <SelectableImage
-          items={ALIGNED_FACE_IMAGES}
+          items={EXAMPLE_IMAGES}
           initialImageSrc={this.state.inputImg.imageSrc}
-          onLoaded={({ img: inputImg }) => this.setState({ inputImg })}
-          maxImageWidth={150}
+          onLoaded={({ img: inputImg, overlay }) => this.setState({ inputImg, overlay })}
+          maxImageWidth={800}
         />
-        <LoadModels faceRecognitionModelUrl="models">
+        <LoadModels
+          faceDetectionModelUrl="models"
+          faceLandmarkModelUrl="models"
+          faceRecognitionModelUrl="models"
+        >
         {
           ({ faceRecognitionNet }) =>
             <ComputeRefDescriptors
@@ -45,26 +51,43 @@ export default class extends React.Component<FaceRecognitionPageProps, FaceRecog
             >
             {
               getBestMatch =>
-                <ComputeFaceDescriptors
-                  imgs={[this.state.inputImg]}
-                  faceRecognitionNet={faceRecognitionNet}
+                <AllFaces
+                  img={this.state.inputImg}
+                  minConfidence={this.state.minDetectionScore}
                 >
                 {
-                  (faceDescriptors) => {
-                    if (!faceDescriptors) {
+                  (fullFaceDescriptions) => {
+                    const { overlay } = this.state
+                    if (!fullFaceDescriptions || !overlay) {
                       return null
                     }
 
-                    const bestMatch = getBestMatch(faceDescriptors[0])
-                    return (
-                      <FaceSimilarity
-                        text={`${bestMatch.label} ${faceapi.round(bestMatch.distance)}`}
-                        isMatch={bestMatch.distance < 0.6}
-                      />
+                    const { width, height } = overlay
+                    overlay.getContext('2d').clearRect(0, 0, width, height)
+
+                    const faceDetections = fullFaceDescriptions.map(fd => fd.detection.forSize(width, height))
+
+                    faceapi.drawDetection(
+                      overlay,
+                      faceDetections
                     )
+
+                    fullFaceDescriptions.forEach(({ detection, descriptor }) => {
+                      const bestMatch = getBestMatch(descriptor)
+                      const text = `${bestMatch.distance < 0.6 ? bestMatch.label : 'unknown'} (${faceapi.round(bestMatch.distance)})`
+                      const { x, y, height: boxHeight } = detection.forSize(width, height).getBox()
+                      faceapi.drawText(
+                        overlay.getContext('2d'),
+                        x,
+                        y + boxHeight,
+                        text,
+                        Object.assign(faceapi.getDefaultDrawOptions(), { color: 'red', fontSize: 16 })
+                      )
+                    })
+                    return null
                   }
                 }
-                </ComputeFaceDescriptors>
+                </AllFaces>
             }
             </ComputeRefDescriptors>
         }

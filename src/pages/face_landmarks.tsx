@@ -8,6 +8,8 @@ import { DetectFaceLandmarks } from '../facc/DetectFaceLandmarks';
 import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
+import { MarginTop } from '../styled/MarginTop';
+
 
 type FaceLandmarksPageProps = {
   faceLandmarkNet?: faceapi.FaceLandmarkNet
@@ -22,7 +24,7 @@ type FaceLandmarksPageState = {
 export default class extends React.Component<FaceLandmarksPageProps, FaceLandmarksPageState> {
 
   state: FaceLandmarksPageState = {
-    inputImg: new ImageWrap(ALIGNED_FACE_IMAGES[0].url),
+    inputImg: new ImageWrap(ALIGNED_FACE_IMAGES[30].url),
     drawLines: true
   }
 
@@ -43,16 +45,18 @@ export default class extends React.Component<FaceLandmarksPageProps, FaceLandmar
           onLoaded={({ img: inputImg, overlay }) => this.setState({ inputImg, overlay })}
           maxImageWidth={150}
         />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={this.state.drawLines}
-              onChange={this.toggleDrawLines}
-              color="primary"
-            />
-          }
-          label="Draw Lines"
-        />
+        <MarginTop>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.state.drawLines}
+                onChange={this.toggleDrawLines}
+                color="primary"
+              />
+            }
+            label="Draw Lines"
+          />
+        </MarginTop>
         <LoadModels faceLandmarkModelUrl="models">
         {
           ({ faceLandmarkNet }) =>

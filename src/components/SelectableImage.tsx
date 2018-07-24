@@ -1,8 +1,16 @@
 import * as React from 'react';
+import styled from 'styled-components';
 
 import { ImageWrap } from '../ImageWrap';
 import { ImageSelection, ImageSelectionItem } from './ImageSelection';
 import { ImageWithOverlay } from './ImageWithOverlay';
+
+const Container = styled.div`
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 export type SelectableImageProps = {
   items: ImageSelectionItem[]
@@ -34,7 +42,7 @@ export class SelectableImage extends React.Component<SelectableImageProps, Selec
 
   render() {
     return (
-      <div>
+      <Container>
         <ImageWithOverlay
           {...this.props}
           imageSrc={this.state.imageSrc}
@@ -44,7 +52,7 @@ export class SelectableImage extends React.Component<SelectableImageProps, Selec
           selectedImage={this.state.imageSrc}
           onChange={this.onChangeSelection}
         />
-      </div>
+      </Container>
     )
   }
 }

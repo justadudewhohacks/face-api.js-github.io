@@ -44,9 +44,9 @@ export class LoadModels extends React.Component<LoadModelsProps, LoadModelsState
       }
 
       const promises = [
-        loadOrUndefined(new faceapi.FaceDetectionNet(), faceDetectionModelUrl),
-        loadOrUndefined(new faceapi.FaceLandmarkNet(), faceLandmarkModelUrl),
-        loadOrUndefined(new faceapi.FaceRecognitionNet(), faceRecognitionModelUrl)
+        loadOrUndefined(faceapi.nets.ssdMobilenet, faceDetectionModelUrl),
+        loadOrUndefined(faceapi.nets.faceLandmark68Net, faceLandmarkModelUrl),
+        loadOrUndefined(faceapi.nets.faceRecognitionNet, faceRecognitionModelUrl)
       ]
 
       const [faceDetectionNet, faceLandmarkNet, faceRecognitionNet] = await Promise.all(promises)

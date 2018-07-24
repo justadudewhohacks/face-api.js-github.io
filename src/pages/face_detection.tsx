@@ -24,7 +24,7 @@ export default class extends React.Component<FaceDetectionPageProps, FaceDetecti
 
   state: FaceDetectionPageState = {
     inputImg: new ImageWrap(EXAMPLE_IMAGES[0].url),
-    minDetectionScore: 0.7,
+    minDetectionScore: 0.5,
   }
 
   public render() {
@@ -46,7 +46,7 @@ export default class extends React.Component<FaceDetectionPageProps, FaceDetecti
             <DetectFaces
               faceDetectionNet={faceDetectionNet}
               img={this.state.inputImg}
-              minConfidence={0.7}
+              minConfidence={this.state.minDetectionScore}
             >
             {
               (faceDetections) => {

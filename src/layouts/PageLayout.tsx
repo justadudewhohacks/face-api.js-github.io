@@ -4,6 +4,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import * as React from 'react';
 import styled from 'styled-components';
 
+import { CenterContent } from '../styled/CenterContent';
 import { SideMenu } from '../components/SideMenu';
 
 const PageHeader = styled.h3`
@@ -14,12 +15,16 @@ const MENU_ITEMS = [
   { label: 'Face Detection', linkTo: 'face_detection' },
   { label: 'Face Landmarks', linkTo: 'face_landmarks' },
   { label: 'Face Similarity', linkTo: 'face_similarity' },
-  { label: 'Face Recognition', linkTo: 'face_recognition' },
-  { label: 'Face Detection and Recognition', linkTo: 'face_detection_and_recognition' }
+  { label: 'Face Recognition', linkTo: 'face_recognition' }
 ]
 
 const styles = (theme: any) => ({
   pageContent: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    maxWidth: '800px',
     padding: '10px',
     marginLeft: '0px',
     [theme.breakpoints.up('md')]: {
@@ -54,16 +59,20 @@ class PageLayoutComponent extends React.Component<PageLayoutProps, PageLayoutSta
         >
           <MenuIcon />
         </IconButton>
-        <PageHeader>
-          face-api.js playground
-        </PageHeader>
         <SideMenu
           items={MENU_ITEMS}
           isOpen={this.state.isSideMenuOpen}
           onToggle={this.toggleMenu}
         />
         <div className={this.props.classes.pageContent}>
-          { this.props.children }
+          <CenterContent>
+            <div>
+              <PageHeader>
+                face-api.js playground
+              </PageHeader>
+              { this.props.children }
+              </div>
+          </CenterContent>
         </div>
       </div>
     )
@@ -71,4 +80,4 @@ class PageLayoutComponent extends React.Component<PageLayoutProps, PageLayoutSta
 
 }
 
-export const PageLayout = withStyles(styles)(PageLayoutComponent)
+export const PageLayout = withStyles(styles as any)(PageLayoutComponent)
