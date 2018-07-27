@@ -1,58 +1,33 @@
 import * as faceapi from 'face-api.js';
-import * as React from 'react';
 
+import { withAsyncRendering } from '../hoc/withAsyncRendering';
 import { ImageWrap } from '../ImageWrap';
+import { ModalLoader } from '../components/ModalLoader';
+import * as React from 'react';
 
 export interface ComputeFaceDescriptorsProps {
   faceRecognitionNet: faceapi.FaceRecognitionNet
   imgs: ImageWrap[]
-  children: (faceDescriptors: Float32Array[]) => React.Component | JSX.Element
 }
 
 export interface ComputeFaceDescriptorsState {
-  faceDescriptors: Float32Array[] | null
+  faceDescriptors?: Float32Array[]
 }
 
-export class ComputeFaceDescriptors extends React.Component<ComputeFaceDescriptorsProps, ComputeFaceDescriptorsState> {
+async function computeFaceDescriptors(props: ComputeFaceDescriptorsProps) {
+  const faceDescriptors = await Promise.all(
+    props.imgs.map((imgWrap) => {
+      return props.faceRecognitionNet.computeFaceDescriptor(imgWrap.img) as Promise<Float32Array>
+    })
+  )
 
-    state: ComputeFaceDescriptorsState = {
-      faceDescriptors: null
-    }
-
-    async computeDescriptors(prevImgs?: ImageWrap[]) {
-      if (!this.props.imgs.every(img => img.isLoaded)) {
-        return
-      }
-
-      const faceDescriptors = await Promise.all(
-        this.props.imgs.map((imgWrap, idx) => {
-          if (this.state.faceDescriptors && prevImgs && imgWrap === prevImgs[idx]) {
-            return Promise.resolve(this.state.faceDescriptors[idx])
-          }
-          return this.props.faceRecognitionNet.computeFaceDescriptor(imgWrap.img) as Promise<Float32Array>
-        })
-      )
-
-      this.setState({
-        faceDescriptors
-      })
-    }
-
-    componentDidUpdate(prevProps: ComputeFaceDescriptorsProps) {
-      if (
-        this.props.faceRecognitionNet !== prevProps.faceRecognitionNet
-          || this.props.imgs !== prevProps.imgs
-          || this.props.children !== prevProps.children
-      ) {
-        this.computeDescriptors(prevProps.imgs)
-      }
-    }
-
-    componentDidMount() {
-      this.computeDescriptors()
-    }
-
-    render() {
-      return this.props.children(this.state.faceDescriptors)
-    }
+  return {
+    faceDescriptors
   }
+}
+
+export const ComputeFaceDescriptors = withAsyncRendering<ComputeFaceDescriptorsProps, ComputeFaceDescriptorsState>(
+  computeFaceDescriptors,
+  () => <ModalLoader title="Computing Face Descriptors"/>
+)
+

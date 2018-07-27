@@ -16,6 +16,8 @@ type FaceRecognitionPageState = {
   overlay?: HTMLCanvasElement
 }
 
+const REF_DATA_SOURCES = ALIGNED_FACE_IMAGES_BY_CLASS.map(srcsByClass => srcsByClass[0])
+
 export default class extends React.Component<{}, FaceRecognitionPageState> {
 
   state: FaceRecognitionPageState = {
@@ -45,10 +47,10 @@ export default class extends React.Component<{}, FaceRecognitionPageState> {
           ({ faceRecognitionNet }) =>
             <ComputeRefDescriptors
               faceRecognitionNet={faceRecognitionNet}
-              refDataSources={ALIGNED_FACE_IMAGES_BY_CLASS.map(srcsByClass => srcsByClass[0])}
+              refDataSources={REF_DATA_SOURCES}
             >
             {
-              getBestMatch =>
+              ({ getBestMatch }) =>
                 <AllFaces
                   img={this.state.inputImg}
                   detectionParams={{
@@ -56,7 +58,7 @@ export default class extends React.Component<{}, FaceRecognitionPageState> {
                   }}
                 >
                 {
-                  fullFaceDescriptions =>
+                  ({ fullFaceDescriptions }) =>
                     <DisplayFullFaceDescriptions
                       fullFaceDescriptions={fullFaceDescriptions}
                       overlay={this.state.overlay}

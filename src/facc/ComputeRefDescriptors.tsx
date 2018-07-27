@@ -2,6 +2,7 @@ import * as faceapi from 'face-api.js';
 import * as React from 'react';
 
 import { ModalLoader } from '../components/ModalLoader';
+import { withAsyncRendering } from '../hoc/withAsyncRendering';
 
 export type RefDescriptor = {
   label: string,
@@ -19,58 +20,39 @@ export interface ComputeRefDescriptorsProps {
     label: string,
     url: string
   }[]
-  children: (
-    getBestMatch: (queryDescriptor: Float32Array) => BestMatch | null,
-    refDescriptors: RefDescriptor[] | null
-  ) => React.Component | JSX.Element
 }
 
 export interface ComputeRefDescriptorsState {
-  refDescriptors: RefDescriptor[] | null,
-  isBusy: boolean
+  refDescriptors?: RefDescriptor[]
+  getBestMatch?: (queryDescriptor: Float32Array) => BestMatch
 }
 
-export class ComputeRefDescriptors extends React.Component<ComputeRefDescriptorsProps, ComputeRefDescriptorsState> {
-
-    state: ComputeRefDescriptorsState = {
-      refDescriptors: null,
-      isBusy: true
-    }
-
-    async initRefDescriptors() {
-      const refDescriptors = await Promise.all(
-        this.props.refDataSources.map(async ({ label, url }) => {
-          const img = await faceapi.bufferToImage(await (await fetch(url)).blob())
-          const descriptor = await this.props.faceRecognitionNet.computeFaceDescriptor(img) as Float32Array
-          return {
-            label: label.replace('1.png', ''),
-            descriptor
-          }
-        })
-      )
-
-      this.setState({
-        refDescriptors,
-        isBusy: false
-      })
-    }
-
-    componentDidMount() {
-      this.initRefDescriptors()
-    }
-
-    render() {
-      if (this.state.isBusy) {
-        return <ModalLoader title="Computing Reference Descriptors" />
+async function initRefDescriptors(props: ComputeRefDescriptorsProps) {
+  const refDescriptors = await Promise.all(
+    props.refDataSources.map(async ({ label, url }) => {
+      const img = await faceapi.bufferToImage(await (await fetch(url)).blob())
+      const descriptor = await props.faceRecognitionNet.computeFaceDescriptor(img) as Float32Array
+      return {
+        label: label.replace('1.png', ''),
+        descriptor
       }
+    })
+  )
 
-      const getBestMatch = (queryDescriptor: Float32Array) =>
-        this.state.refDescriptors.map(ref => ({
-          label: ref.label,
-          distance: faceapi.euclideanDistance(ref.descriptor, queryDescriptor)
-        }))
-          .reduce((best, curr) => curr.distance < best.distance ? curr : best)
+  const getBestMatch = (queryDescriptor: Float32Array) =>
+    refDescriptors.map(ref => ({
+      label: ref.label,
+      distance: faceapi.euclideanDistance(ref.descriptor, queryDescriptor)
+    }))
+      .reduce((best, curr) => curr.distance < best.distance ? curr : best)
 
-      return this.props.children(getBestMatch, this.state.refDescriptors)
-    }
+  return {
+    refDescriptors,
+    getBestMatch
   }
+}
+
+export const ComputeRefDescriptors = withAsyncRendering<ComputeRefDescriptorsProps, ComputeRefDescriptorsState>(
+  initRefDescriptors,
+  () => <ModalLoader title="Computing Reference Descriptors"/>
+)

@@ -54,7 +54,7 @@ export default class extends React.Component<{}, FaceSimilarityPageState> {
                   faceRecognitionNet={faceRecognitionNet}
                 >
                 {
-                  (faceDescriptors) => {
+                  ({ faceDescriptors }) => {
                     if (!faceDescriptors) {
                       return null
                     }

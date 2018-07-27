@@ -1,15 +1,16 @@
 import * as faceapi from 'face-api.js';
-import * as React from 'react';
 
 import { ImageWrap } from '../ImageWrap';
+import { withAsyncRendering } from './withAsyncRendering';
+import { ModalLoader } from '../components/ModalLoader';
+import * as React from 'react';
 
 export interface WithAllFacesProps {
   img: ImageWrap
-  children: (fullFaceDescriptions: faceapi.FullFaceDescription[] | null) => React.Component | JSX.Element
 }
 
 export interface WithAllFacesState {
-  fullFaceDescriptions: faceapi.FullFaceDescription[] | null
+  fullFaceDescriptions?: faceapi.FullFaceDescription[]
 }
 
 type Props<DetectionParams> = WithAllFacesProps & {
@@ -17,41 +18,18 @@ type Props<DetectionParams> = WithAllFacesProps & {
 }
 
 export const withAllFaces = <DetectionParams extends {}> (
-  allFaces: (img: HTMLImageElement, params: DetectionParams) => Promise<faceapi.FullFaceDescription[]>
-) =>
+  allFacesFunction: (img: HTMLImageElement, params: DetectionParams) => Promise<faceapi.FullFaceDescription[]>
+) => {
+  async function allFaces(props: Props<DetectionParams>) {
+    const fullFaceDescriptions = await allFacesFunction(props.img.img, props.detectionParams)
 
-  class extends React.Component<WithAllFacesProps & Props<DetectionParams>, WithAllFacesState> {
-
-    state: WithAllFacesState = {
-      fullFaceDescriptions: null
-    }
-
-    async detectFaces() {
-      if (!this.props.img.isLoaded) {
-        return
-      }
-      const fullFaceDescriptions = await allFaces(this.props.img.img, this.props.detectionParams)
-
-      this.setState({
-        fullFaceDescriptions
-      })
-    }
-
-    componentDidUpdate(prevProps: Props<DetectionParams>) {
-      if (
-        this.props.detectionParams !== prevProps.detectionParams
-          || this.props.img !== prevProps.img
-          || this.props.children !== prevProps.children
-      ) {
-        this.detectFaces()
-      }
-    }
-
-    componentDidMount() {
-      this.detectFaces()
-    }
-
-    render() {
-      return this.props.children(this.state.fullFaceDescriptions)
+    return {
+      fullFaceDescriptions
     }
   }
+
+  return withAsyncRendering<Props<DetectionParams>, WithAllFacesState>(
+    allFaces,
+    () => <ModalLoader title="Detecting Faces"/>
+  )
+}

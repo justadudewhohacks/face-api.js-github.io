@@ -3,6 +3,7 @@ import * as faceapi from 'face-api.js';
 import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
+import { ModalLoader } from '../components/ModalLoader';
 import { SelectableImage } from '../components/SelectableImage';
 import { ALIGNED_FACE_IMAGES } from '../const';
 import { DetectFaceLandmarks } from '../facc/DetectFaceLandmarks';
@@ -61,18 +62,19 @@ export default class extends React.Component<{}, FaceLandmarksPageState> {
               faceLandmarkNet={faceLandmarkNet}
             >
             {
-              (faceLandmarks) => {
-                const { overlay, drawLines } = this.state
-
-                if (overlay && faceLandmarks) {
-                  const { width, height } = overlay
-                  overlay.getContext('2d').clearRect(0, 0, width, height)
-                  faceapi.drawLandmarks(
-                    overlay,
-                    faceLandmarks.map(l => l.forSize(width, height)),
-                    { drawLines }
-                  )
+              ({ faceLandmarks, isBusy }) => {
+                if (isBusy) {
+                  return <ModalLoader title="Detecting Face Landmarks"/>
                 }
+
+                const { overlay, drawLines } = this.state
+                const { width, height } = overlay
+                overlay.getContext('2d').clearRect(0, 0, width, height)
+                faceapi.drawLandmarks(
+                  overlay,
+                  faceLandmarks.map(l => l.forSize(width, height)),
+                  { drawLines }
+                )
 
                 return null
               }

@@ -8,8 +8,8 @@ import { WebcamVideoWithOverlay } from '../components/WebcamVideoWithOverlay';
 import { DetectFacesMtcnn } from '../facc/DetectFacesMtcnn';
 import { LoadModels } from '../facc/LoadModels';
 import { Root } from '../Root';
-import { VideoWrap } from '../VideoWrap';
 import { CenterContent } from '../styled/CenterContent';
+import { VideoWrap } from '../VideoWrap';
 
 type FaceDetectionWebcamMtcnnPageState = {
   inputVideo: VideoWrap
@@ -91,7 +91,7 @@ export default class extends React.Component<{}, FaceDetectionWebcamMtcnnPageSta
               detectionParams={this.state.detectionParams}
             >
             {
-              (mtcnnResults) => {
+              ({ mtcnnResults }) => {
                 const { overlay } = this.state
 
                 if (overlay && mtcnnResults) {

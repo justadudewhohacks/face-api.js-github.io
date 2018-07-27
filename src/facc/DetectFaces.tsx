@@ -1,53 +1,30 @@
 import * as faceapi from 'face-api.js';
-import * as React from 'react';
 
+import { withAsyncRendering } from '../hoc/withAsyncRendering';
 import { ImageWrap } from '../ImageWrap';
+import { ModalLoader } from '../components/ModalLoader';
+import * as React from 'react';
 
 export interface DetectFacesProps {
   faceDetectionNet: faceapi.FaceDetectionNet
   img: ImageWrap
   minConfidence: number
-  children: (faceDetections: faceapi.FaceDetection[] | null) => React.Component | JSX.Element
 }
 
 export interface DetectFacesState {
-  faceDetections: faceapi.FaceDetection[] | null
+  faceDetections?: faceapi.FaceDetection[]
 }
 
-export class DetectFaces extends React.Component<DetectFacesProps, DetectFacesState> {
+async function detectFaces(props: DetectFacesProps) {
+  const faceDetections = await props.faceDetectionNet.locateFaces(props.img.img, props.minConfidence)
 
-    state: DetectFacesState = {
-      faceDetections: null
-    }
-
-    async detectFaces() {
-      if (!this.props.img.isLoaded) {
-        return
-      }
-
-      const faceDetections = await this.props.faceDetectionNet.locateFaces(this.props.img.img, this.props.minConfidence)
-
-      this.setState({
-        faceDetections
-      })
-    }
-
-    componentDidUpdate(prevProps: DetectFacesProps) {
-      if (
-        this.props.faceDetectionNet !== prevProps.faceDetectionNet
-          || this.props.minConfidence !== prevProps.minConfidence
-          || this.props.img !== prevProps.img
-          || this.props.children !== prevProps.children
-      ) {
-        this.detectFaces()
-      }
-    }
-
-    componentDidMount() {
-      this.detectFaces()
-    }
-
-    render() {
-      return this.props.children(this.state.faceDetections)
-    }
+  return {
+    faceDetections,
+    isBusy: false
   }
+}
+
+export const DetectFaces = withAsyncRendering<DetectFacesProps, DetectFacesState>(
+  detectFaces,
+  () => <ModalLoader title="Detecting Faces"/>
+)

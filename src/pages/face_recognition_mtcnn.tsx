@@ -10,6 +10,7 @@ import { ComputeRefDescriptors } from '../facc/ComputeRefDescriptors';
 import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
+import { ModalLoader } from '../components/ModalLoader';
 
 type FaceRecognitionMtcnnPageState = {
   inputImg: ImageWrap
@@ -18,6 +19,8 @@ type FaceRecognitionMtcnnPageState = {
   }
   overlay?: HTMLCanvasElement
 }
+
+const REF_DATA_SOURCES = ALIGNED_FACE_IMAGES_BY_CLASS.map(srcsByClass => srcsByClass[0])
 
 export default class extends React.Component<{}, FaceRecognitionMtcnnPageState> {
 
@@ -62,22 +65,25 @@ export default class extends React.Component<{}, FaceRecognitionMtcnnPageState> 
           ({ faceRecognitionNet }) =>
             <ComputeRefDescriptors
               faceRecognitionNet={faceRecognitionNet}
-              refDataSources={ALIGNED_FACE_IMAGES_BY_CLASS.map(srcsByClass => srcsByClass[0])}
+              refDataSources={REF_DATA_SOURCES}
             >
             {
-              getBestMatch =>
+            ({ getBestMatch }) =>
                 <AllFacesMtcnn
                   img={this.state.inputImg}
                   detectionParams={this.state.detectionParams}
                 >
                 {
-                  fullFaceDescriptions =>
-                    <DisplayFullFaceDescriptions
-                      fullFaceDescriptions={fullFaceDescriptions}
-                      overlay={this.state.overlay}
-                      getBestMatch={getBestMatch}
-                      drawLandmarks
-                    />
+                  ({ fullFaceDescriptions, isBusy }) =>
+                    isBusy
+                      ? <ModalLoader title="Computing"/>
+                      :
+                        <DisplayFullFaceDescriptions
+                          fullFaceDescriptions={fullFaceDescriptions}
+                          overlay={this.state.overlay}
+                          getBestMatch={getBestMatch}
+                          drawLandmarks
+                        />
                 }
                 </AllFacesMtcnn>
             }

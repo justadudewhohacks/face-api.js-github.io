@@ -44,7 +44,7 @@ export default class extends React.Component<{}, FaceDetectionPageState> {
               minConfidence={this.state.minDetectionScore}
             >
             {
-              (faceDetections) => {
+              ({ faceDetections }) => {
                 const { overlay } = this.state
 
                 if (overlay && faceDetections) {
