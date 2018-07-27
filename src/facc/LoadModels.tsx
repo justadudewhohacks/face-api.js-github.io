@@ -7,7 +7,7 @@ export interface InjectedProps {
   faceDetectionNet?: faceapi.FaceDetectionNet
   faceLandmarkNet?: faceapi.FaceLandmarkNet
   faceRecognitionNet?: faceapi.FaceRecognitionNet
-  mtcnnModelUrl?: faceapi.Mtcnn
+  mtcnn?: faceapi.Mtcnn
 }
 
 export interface LoadModelsProps {
@@ -53,14 +53,15 @@ export class LoadModels extends React.Component<LoadModelsProps, LoadModelsState
         loadOrUndefined(faceapi.nets.mtcnn, mtcnnModelUrl)
       ]
 
-      const [faceDetectionNet, faceLandmarkNet, faceRecognitionNet] = await Promise.all(promises)
+      const [faceDetectionNet, faceLandmarkNet, faceRecognitionNet, mtcnn] = await Promise.all(promises)
 
       this.setState({
         isLoading: false,
         nets: {
           faceDetectionNet,
           faceLandmarkNet,
-          faceRecognitionNet
+          faceRecognitionNet,
+          mtcnn
         }
       })
     }

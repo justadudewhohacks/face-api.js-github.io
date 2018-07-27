@@ -1,4 +1,5 @@
 import * as faceapi from 'face-api.js';
+import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
 import { SelectableImage } from '../components/SelectableImage';
@@ -8,19 +9,13 @@ import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
 
-type FaceDetectionPageProps = {
-  faceDetectionNet: faceapi.FaceDetectionNet | null
-  faceLandmarkNet: faceapi.FaceLandmarkNet | null
-  faceRecognitionNet: faceapi.FaceRecognitionNet | null
-}
-
 type FaceDetectionPageState = {
   inputImg: ImageWrap
   minDetectionScore: number
   overlay?: HTMLCanvasElement
 }
 
-export default class extends React.Component<FaceDetectionPageProps, FaceDetectionPageState> {
+export default class extends React.Component<{}, FaceDetectionPageState> {
 
   state: FaceDetectionPageState = {
     inputImg: new ImageWrap(EXAMPLE_IMAGES[0].url),
@@ -40,7 +35,7 @@ export default class extends React.Component<FaceDetectionPageProps, FaceDetecti
           onLoaded={({ img: inputImg, overlay }) => this.setState({ inputImg, overlay })}
           maxImageWidth={800}
         />
-        <LoadModels faceDetectionModelUrl="models">
+        <LoadModels faceDetectionModelUrl={withPrefix('/models')}>
         {
           ({ faceDetectionNet }) =>
             <DetectFaces

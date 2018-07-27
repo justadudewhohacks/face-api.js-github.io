@@ -1,5 +1,5 @@
 module.exports = {
-  pathPrefix: `/`,
+  pathPrefix: `/face-api.js`,
   siteMetadata: {
     siteName: `face-api.js`,
   },

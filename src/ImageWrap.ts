@@ -15,6 +15,10 @@ export class ImageWrap {
     return this._img
   }
 
+  public get element(): HTMLImageElement | undefined {
+    return this.img
+  }
+
   public get isLoaded(): boolean {
     return this.img instanceof HTMLImageElement
   }

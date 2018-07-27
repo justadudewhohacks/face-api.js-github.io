@@ -1,3 +1,4 @@
+import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
 import { DisplayFullFaceDescriptions } from '../components/DisplayFullFaceDescriptions';
@@ -9,16 +10,13 @@ import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
 
-type FaceRecognitionPageProps = {
-}
-
 type FaceRecognitionPageState = {
   inputImg: ImageWrap
   minDetectionScore: number
   overlay?: HTMLCanvasElement
 }
 
-export default class extends React.Component<FaceRecognitionPageProps, FaceRecognitionPageState> {
+export default class extends React.Component<{}, FaceRecognitionPageState> {
 
   state: FaceRecognitionPageState = {
     inputImg: new ImageWrap(EXAMPLE_IMAGES[0].url),
@@ -39,9 +37,9 @@ export default class extends React.Component<FaceRecognitionPageProps, FaceRecog
           maxImageWidth={800}
         />
         <LoadModels
-          faceDetectionModelUrl="models"
-          faceLandmarkModelUrl="models"
-          faceRecognitionModelUrl="models"
+          faceDetectionModelUrl={withPrefix('/models')}
+          faceLandmarkModelUrl={withPrefix('/models')}
+          faceRecognitionModelUrl={withPrefix('/models')}
         >
         {
           ({ faceRecognitionNet }) =>

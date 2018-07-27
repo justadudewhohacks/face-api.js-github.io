@@ -1,5 +1,6 @@
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import * as faceapi from 'face-api.js';
+import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
 import { SelectableImage } from '../components/SelectableImage';
@@ -10,18 +11,13 @@ import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
 import { MarginTop } from '../styled/MarginTop';
 
-
-type FaceLandmarksPageProps = {
-  faceLandmarkNet?: faceapi.FaceLandmarkNet
-}
-
 type FaceLandmarksPageState = {
   inputImg: ImageWrap
   drawLines: boolean
   overlay?: HTMLCanvasElement
 }
 
-export default class extends React.Component<FaceLandmarksPageProps, FaceLandmarksPageState> {
+export default class extends React.Component<{}, FaceLandmarksPageState> {
 
   state: FaceLandmarksPageState = {
     inputImg: new ImageWrap(ALIGNED_FACE_IMAGES[30].url),
@@ -57,7 +53,7 @@ export default class extends React.Component<FaceLandmarksPageProps, FaceLandmar
             label="Draw Lines"
           />
         </MarginTop>
-        <LoadModels faceLandmarkModelUrl="models">
+        <LoadModels faceLandmarkModelUrl={withPrefix('/models')}>
         {
           ({ faceLandmarkNet }) =>
             <DetectFaceLandmarks

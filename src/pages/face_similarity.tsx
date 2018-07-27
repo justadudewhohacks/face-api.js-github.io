@@ -1,4 +1,5 @@
 import * as faceapi from 'face-api.js';
+import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
 import { FaceSimilarity } from '../components/FaceSimilarity';
@@ -8,19 +9,15 @@ import { ComputeFaceDescriptors } from '../facc/ComputeFaceDescriptors';
 import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
-import { SideBySide } from '../styled/SideBySide';
 import { MarginTop } from '../styled/MarginTop';
-
-type FaceSimilarityPageProps = {
-  faceRecognitionNet?: faceapi.FaceRecognitionNet
-}
+import { SideBySide } from '../styled/SideBySide';
 
 type FaceSimilarityPageState = {
   inputImg1: ImageWrap
   inputImg2: ImageWrap
 }
 
-export default class extends React.Component<FaceSimilarityPageProps, FaceSimilarityPageState> {
+export default class extends React.Component<{}, FaceSimilarityPageState> {
 
   state: FaceSimilarityPageState = {
     inputImg1: new ImageWrap(ALIGNED_FACE_IMAGES[30].url),
@@ -49,7 +46,7 @@ export default class extends React.Component<FaceSimilarityPageProps, FaceSimila
           />
         </SideBySide>
         <MarginTop>
-          <LoadModels faceRecognitionModelUrl="models">
+          <LoadModels faceRecognitionModelUrl={withPrefix('/models')}>
             {
               ({ faceRecognitionNet }) =>
                 <ComputeFaceDescriptors

@@ -2,7 +2,7 @@ export const EXAMPLE_IMAGES = [1, 2, 3, 4, 5]
   .map(idx => `bbt${idx}.jpg`)
   .map(label => ({
     label,
-    url: `images/${label}`
+    url: `/images/${label}`
   }))
 
 export const ALIGNED_FACE_IMAGES_BY_CLASS = ['amy', 'bernadette', 'howard', 'leonard', 'penny', 'raj', 'sheldon', 'stuart']
@@ -11,7 +11,7 @@ export const ALIGNED_FACE_IMAGES_BY_CLASS = ['amy', 'bernadette', 'howard', 'leo
       .map(idx => `${clazz}${idx}.png`)
       .map(label => ({
         label,
-        url: `images/${clazz}/${label}`
+        url: `/images/${clazz}/${label}`
       }))
   )
 

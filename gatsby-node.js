@@ -1,11 +1,13 @@
+const { withPrefix } = require('gatsby-link')
+
 exports.createPages = ({ boundActionCreators, graphql }) => {
 
   const { createRedirect } = boundActionCreators
 
   createRedirect({
-    fromPath: '/',
+    fromPath: withPrefix('/'),
     isPermanent: true,
     redirectInBrowser: true,
-    toPath: '/face_detection'
+    toPath: withPrefix('/face_detection')
   })
 }
