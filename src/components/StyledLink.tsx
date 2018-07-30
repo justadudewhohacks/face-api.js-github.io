@@ -1,9 +1,17 @@
 import Link from 'gatsby-link';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const StyledLink = styled(Link)`
+const linkCss = css`
   padding: 4px;
   color: inherit;
   text-decoration: none;
   display: block;
+`
+
+export const StyledLink = styled(Link)`
+  ${linkCss}
+`
+
+export const StyledAbsLink = styled.a`
+  ${linkCss}
 `
