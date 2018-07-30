@@ -1,9 +1,8 @@
-import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
 import { DisplayFullFaceDescriptions } from '../components/DisplayFullFaceDescriptions';
 import { SelectableImage } from '../components/SelectableImage';
-import { ALIGNED_FACE_IMAGES_BY_CLASS, EXAMPLE_IMAGES } from '../const';
+import { ALIGNED_FACE_IMAGES_BY_CLASS, EXAMPLE_IMAGES, MODELS_URI } from '../const';
 import { AllFaces } from '../facc/AllFaces';
 import { ComputeRefDescriptors } from '../facc/ComputeRefDescriptors';
 import { LoadModels } from '../facc/LoadModels';
@@ -39,9 +38,9 @@ export default class extends React.Component<{}, FaceRecognitionPageState> {
           maxImageWidth={800}
         />
         <LoadModels
-          faceDetectionModelUrl={withPrefix('/models')}
-          faceLandmarkModelUrl={withPrefix('/models')}
-          faceRecognitionModelUrl={withPrefix('/models')}
+          faceDetectionModelUrl={MODELS_URI}
+          faceLandmarkModelUrl={MODELS_URI}
+          faceRecognitionModelUrl={MODELS_URI}
         >
         {
           ({ faceRecognitionNet }) =>

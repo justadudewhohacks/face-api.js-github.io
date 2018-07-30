@@ -1,5 +1,4 @@
 import * as faceapi from 'face-api.js';
-import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
 import { MtcnnForwardParams } from '../../node_modules/face-api.js/build/mtcnn/types';
@@ -9,6 +8,7 @@ import { DetectFacesMtcnn } from '../facc/DetectFacesMtcnn';
 import { LoadModels } from '../facc/LoadModels';
 import { Root } from '../Root';
 import { VideoWrap } from '../VideoWrap';
+import { MODELS_URI } from '../const';
 
 type FaceDetectionWebcamMtcnnPageState = {
   inputVideo: VideoWrap
@@ -57,7 +57,7 @@ export default class extends React.Component<{}, FaceDetectionWebcamMtcnnPageSta
           detectionParams={this.state.detectionParams}
           onChange={detectionParams => this.setState({ detectionParams })}
         />
-        <LoadModels mtcnnModelUrl={withPrefix('/models')}>
+        <LoadModels mtcnnModelUrl={MODELS_URI}>
         {
           ({ mtcnn }) =>
             <DetectFacesMtcnn

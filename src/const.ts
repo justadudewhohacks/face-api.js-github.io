@@ -1,4 +1,5 @@
 import { withPrefix } from 'gatsby-link';
+
 export const EXAMPLE_IMAGES = [1, 2, 3, 4, 5]
   .map(idx => `bbt${idx}.jpg`)
   .map(label => ({
@@ -15,6 +16,8 @@ export const ALIGNED_FACE_IMAGES_BY_CLASS = ['amy', 'bernadette', 'howard', 'leo
         url: withPrefix(`/images/${clazz}/${label}`)
       }))
   )
+
+export const MODELS_URI = withPrefix(`/models`)
 
 export const ALIGNED_FACE_IMAGES = ALIGNED_FACE_IMAGES_BY_CLASS
   .reduce((flat, arr) => flat.concat(arr), [])

@@ -1,10 +1,9 @@
 import * as faceapi from 'face-api.js';
-import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
 import { FaceSimilarity } from '../components/FaceSimilarity';
 import { SelectableImage } from '../components/SelectableImage';
-import { ALIGNED_FACE_IMAGES } from '../const';
+import { ALIGNED_FACE_IMAGES, MODELS_URI } from '../const';
 import { ComputeFaceDescriptors } from '../facc/ComputeFaceDescriptors';
 import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
@@ -46,7 +45,7 @@ export default class extends React.Component<{}, FaceSimilarityPageState> {
           />
         </SideBySide>
         <MarginTop>
-          <LoadModels faceRecognitionModelUrl={withPrefix('/models')}>
+          <LoadModels faceRecognitionModelUrl={MODELS_URI}>
             {
               ({ faceRecognitionNet }) =>
                 <ComputeFaceDescriptors

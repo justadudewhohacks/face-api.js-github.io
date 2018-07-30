@@ -12,12 +12,12 @@ const PageHeader = styled.h3`
 `
 
 const MENU_ITEMS = [
-  { label: 'Face Detection', linkTo: 'face_detection' },
-  { label: 'Face Detection Webcam - MTCNN', linkTo: 'face_detection_webcam_mtcnn' },
-  { label: 'Face Landmarks', linkTo: 'face_landmarks' },
-  { label: 'Face Similarity', linkTo: 'face_similarity' },
-  { label: 'Face Recognition - SSD Face Detector', linkTo: 'face_recognition' },
-  { label: 'Face Recognition - MTCNN Face Detector', linkTo: 'face_recognition_mtcnn' }
+  { label: 'Face Detection', linkTo: '/face_detection' },
+  { label: 'Face Detection Webcam - MTCNN', linkTo: '/face_detection_webcam_mtcnn' },
+  { label: 'Face Landmarks', linkTo: '/face_landmarks' },
+  { label: 'Face Similarity', linkTo: '/face_similarity' },
+  { label: 'Face Recognition - SSD Face Detector', linkTo: '/face_recognition' },
+  { label: 'Face Recognition - MTCNN Face Detector', linkTo: '/face_recognition_mtcnn' }
 ]
 
 const styles = (theme: any) => ({

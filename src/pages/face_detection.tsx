@@ -1,9 +1,8 @@
-import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
 import { DisplayResults } from '../components/DisplayResults';
 import { SelectableImage, SelectionTypes } from '../components/SelectableImage';
-import { EXAMPLE_IMAGES } from '../const';
+import { EXAMPLE_IMAGES, MODELS_URI } from '../const';
 import { DetectFaces } from '../facc/DetectFaces';
 import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
@@ -36,7 +35,7 @@ export default class extends React.Component<{}, FaceDetectionPageState> {
           maxImageWidth={800}
           selectionType={SelectionTypes.BOTH}
         />
-        <LoadModels faceDetectionModelUrl={withPrefix('/models')}>
+        <LoadModels faceDetectionModelUrl={MODELS_URI}>
         {
           ({ faceDetectionNet }) =>
             <DetectFaces

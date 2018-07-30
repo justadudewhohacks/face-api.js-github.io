@@ -1,4 +1,3 @@
-import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
 import { MtcnnForwardParams } from '../../node_modules/face-api.js/build/mtcnn/types';
@@ -6,7 +5,7 @@ import { DisplayFullFaceDescriptions } from '../components/DisplayFullFaceDescri
 import { ModalLoader } from '../components/ModalLoader';
 import { MtcnnParamControls } from '../components/MtcnnParamControls';
 import { SelectableImage } from '../components/SelectableImage';
-import { ALIGNED_FACE_IMAGES_BY_CLASS, EXAMPLE_IMAGES } from '../const';
+import { ALIGNED_FACE_IMAGES_BY_CLASS, EXAMPLE_IMAGES, MODELS_URI } from '../const';
 import { AllFacesMtcnn } from '../facc/AllFacesMtcnn';
 import { ComputeRefDescriptors } from '../facc/ComputeRefDescriptors';
 import { LoadModels } from '../facc/LoadModels';
@@ -49,8 +48,8 @@ export default class extends React.Component<{}, FaceRecognitionMtcnnPageState> 
           onChange={detectionParams => this.setState({ detectionParams })}
         />
         <LoadModels
-          mtcnnModelUrl={withPrefix('/models')}
-          faceRecognitionModelUrl={withPrefix('/models')}
+          mtcnnModelUrl={MODELS_URI}
+          faceRecognitionModelUrl={MODELS_URI}
         >
         {
           ({ faceRecognitionNet }) =>

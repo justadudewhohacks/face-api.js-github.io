@@ -1,12 +1,11 @@
 import * as Mui from '@material-ui/core';
 import * as faceapi from 'face-api.js';
-import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
 import { DisplayResults } from '../components/DisplayResults';
 import { ModalLoader } from '../components/ModalLoader';
 import { SelectableImage, SelectionTypes } from '../components/SelectableImage';
-import { ALIGNED_FACE_IMAGES } from '../const';
+import { ALIGNED_FACE_IMAGES, MODELS_URI } from '../const';
 import { DetectFaceLandmarks } from '../facc/DetectFaceLandmarks';
 import { DetectFaces } from '../facc/DetectFaces';
 import { ExtractFaces } from '../facc/ExtractFaces';
@@ -122,8 +121,8 @@ export default class extends React.Component<{}, FaceLandmarksPageState> {
     return(
       <Root>
         <LoadModels
-          faceDetectionModelUrl={withPrefix('/models')}
-          faceLandmarkModelUrl={withPrefix('/models')}
+          faceDetectionModelUrl={MODELS_URI}
+          faceLandmarkModelUrl={MODELS_URI}
         >
         {
           ({ faceDetectionNet, faceLandmarkNet }) =>
