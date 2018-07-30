@@ -4,16 +4,15 @@ import * as React from 'react';
 import { MtcnnForwardParams } from '../../node_modules/face-api.js/build/mtcnn/types';
 import { MtcnnParamControls } from '../components/MtcnnParamControls';
 import { WebcamVideoWithOverlay } from '../components/WebcamVideoWithOverlay';
-import { DetectFacesMtcnn } from '../facc/DetectFacesMtcnn';
+import { MODELS_URI } from '../const';
+import { DetectFacesMtcnnNoLoader } from '../facc/DetectFacesMtcnn';
 import { LoadModels } from '../facc/LoadModels';
 import { Root } from '../Root';
 import { VideoWrap } from '../VideoWrap';
-import { MODELS_URI } from '../const';
 
 type FaceDetectionWebcamMtcnnPageState = {
   inputVideo: VideoWrap
   detectionParams: MtcnnForwardParams
-  isPlaying: boolean
   overlay?: HTMLCanvasElement
 }
 
@@ -26,7 +25,6 @@ export default class extends React.Component<{}, FaceDetectionWebcamMtcnnPageSta
 
     this.state = {
       inputVideo: new VideoWrap(),
-      isPlaying: false,
       detectionParams: {
         minFaceSize: 200,
         scaleFactor: 0.8
@@ -60,7 +58,9 @@ export default class extends React.Component<{}, FaceDetectionWebcamMtcnnPageSta
         <LoadModels mtcnnModelUrl={MODELS_URI}>
         {
           ({ mtcnn }) =>
-            <DetectFacesMtcnn
+            this.state.inputVideo.isLoaded
+            &&
+            <DetectFacesMtcnnNoLoader
               mtcnn={mtcnn}
               input={this.state.inputVideo}
               detectionParams={this.state.detectionParams}
@@ -87,7 +87,7 @@ export default class extends React.Component<{}, FaceDetectionWebcamMtcnnPageSta
                 return null
               }
             }
-            </DetectFacesMtcnn>
+            </DetectFacesMtcnnNoLoader>
         }
         </LoadModels>
       </Root>

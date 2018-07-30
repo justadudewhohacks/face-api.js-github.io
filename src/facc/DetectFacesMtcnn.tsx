@@ -29,3 +29,8 @@ export const DetectFacesMtcnn = withAsyncRendering<DetectFacesMtcnnProps, Detect
   detectFaces,
   () => <ModalLoader title="Detecting Faces"/>
 )
+
+export const DetectFacesMtcnnNoLoader = withAsyncRendering<DetectFacesMtcnnProps, DetectFacesMtcnnState>(
+  detectFaces
+)
+
