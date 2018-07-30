@@ -19,6 +19,7 @@
     "face-api.js": "^0.9.2",
     "gatsby": "^1.9.273",
     "gatsby-link": "^1.6.45",
+    "gatsby-plugin-google-analytics": "^1.0.31",
     "gatsby-plugin-styled-components": "^2.0.11",
     "gatsby-plugin-typescript": "^1.4.20",
     "gatsby-source-filesystem": "^1.5.39",
