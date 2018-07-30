@@ -1,8 +1,10 @@
 import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
-import { AdjustableInput } from '../components/AdjustableInput';
+import { MtcnnForwardParams } from '../../node_modules/face-api.js/build/mtcnn/types';
 import { DisplayFullFaceDescriptions } from '../components/DisplayFullFaceDescriptions';
+import { ModalLoader } from '../components/ModalLoader';
+import { MtcnnParamControls } from '../components/MtcnnParamControls';
 import { SelectableImage } from '../components/SelectableImage';
 import { ALIGNED_FACE_IMAGES_BY_CLASS, EXAMPLE_IMAGES } from '../const';
 import { AllFacesMtcnn } from '../facc/AllFacesMtcnn';
@@ -10,13 +12,10 @@ import { ComputeRefDescriptors } from '../facc/ComputeRefDescriptors';
 import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
-import { ModalLoader } from '../components/ModalLoader';
 
 type FaceRecognitionMtcnnPageState = {
   inputImg: ImageWrap
-  detectionParams: {
-    minFaceSize: number
-  }
+  detectionParams: MtcnnForwardParams
   overlay?: HTMLCanvasElement
 }
 
@@ -27,7 +26,8 @@ export default class extends React.Component<{}, FaceRecognitionMtcnnPageState> 
   state: FaceRecognitionMtcnnPageState = {
     inputImg: new ImageWrap(EXAMPLE_IMAGES[0].url),
     detectionParams: {
-      minFaceSize: 40
+      minFaceSize: 40,
+      scaleFactor: 0.7
     }
   }
 
@@ -44,18 +44,9 @@ export default class extends React.Component<{}, FaceRecognitionMtcnnPageState> 
           onLoaded={({ img: inputImg, overlay }) => this.setState({ inputImg, overlay })}
           maxImageWidth={800}
         />
-        <AdjustableInput
-          inputId="minFaceSize"
-          label="minFaceSize:"
-          value={this.state.detectionParams.minFaceSize}
-          minValue={20}
-          maxValue={200}
-          step={20}
-          onChange={
-            (minFaceSize: number) => this.setState({
-              detectionParams: { ...this.state.detectionParams, minFaceSize }
-            })
-          }
+        <MtcnnParamControls
+          detectionParams={this.state.detectionParams}
+          onChange={detectionParams => this.setState({ detectionParams })}
         />
         <LoadModels
           mtcnnModelUrl={withPrefix('/models')}

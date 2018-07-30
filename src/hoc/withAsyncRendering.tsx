@@ -7,7 +7,7 @@ export interface WithAsyncRenderingState  {
 }
 
 export interface WithAsyncRenderingProps<T extends WithAsyncRenderingState> {
-  children: (injectedProps: T) => React.Component | JSX.Element
+  children: (injectedProps: T) => React.Component | JSX.Element | React.Component[] | JSX.Element[]
 }
 
 export const withAsyncRendering = <P, S> (
@@ -41,7 +41,6 @@ export const withAsyncRendering = <P, S> (
 
     componentWillReceiveProps(nextProps: WithAsyncRenderingProps<WithAsyncRenderingState & S>) {
       if (!shallowEquals(this.props, nextProps, ['children'])) {
-        this.setState({ isBusy: true })
         this.dispatchAsyncAction()
       }
     }

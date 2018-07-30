@@ -19,8 +19,7 @@ async function detectFaces(props: DetectFacesProps) {
   const faceDetections = await props.faceDetectionNet.locateFaces(props.img.img, props.minConfidence)
 
   return {
-    faceDetections,
-    isBusy: false
+    faceDetections
   }
 }
 

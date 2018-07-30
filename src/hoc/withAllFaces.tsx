@@ -18,7 +18,7 @@ type Props<DetectionParams> = WithAllFacesProps & {
 }
 
 export const withAllFaces = <DetectionParams extends {}> (
-  allFacesFunction: (img: HTMLImageElement, params: DetectionParams) => Promise<faceapi.FullFaceDescription[]>
+  allFacesFunction: (img: HTMLImageElement | HTMLCanvasElement, params: DetectionParams) => Promise<faceapi.FullFaceDescription[]>
 ) => {
   async function allFaces(props: Props<DetectionParams>) {
     const fullFaceDescriptions = await allFacesFunction(props.img.img, props.detectionParams)

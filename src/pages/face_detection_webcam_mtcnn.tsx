@@ -3,12 +3,11 @@ import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
 import { MtcnnForwardParams } from '../../node_modules/face-api.js/build/mtcnn/types';
-import { AdjustableInput } from '../components/AdjustableInput';
+import { MtcnnParamControls } from '../components/MtcnnParamControls';
 import { WebcamVideoWithOverlay } from '../components/WebcamVideoWithOverlay';
 import { DetectFacesMtcnn } from '../facc/DetectFacesMtcnn';
 import { LoadModels } from '../facc/LoadModels';
 import { Root } from '../Root';
-import { CenterContent } from '../styled/CenterContent';
 import { VideoWrap } from '../VideoWrap';
 
 type FaceDetectionWebcamMtcnnPageState = {
@@ -54,34 +53,10 @@ export default class extends React.Component<{}, FaceDetectionWebcamMtcnnPageSta
           onLoaded={({ video: inputVideo, overlay }) => this.setState({ inputVideo, overlay })}
           maxVideoWidth={800}
         />
-        <CenterContent flexDirection="column">
-          <AdjustableInput
-            inputId="scaleFactor"
-            label="scaleFactor:"
-            value={this.state.detectionParams.scaleFactor}
-            minValue={0.1}
-            maxValue={0.9}
-            step={0.05}
-            onChange={
-              (scaleFactor: number) => this.setState({
-                detectionParams: { ...this.state.detectionParams, scaleFactor }
-              })
-            }
-          />
-          <AdjustableInput
-            inputId="minFaceSize"
-            label="minFaceSize:"
-            value={this.state.detectionParams.minFaceSize}
-            minValue={40}
-            maxValue={400}
-            step={40}
-            onChange={
-              (minFaceSize: number) => this.setState({
-                detectionParams: { ...this.state.detectionParams, minFaceSize }
-              })
-            }
-          />
-        </CenterContent>
+        <MtcnnParamControls
+          detectionParams={this.state.detectionParams}
+          onChange={detectionParams => this.setState({ detectionParams })}
+        />
         <LoadModels mtcnnModelUrl={withPrefix('/models')}>
         {
           ({ mtcnn }) =>

@@ -1,4 +1,3 @@
-import { withPrefix } from 'gatsby-link';
 import * as React from 'react';
 
 import { ImageWrap } from '../ImageWrap';
@@ -64,7 +63,7 @@ export class ImageWithOverlay extends React.Component<ImageWithOverlayProps> {
     return(
       <div style={{ position: 'relative' }}>
         <img
-          src={withPrefix(this.props.imageSrc)}
+          src={this.props.imageSrc}
           style={{ maxWidth: this.props.maxImageWidth }}
           ref={this.onImageRef}
           onLoad={this.onImageLoaded}

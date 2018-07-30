@@ -1,8 +1,8 @@
 export class ImageWrap {
   private _imageSrc: string
-  private _img: HTMLImageElement | undefined
+  private _img: HTMLImageElement | HTMLCanvasElement | undefined
 
-  constructor(imageSrc: string, img?: HTMLImageElement) {
+  constructor(imageSrc: string, img?: HTMLImageElement | HTMLCanvasElement) {
     this._imageSrc = imageSrc
     this._img = img
   }
@@ -11,11 +11,11 @@ export class ImageWrap {
     return this._imageSrc
   }
 
-  public get img(): HTMLImageElement | undefined {
+  public get img(): HTMLImageElement | HTMLCanvasElement | undefined {
     return this._img
   }
 
-  public get element(): HTMLImageElement | undefined {
+  public get element(): HTMLImageElement | HTMLCanvasElement | undefined {
     return this.img
   }
 
