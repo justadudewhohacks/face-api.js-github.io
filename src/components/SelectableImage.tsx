@@ -68,7 +68,7 @@ export class SelectableImage extends React.Component<SelectableImageProps, Selec
 
     const reader = new FileReader()
 
-    reader.onload = loadEvent =>
+    reader.onload = (loadEvent: any) =>
     this.setState({
       imageSrc: loadEvent.target.result
     })

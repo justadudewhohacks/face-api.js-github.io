@@ -1,17 +1,22 @@
 import * as faceapi from 'face-api.js';
-import { FaceLandmarks } from 'face-api.js/build/FaceLandmarks';
 import * as React from 'react';
 
 import { shallowEquals } from '../commons/shallowEquals';
 import { BestMatch } from '../facc/ComputeRefDescriptors';
 
+export type DisplayResult = {
+  faceDetection: faceapi.FaceDetection,
+  faceLandmarks: faceapi.FaceLandmarks
+}
+
 export type DisplayResultsProps = {
   overlay: HTMLCanvasElement
-  faceDetections?: faceapi.FaceDetection[]
-  faceLandmarks?: FaceLandmarks[]
+  faceDetections?: faceapi.FaceDetection[] 
+  faceLandmarks?: faceapi.FaceLandmarks[]
   bestMatches?: BestMatch[]
   withScore?: boolean
   drawLines?: boolean
+  onRendered?: () => any
 }
 
 export class DisplayResults extends React.Component<DisplayResultsProps> {
@@ -23,9 +28,10 @@ export class DisplayResults extends React.Component<DisplayResultsProps> {
 
   draw() {
     const { overlay, faceDetections, faceLandmarks, bestMatches, withScore, drawLines } = this.props
+
     overlay.getContext('2d').clearRect(0, 0, overlay.width, overlay.height)
 
-    if (faceDetections) {
+    if (faceDetections && faceDetections.length) {
       faceapi.drawDetection(
         overlay,
         faceDetections.map(det => det.forSize(overlay.width, overlay.height)),
@@ -33,7 +39,7 @@ export class DisplayResults extends React.Component<DisplayResultsProps> {
       )
     }
 
-    if (faceLandmarks) {
+    if (faceLandmarks && faceLandmarks.length) {
       faceapi.drawLandmarks(
         overlay,
         faceLandmarks.map((landmarks, i) => {
@@ -73,6 +79,7 @@ export class DisplayResults extends React.Component<DisplayResultsProps> {
   }
 
   render(): any {
+    this.props.onRendered && this.props.onRendered()
     return null
   }
 }

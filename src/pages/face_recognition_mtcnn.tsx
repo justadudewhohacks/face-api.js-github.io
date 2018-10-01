@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { MtcnnForwardParams } from '../../node_modules/face-api.js/build/mtcnn/types';
 import { DisplayFullFaceDescriptions } from '../components/DisplayFullFaceDescriptions';
 import { ModalLoader } from '../components/ModalLoader';
 import { MtcnnParamControls } from '../components/MtcnnParamControls';
@@ -11,10 +10,11 @@ import { ComputeRefDescriptors } from '../facc/ComputeRefDescriptors';
 import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
 import { Root } from '../Root';
+import { MtcnnDetectionParams } from '../types';
 
 type FaceRecognitionMtcnnPageState = {
   inputImg: ImageWrap
-  detectionParams: MtcnnForwardParams
+  detectionParams: MtcnnDetectionParams
   overlay?: HTMLCanvasElement
 }
 

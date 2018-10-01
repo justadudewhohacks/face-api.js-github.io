@@ -55,7 +55,7 @@ export class WebcamVideoWithOverlay extends React.Component<WebcamVideoWithOverl
     this.onChange()
   }
 
-  shouldComponentUpdate(nextProps: WebcamVideoWithOverlayProps) {
+  shouldComponentUpdate() {
     return false
   }
 

@@ -1,12 +1,11 @@
 import * as React from 'react';
 
-import { MtcnnForwardParams } from '../../node_modules/face-api.js/build/mtcnn/types';
 import { CenterContent } from '../styled/CenterContent';
 import { AdjustableInput } from './AdjustableInput';
 
 export interface MtcnnParamControlsProps {
-  detectionParams: MtcnnForwardParams
-  onChange: (detectionParams: MtcnnForwardParams) => any
+  detectionParams: { minFaceSize: number, scaleFactor: number }
+  onChange: (detectionParams: { minFaceSize: number, scaleFactor: number }) => any
 }
 
 export const MtcnnParamControls = (props: MtcnnParamControlsProps) =>

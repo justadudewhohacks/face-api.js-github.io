@@ -32,21 +32,21 @@ export const withAsyncRendering = <P, S> (
       { isBusy: true }
     )
 
-    async dispatchAsyncAction() {
+    async dispatchAsyncAction(props: P) {
       this.setState({ isBusy: true })
 
-      const resultState = await asyncAction(this.props as any as P)
+      const resultState = await asyncAction(props)
       this.setState(Object.assign({}, resultState, { isBusy: false }))
     }
 
     componentWillReceiveProps(nextProps: WithAsyncRenderingProps<WithAsyncRenderingState & S>) {
       if (!shallowEquals(this.props, nextProps, ['children'])) {
-        this.dispatchAsyncAction()
+        this.dispatchAsyncAction(nextProps as any as P)
       }
     }
 
     componentDidMount() {
-      this.dispatchAsyncAction()
+      this.dispatchAsyncAction(this.props as any as P)
     }
 
     render() {

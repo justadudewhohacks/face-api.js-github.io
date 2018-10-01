@@ -1,22 +1,22 @@
 import * as faceapi from 'face-api.js';
 import * as React from 'react';
 
-import { MtcnnParamControls } from '../components/MtcnnParamControls';
+import { TinyYolov2ParamControls } from '../components/TinyYolov2ParamControls';
 import { WebcamVideoWithOverlay } from '../components/WebcamVideoWithOverlay';
 import { MODELS_URI } from '../const';
-import { DetectFacesMtcnnNoLoader } from '../facc/DetectFacesMtcnn';
+import { DetectFacesTinyYolov2NoLoader } from '../facc/DetectFacesTinyYolov2';
 import { LoadModels } from '../facc/LoadModels';
 import { Root } from '../Root';
-import { MtcnnDetectionParams } from '../types';
+import { TinyYolov2DetectionParams } from '../types';
 import { VideoWrap } from '../VideoWrap';
 
-type FaceDetectionWebcamMtcnnPageState = {
+type FaceDetectionWebcamYoloPageState = {
   inputVideo: VideoWrap
-  detectionParams: MtcnnDetectionParams
+  detectionParams: TinyYolov2DetectionParams
   overlay?: HTMLCanvasElement
 }
 
-export default class extends React.Component<{}, FaceDetectionWebcamMtcnnPageState> {
+export default class extends React.Component<{}, FaceDetectionWebcamYoloPageState> {
   isBusy: boolean = true
   interval: NodeJS.Timer
 
@@ -26,8 +26,8 @@ export default class extends React.Component<{}, FaceDetectionWebcamMtcnnPageSta
     this.state = {
       inputVideo: new VideoWrap(),
       detectionParams: {
-        minFaceSize: 200,
-        scaleFactor: 0.8
+        inputSize: 416,
+        scoreThreshold: 0.5
       }
     }
 
@@ -51,34 +51,26 @@ export default class extends React.Component<{}, FaceDetectionWebcamMtcnnPageSta
           onLoaded={({ video: inputVideo, overlay }) => this.setState({ inputVideo, overlay })}
           maxVideoWidth={800}
         />
-        <MtcnnParamControls
-          detectionParams={this.state.detectionParams}
-          onChange={detectionParams => this.setState({ detectionParams })}
-        />
-        <LoadModels mtcnnModelUrl={MODELS_URI}>
+        <LoadModels tinyYolov2ModelUrl={MODELS_URI}>
         {
-          ({ mtcnn }) =>
+          ({ tinyYolov2 }) =>
             this.state.inputVideo.isLoaded
             &&
-            <DetectFacesMtcnnNoLoader
-              mtcnn={mtcnn}
+            <DetectFacesTinyYolov2NoLoader
+              tinyYolov2={tinyYolov2}
               input={this.state.inputVideo}
               detectionParams={this.state.detectionParams}
             >
             {
-              ({ mtcnnResults }) => {
+              ({ faceDetections }) => {
                 const { overlay } = this.state
 
-                if (overlay && mtcnnResults) {
+                if (overlay) {
                   const { width, height } = overlay
                   overlay.getContext('2d').clearRect(0, 0, width, height)
                   faceapi.drawDetection(
                     overlay,
-                    mtcnnResults.map(res => res.faceDetection.forSize(width, height))
-                  )
-                  faceapi.drawLandmarks(
-                    overlay,
-                    mtcnnResults.map(res => res.faceLandmarks.forSize(width, height))
+                    faceDetections.map(det => det.forSize(width, height))
                   )
 
                   this.isBusy = false
@@ -87,7 +79,7 @@ export default class extends React.Component<{}, FaceDetectionWebcamMtcnnPageSta
                 return null
               }
             }
-            </DetectFacesMtcnnNoLoader>
+            </DetectFacesTinyYolov2NoLoader>
         }
         </LoadModels>
       </Root>

@@ -1,20 +1,20 @@
 import * as faceapi from 'face-api.js';
 import * as React from 'react';
 
-import { MtcnnForwardParams, MtcnnResult } from '../../node_modules/face-api.js/build/mtcnn/types';
 import { ModalLoader } from '../components/ModalLoader';
 import { withAsyncRendering } from '../hoc/withAsyncRendering';
 import { ImageWrap } from '../ImageWrap';
+import { MtcnnDetectionParams } from '../types';
 import { VideoWrap } from '../VideoWrap';
 
 export interface DetectFacesMtcnnProps {
   mtcnn: faceapi.Mtcnn
   input: ImageWrap | VideoWrap
-  detectionParams: MtcnnForwardParams
+  detectionParams: MtcnnDetectionParams
 }
 
 export interface DetectFacesMtcnnState {
-  mtcnnResults: MtcnnResult[] | null
+  mtcnnResults?: { faceDetection: faceapi.FaceDetection, faceLandmarks: faceapi.FaceLandmarks }[]
 }
 
 async function detectFaces(props: DetectFacesMtcnnProps) {

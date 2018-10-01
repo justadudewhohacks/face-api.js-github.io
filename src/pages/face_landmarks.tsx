@@ -7,7 +7,7 @@ import { ModalLoader } from '../components/ModalLoader';
 import { SelectableImage, SelectionTypes } from '../components/SelectableImage';
 import { ALIGNED_FACE_IMAGES, MODELS_URI } from '../const';
 import { DetectFaceLandmarks } from '../facc/DetectFaceLandmarks';
-import { DetectFaces } from '../facc/DetectFaces';
+import { DetectFacesSsdMobilenetv1 } from '../facc/DetectFacesSsdMobilenetv1';
 import { ExtractFaces } from '../facc/ExtractFaces';
 import { LoadModels } from '../facc/LoadModels';
 import { ImageWrap } from '../ImageWrap';
@@ -121,7 +121,7 @@ export default class extends React.Component<{}, FaceLandmarksPageState> {
     return(
       <Root>
         <LoadModels
-          faceDetectionModelUrl={MODELS_URI}
+          ssdMobilenetv1ModelUrl={MODELS_URI}
           faceLandmarkModelUrl={MODELS_URI}
         >
         {
@@ -167,10 +167,10 @@ export default class extends React.Component<{}, FaceLandmarksPageState> {
                       {
                         this.isReadyForDetection()
                         &&
-                        <DetectFaces
-                          faceDetectionNet={faceDetectionNet}
-                          img={this.state.inputImg}
-                          minConfidence={0.5}
+                        <DetectFacesSsdMobilenetv1
+                          faceDetectionNet={faceDetectionNet as faceapi.FaceDetectionNet}
+                          input={this.state.inputImg}
+                          detectionParams={{ minConfidence: 0.5 }}
                         >
                         {
                           ({ faceDetections }) =>
@@ -181,7 +181,7 @@ export default class extends React.Component<{}, FaceLandmarksPageState> {
                                 faceLandmarkNet={faceLandmarkNet}
                               />
                         }
-                        </DetectFaces>
+                        </DetectFacesSsdMobilenetv1>
                       }
                     </div>
               }

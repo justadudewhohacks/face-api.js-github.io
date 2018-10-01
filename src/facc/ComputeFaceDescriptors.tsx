@@ -15,6 +15,10 @@ export interface ComputeFaceDescriptorsState {
 }
 
 async function computeFaceDescriptors(props: ComputeFaceDescriptorsProps) {
+  if (!props.imgs.every(img => img.isLoaded)) {
+    return
+  }
+
   const faceDescriptors = await Promise.all(
     props.imgs.map((imgWrap) => {
       return props.faceRecognitionNet.computeFaceDescriptor(imgWrap.img) as Promise<Float32Array>

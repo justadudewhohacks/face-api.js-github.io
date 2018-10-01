@@ -1,11 +1,8 @@
 import * as faceapi from 'face-api.js';
 
-import { MtcnnForwardParams } from '../../node_modules/face-api.js/build/mtcnn/types';
 import { withAllFaces } from '../hoc/withAllFaces';
+import { MtcnnDetectionParams } from '../types';
 
-// TODO: export faceapi.MtcnnForwardParams
-export type DetectionParams = MtcnnForwardParams
-
-export const AllFacesMtcnn = withAllFaces<DetectionParams>(
-  (img: HTMLImageElement, detectionParams: DetectionParams) => faceapi.allFacesMtcnn(img, detectionParams)
+export const AllFacesMtcnn = withAllFaces<MtcnnDetectionParams>(
+  (img: HTMLImageElement, detectionParams: MtcnnDetectionParams) => faceapi.allFacesMtcnn(img, detectionParams)
 )
