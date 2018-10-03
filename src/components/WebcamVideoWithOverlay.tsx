@@ -1,10 +1,10 @@
 import * as faceapi from 'face-api.js';
 import * as React from 'react';
 
-import { VideoWrap } from '../VideoWrap';
+import { MediaElement } from '../MediaElement';
 
 export type WebcamVideoWithOverlayProps = {
-  onLoaded: (refs: { video: VideoWrap, overlay: HTMLCanvasElement}) => any
+  onLoaded: (refs: { video: MediaElement, overlay: HTMLCanvasElement }) => any
   maxVideoWidth?: number
 }
 
@@ -29,7 +29,7 @@ export class WebcamVideoWithOverlay extends React.Component<WebcamVideoWithOverl
       const { width, height } = faceapi.getMediaDimensions(this.video)
       this.overlay.width = width,
       this.overlay.height = height
-      this.props.onLoaded({ video: new VideoWrap(video), overlay })
+      this.props.onLoaded({ video: new MediaElement(video), overlay })
     }
   }
 

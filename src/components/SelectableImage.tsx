@@ -2,7 +2,7 @@ import * as Mui from '@material-ui/core';
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { ImageWrap } from '../ImageWrap';
+import { MediaElement } from '../MediaElement';
 import { SideBySide } from '../styled/SideBySide';
 import { ImageSelection, ImageSelectionItem } from './ImageSelection';
 import { ImageWithOverlay } from './ImageWithOverlay';
@@ -26,7 +26,7 @@ export enum SelectionTypes {
 }
 
 export type SelectableImageProps = {
-  onLoaded: (refs: { img: ImageWrap, overlay: HTMLCanvasElement}) => any
+  onLoaded: (refs: { img: MediaElement, overlay: HTMLCanvasElement}) => any
   items?: ImageSelectionItem[]
   initialImageSrc?: string
   maxImageWidth?: number

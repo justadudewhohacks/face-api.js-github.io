@@ -2,58 +2,66 @@ import * as React from 'react';
 
 import { shallowEquals } from '../commons/shallowEquals';
 
-export interface WithAsyncRenderingState  {
+export interface IsBusy  {
   isBusy: boolean
 }
 
-export interface WithAsyncRenderingProps<T extends WithAsyncRenderingState> {
+export interface WithAsyncRenderingProps<T extends IsBusy> {
   children: (injectedProps: T) => React.Component | JSX.Element | React.Component[] | JSX.Element[]
 }
 
-export const withAsyncRendering = <P, S> (
-  asyncAction: (props: P) => Promise<S>,
-  renderLoader?: () => React.Component | JSX.Element,
-  initialState?: S
-) =>
+export interface WithAsyncRenderingState<InjectedProps> extends IsBusy {
+  injectedProps: InjectedProps | null
+}
 
-  class extends React.Component<
-    P & WithAsyncRenderingProps<WithAsyncRenderingState & S>,
-    WithAsyncRenderingState & S
+export const withAsyncRendering = <Props, InjectedProps> (
+  asyncAction: (props: Props) => Promise<InjectedProps | null>,
+  renderLoader?: () => React.Component | JSX.Element,
+  initialState?: InjectedProps
+) => {
+
+  type ExtendedComponentProps = Props & WithAsyncRenderingProps<InjectedProps & IsBusy>
+
+  return class extends React.Component<
+    Props & WithAsyncRenderingProps<InjectedProps & IsBusy>
   > {
-    constructor(props: P & WithAsyncRenderingProps<WithAsyncRenderingState & S>) {
+    constructor(props: ExtendedComponentProps) {
       super(props)
 
       this.dispatchAsyncAction = this.dispatchAsyncAction.bind(this)
     }
 
-    state: WithAsyncRenderingState & S = Object.assign(
-      {},
-      initialState,
-      { isBusy: true }
-    )
-
-    async dispatchAsyncAction(props: P) {
-      this.setState({ isBusy: true })
-
-      const resultState = await asyncAction(props)
-      this.setState(Object.assign({}, resultState, { isBusy: false }))
+    state: WithAsyncRenderingState<InjectedProps> = {
+      injectedProps: initialState,
+      isBusy: true
     }
 
-    componentWillReceiveProps(nextProps: WithAsyncRenderingProps<WithAsyncRenderingState & S>) {
+    async dispatchAsyncAction(props: Props) {
+      this.setState({ isBusy: true })
+      this.setState({ isBusy: false, injectedProps: await asyncAction(props) })
+    }
+
+    componentWillReceiveProps(nextProps: ExtendedComponentProps) {
       if (!shallowEquals(this.props, nextProps, ['children'])) {
-        this.dispatchAsyncAction(nextProps as any as P)
+        this.dispatchAsyncAction(nextProps)
       }
     }
 
     componentDidMount() {
-      this.dispatchAsyncAction(this.props as any as P)
+      this.dispatchAsyncAction(this.props as any as Props)
     }
 
     render() {
-      if (this.state.isBusy && renderLoader) {
+      const { injectedProps, isBusy } = this.state
+
+      if (isBusy && renderLoader) {
         return renderLoader()
       }
 
-      return this.props.children(this.state)
+      return injectedProps
+        ? this.props.children(Object.assign({}, injectedProps, { isBusy }))
+        // case: async action did not resolve state
+        : null
     }
   }
+}

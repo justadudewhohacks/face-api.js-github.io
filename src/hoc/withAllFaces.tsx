@@ -1,12 +1,13 @@
 import * as faceapi from 'face-api.js';
-
-import { ImageWrap } from '../ImageWrap';
-import { withAsyncRendering } from './withAsyncRendering';
-import { ModalLoader } from '../components/ModalLoader';
 import * as React from 'react';
 
+import { ModalLoader } from '../components/ModalLoader';
+import { MediaElement } from '../MediaElement';
+import { withAsyncRendering } from './withAsyncRendering';
+import { TMediaElement } from 'face-api.js';
+
 export interface WithAllFacesProps {
-  img: ImageWrap
+  input?: MediaElement
 }
 
 export interface WithAllFacesState {
@@ -18,14 +19,12 @@ type Props<DetectionParams> = WithAllFacesProps & {
 }
 
 export const withAllFaces = <DetectionParams extends {}> (
-  allFacesFunction: (img: HTMLImageElement | HTMLCanvasElement, params: DetectionParams) => Promise<faceapi.FullFaceDescription[]>
+  allFacesFunction: (img: TMediaElement, params: DetectionParams) => Promise<faceapi.FullFaceDescription[]>
 ) => {
   async function allFaces(props: Props<DetectionParams>) {
-    const fullFaceDescriptions = await allFacesFunction(props.img.img, props.detectionParams)
-
-    return {
-      fullFaceDescriptions
-    }
+    return props.input
+      ? { fullFaceDescriptions: await allFacesFunction(props.input.element, props.detectionParams) }
+      : null
   }
 
   return withAsyncRendering<Props<DetectionParams>, WithAllFacesState>(

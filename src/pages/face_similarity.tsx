@@ -6,21 +6,19 @@ import { SelectableImage } from '../components/SelectableImage';
 import { ALIGNED_FACE_IMAGES, MODELS_URI } from '../const';
 import { ComputeFaceDescriptors } from '../facc/ComputeFaceDescriptors';
 import { LoadModels } from '../facc/LoadModels';
-import { ImageWrap } from '../ImageWrap';
+import { MediaElement } from '../MediaElement';
 import { Root } from '../Root';
 import { MarginTop } from '../styled/MarginTop';
 import { SideBySide } from '../styled/SideBySide';
 
 type FaceSimilarityPageState = {
-  inputImg1: ImageWrap
-  inputImg2: ImageWrap
+  inputImg1?: MediaElement
+  inputImg2?: MediaElement
 }
 
 export default class extends React.Component<{}, FaceSimilarityPageState> {
 
   state: FaceSimilarityPageState = {
-    inputImg1: new ImageWrap(ALIGNED_FACE_IMAGES[30].url),
-    inputImg2: new ImageWrap(ALIGNED_FACE_IMAGES[31].url)
   }
 
   public render() {
@@ -33,13 +31,13 @@ export default class extends React.Component<{}, FaceSimilarityPageState> {
         <SideBySide>
           <SelectableImage
             items={ALIGNED_FACE_IMAGES}
-            initialImageSrc={this.state.inputImg1.imageSrc}
+            initialImageSrc={ALIGNED_FACE_IMAGES[30].url}
             onLoaded={({ img: inputImg1 }) => this.setState({ inputImg1 })}
             maxImageWidth={150}
           />
           <SelectableImage
             items={ALIGNED_FACE_IMAGES}
-            initialImageSrc={this.state.inputImg2.imageSrc}
+            initialImageSrc={ALIGNED_FACE_IMAGES[31].url}
             onLoaded={({ img: inputImg2 }) => this.setState({ inputImg2 })}
             maxImageWidth={150}
           />
@@ -49,7 +47,7 @@ export default class extends React.Component<{}, FaceSimilarityPageState> {
             {
               ({ faceRecognitionNet }) =>
                 <ComputeFaceDescriptors
-                  imgs={[this.state.inputImg1, this.state.inputImg2]}
+                  inputs={[this.state.inputImg1, this.state.inputImg2]}
                   faceRecognitionNet={faceRecognitionNet}
                 >
                 {

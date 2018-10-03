@@ -13,11 +13,10 @@ const PageHeader = styled.h3`
 
 const MENU_ITEMS = [
   { label: 'Face Detection', linkTo: '/face_detection' },
-  { label: 'Face Detection Webcam - MTCNN', linkTo: '/face_detection_webcam_mtcnn' },
+  { label: 'Webcam Face Tracking', linkTo: '/webcam_face_tracking' },
   { label: 'Face Landmarks', linkTo: '/face_landmarks' },
   { label: 'Face Similarity', linkTo: '/face_similarity' },
-  { label: 'Face Recognition - SSD Face Detector', linkTo: '/face_recognition' },
-  { label: 'Face Recognition - MTCNN Face Detector', linkTo: '/face_recognition_mtcnn' }
+  { label: 'Face Recognition', linkTo: '/face_recognition' }
 ]
 
 const styles = (theme: any) => ({

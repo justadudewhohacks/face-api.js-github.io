@@ -12,19 +12,18 @@ import { DetectFacesMtcnn } from '../facc/DetectFacesMtcnn';
 import { DetectFacesSsdMobilenetv1 } from '../facc/DetectFacesSsdMobilenetv1';
 import { DetectFacesTinyYolov2 } from '../facc/DetectFacesTinyYolov2';
 import { LoadFaceDetectionModel } from '../facc/LoadModels';
-import { ImageWrap } from '../ImageWrap';
+import { MediaElement } from '../MediaElement';
 import { Root } from '../Root';
 
 type FaceDetectionPageState = {
-  inputImg: ImageWrap
   minDetectionScore: number
+  inputImg?: MediaElement
   overlay?: HTMLCanvasElement
 }
 
 export default class extends React.Component<{}, FaceDetectionPageState> {
 
   state: FaceDetectionPageState = {
-    inputImg: new ImageWrap(EXAMPLE_IMAGES[0].url),
     minDetectionScore: 0.5
   }
 
@@ -41,7 +40,7 @@ export default class extends React.Component<{}, FaceDetectionPageState> {
             <span>
               <SelectableImage
                 items={EXAMPLE_IMAGES}
-                initialImageSrc={this.state.inputImg.imageSrc}
+                initialImageSrc={EXAMPLE_IMAGES[0].url}
                 onLoaded={({ img: inputImg, overlay }) => this.setState({ inputImg, overlay })}
                 maxImageWidth={800}
                 selectionType={SelectionTypes.BOTH}

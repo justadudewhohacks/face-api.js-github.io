@@ -12,12 +12,12 @@ export interface SsdMobilenetv1ParamControlsProps {
 export const SsdMobilenetv1ParamControls = (props: SsdMobilenetv1ParamControlsProps) =>
   <CenterContent flexDirection="column">
     <AdjustableInput
-      inputId="inputSize"
-      label="inputSize:"
+      inputId="minConfidence"
+      label="minConfidence:"
       value={props.detectionParams.minConfidence}
       minValue={0.1}
       maxValue={0.9}
       step={0.1}
-      onChange={(e: any) => props.onChange({ ...props.detectionParams, minConfidence: parseInt(e.target.value) })}
+      onChange={(minConfidence: number) => props.onChange({ ...props.detectionParams, minConfidence })}
     />
   </CenterContent>

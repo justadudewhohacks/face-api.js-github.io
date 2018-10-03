@@ -1,13 +1,13 @@
 import * as faceapi from 'face-api.js';
-
-import { withAsyncRendering } from '../hoc/withAsyncRendering';
-import { ImageWrap } from '../ImageWrap';
-import { ModalLoader } from '../components/ModalLoader';
 import * as React from 'react';
+
+import { ModalLoader } from '../components/ModalLoader';
+import { withAsyncRendering } from '../hoc/withAsyncRendering';
+import { MediaElement } from '../MediaElement';
 
 export interface ComputeFaceDescriptorsProps {
   faceRecognitionNet: faceapi.FaceRecognitionNet
-  imgs: ImageWrap[]
+  inputs: Array<MediaElement | undefined>
 }
 
 export interface ComputeFaceDescriptorsState {
@@ -15,14 +15,14 @@ export interface ComputeFaceDescriptorsState {
 }
 
 async function computeFaceDescriptors(props: ComputeFaceDescriptorsProps) {
-  if (!props.imgs.every(img => img.isLoaded)) {
+  if (!props.inputs.every(input => !!input)) {
     return
   }
 
   const faceDescriptors = await Promise.all(
-    props.imgs.map((imgWrap) => {
-      return props.faceRecognitionNet.computeFaceDescriptor(imgWrap.img) as Promise<Float32Array>
-    })
+    props.inputs.map(input =>
+      props.faceRecognitionNet.computeFaceDescriptor(input.element) as Promise<Float32Array>
+    )
   )
 
   return {

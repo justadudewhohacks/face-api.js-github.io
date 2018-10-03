@@ -1,10 +1,11 @@
 import * as React from 'react';
 
-import { ImageWrap } from '../ImageWrap';
+import { MediaElement } from '../MediaElement';
+
 
 export type ImageWithOverlayProps = {
   imageSrc: string
-  onLoaded: (refs: { img: ImageWrap, overlay: HTMLCanvasElement}) => any
+  onLoaded: (refs: { img: MediaElement, overlay: HTMLCanvasElement}) => any
   maxImageWidth?: number
 }
 
@@ -28,7 +29,7 @@ export class ImageWithOverlay extends React.Component<ImageWithOverlayProps> {
     if (img && overlay && isLoaded) {
       this.overlay.height = this.img.height
       this.overlay.width = this.img.width
-      this.props.onLoaded({ img: new ImageWrap(this.props.imageSrc, img), overlay })
+      this.props.onLoaded({ img: new MediaElement(img), overlay })
     }
   }
 

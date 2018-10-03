@@ -3,13 +3,13 @@ import * as React from 'react';
 
 import { ModalLoader } from '../components/ModalLoader';
 import { withAsyncRendering } from '../hoc/withAsyncRendering';
-import { ImageWrap } from '../ImageWrap';
+import { MediaElement } from '../MediaElement';
 import { SsdMobilenetv1DetectionParams } from '../types';
 
 export interface DetectFacesSsdMobilenetv1Props {
   faceDetectionNet: faceapi.FaceDetectionNet
-  input: ImageWrap
   detectionParams: SsdMobilenetv1DetectionParams
+  input?: MediaElement
 }
 
 export interface DetectFacesSsdMobilenetv1State {
@@ -17,11 +17,9 @@ export interface DetectFacesSsdMobilenetv1State {
 }
 
 async function detectFaces(props: DetectFacesSsdMobilenetv1Props) {
-  const faceDetections = await props.faceDetectionNet.locateFaces(props.input.img, props.detectionParams.minConfidence)
-
-  return {
-    faceDetections
-  }
+  return props.input
+    ? { faceDetections: await props.faceDetectionNet.locateFaces(props.input.element, props.detectionParams.minConfidence) }
+    : null
 }
 
 export const DetectFacesSsdMobilenetv1 = withAsyncRendering<DetectFacesSsdMobilenetv1Props, DetectFacesSsdMobilenetv1State>(

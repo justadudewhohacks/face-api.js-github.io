@@ -13,12 +13,12 @@ import { AllFacesTinyYolov2 } from '../facc/AllFacesTinyYolov2';
 import { ChooseFaceDetector } from '../facc/ChooseFaceDetector';
 import { ComputeRefDescriptors } from '../facc/ComputeRefDescriptors';
 import { LoadFaceDetectionModel, LoadModels } from '../facc/LoadModels';
-import { ImageWrap } from '../ImageWrap';
+import { MediaElement } from '../MediaElement';
 import { Root } from '../Root';
 
 type FaceRecognitionPageState = {
-  inputImg: ImageWrap
   minDetectionScore: number
+  inputImg?: MediaElement
   overlay?: HTMLCanvasElement
 }
 
@@ -27,7 +27,6 @@ const REF_DATA_SOURCES = ALIGNED_FACE_IMAGES_BY_CLASS.map(srcsByClass => srcsByC
 export default class extends React.Component<{}, FaceRecognitionPageState> {
 
   state: FaceRecognitionPageState = {
-    inputImg: new ImageWrap(EXAMPLE_IMAGES[0].url),
     minDetectionScore: 0.5
   }
 
@@ -44,7 +43,7 @@ export default class extends React.Component<{}, FaceRecognitionPageState> {
             <span>
               <SelectableImage
                 items={EXAMPLE_IMAGES}
-                initialImageSrc={this.state.inputImg.imageSrc}
+                initialImageSrc={EXAMPLE_IMAGES[0].url}
                 onLoaded={({ img: inputImg, overlay }) => this.setState({ inputImg, overlay })}
                 maxImageWidth={800}
               />
@@ -71,7 +70,7 @@ export default class extends React.Component<{}, FaceRecognitionPageState> {
                               {
                                 ({ detectionParams }) =>
                                   <AllFacesTinyYolov2
-                                    img={this.state.inputImg}
+                                    input={this.state.inputImg}
                                     detectionParams={detectionParams}
                                   >
                                   {
@@ -93,7 +92,7 @@ export default class extends React.Component<{}, FaceRecognitionPageState> {
                               {
                                 ({ detectionParams }) =>
                                   <AllFacesSsdMobilenetv1
-                                    img={this.state.inputImg}
+                                    input={this.state.inputImg}
                                     detectionParams={detectionParams}
                                   >
                                   {
@@ -115,7 +114,7 @@ export default class extends React.Component<{}, FaceRecognitionPageState> {
                               {
                                 ({ detectionParams }) =>
                                   <AllFacesMtcnn
-                                    img={this.state.inputImg}
+                                    input={this.state.inputImg}
                                     detectionParams={detectionParams}
                                   >
                                   {

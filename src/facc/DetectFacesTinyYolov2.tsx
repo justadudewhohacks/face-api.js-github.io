@@ -3,15 +3,14 @@ import * as React from 'react';
 
 import { ModalLoader } from '../components/ModalLoader';
 import { withAsyncRendering } from '../hoc/withAsyncRendering';
-import { ImageWrap } from '../ImageWrap';
-import { VideoWrap } from '../VideoWrap';
+import { MediaElement } from '../MediaElement';
 import { FaceDetection } from 'face-api.js';
 import { TinyYolov2Types } from 'tfjs-tiny-yolov2';
 
 export interface DetectFacesTinyYolov2Props {
   tinyYolov2: faceapi.TinyYolov2
-  input: ImageWrap | VideoWrap
   detectionParams: TinyYolov2Types.TinyYolov2ForwardParams
+  input?: MediaElement
 }
 
 export interface DetectFacesTinyYolov2State {
@@ -19,11 +18,9 @@ export interface DetectFacesTinyYolov2State {
 }
 
 async function detectFaces(props: DetectFacesTinyYolov2Props) {
-  const faceDetections = await props.tinyYolov2.locateFaces(props.input.element, props.detectionParams)
-
-  return {
-    faceDetections
-  }
+  return props.input
+    ? { faceDetections: await props.tinyYolov2.locateFaces(props.input.element, props.detectionParams)}
+    : null
 }
 
 export const DetectFacesTinyYolov2 = withAsyncRendering<DetectFacesTinyYolov2Props, DetectFacesTinyYolov2State>(

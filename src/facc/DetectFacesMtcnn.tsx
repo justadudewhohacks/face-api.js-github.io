@@ -3,14 +3,13 @@ import * as React from 'react';
 
 import { ModalLoader } from '../components/ModalLoader';
 import { withAsyncRendering } from '../hoc/withAsyncRendering';
-import { ImageWrap } from '../ImageWrap';
+import { MediaElement } from '../MediaElement';
 import { MtcnnDetectionParams } from '../types';
-import { VideoWrap } from '../VideoWrap';
 
 export interface DetectFacesMtcnnProps {
   mtcnn: faceapi.Mtcnn
-  input: ImageWrap | VideoWrap
   detectionParams: MtcnnDetectionParams
+  input?: MediaElement
 }
 
 export interface DetectFacesMtcnnState {
@@ -18,11 +17,9 @@ export interface DetectFacesMtcnnState {
 }
 
 async function detectFaces(props: DetectFacesMtcnnProps) {
-  const mtcnnResults = await props.mtcnn.forward(props.input.element, props.detectionParams)
-
-  return {
-    mtcnnResults
-  }
+  return props.input
+    ? { mtcnnResults: await props.mtcnn.forward(props.input.element, props.detectionParams) }
+    : null
 }
 
 export const DetectFacesMtcnn = withAsyncRendering<DetectFacesMtcnnProps, DetectFacesMtcnnState>(

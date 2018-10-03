@@ -10,13 +10,13 @@ import { DetectFaceLandmarks } from '../facc/DetectFaceLandmarks';
 import { DetectFacesSsdMobilenetv1 } from '../facc/DetectFacesSsdMobilenetv1';
 import { ExtractFaces } from '../facc/ExtractFaces';
 import { LoadModels } from '../facc/LoadModels';
-import { ImageWrap } from '../ImageWrap';
+import { MediaElement } from '../MediaElement';
 import { Root } from '../Root';
 import { MarginTop } from '../styled/MarginTop';
 
 
 interface DetectAndDrawFaceLandmarksForFaceImageProps {
-  inputImgs: ImageWrap[]
+  inputImgs: MediaElement[]
   overlay: HTMLCanvasElement
   faceLandmarkNet: faceapi.FaceLandmarkNet
   drawLines: boolean
@@ -27,7 +27,7 @@ class DetectAndDrawFaceLandmarksForFaceImage extends React.Component<DetectAndDr
   render() {
     return (
       <DetectFaceLandmarks
-        imgs={this.props.inputImgs}
+        inputs={this.props.inputImgs}
         faceLandmarkNet={this.props.faceLandmarkNet}
       >
       {
@@ -50,10 +50,10 @@ class DetectAndDrawFaceLandmarksForFaceImage extends React.Component<DetectAndDr
 }
 
 interface DetectAndDrawFaceLandmarksProps {
-  inputImg: ImageWrap
   overlay: HTMLCanvasElement
   faceLandmarkNet: faceapi.FaceLandmarkNet
   drawLines: boolean
+  inputImg?: MediaElement
   faceDetections?: faceapi.FaceDetection[]
 }
 
@@ -62,7 +62,7 @@ class DetectAndDrawFaceLandmarks extends React.Component<DetectAndDrawFaceLandma
     if (this.props.faceDetections) {
       return (
         <ExtractFaces
-          img={this.props.inputImg}
+          input={this.props.inputImg}
           faceDetections={this.props.faceDetections}
         >
         {
@@ -70,7 +70,7 @@ class DetectAndDrawFaceLandmarks extends React.Component<DetectAndDrawFaceLandma
             !isBusy &&
               <DetectAndDrawFaceLandmarksForFaceImage
                 {...this.props}
-                inputImgs={canvases.map((canvas) => new ImageWrap('none', canvas))}
+                inputImgs={canvases.map((canvas) => new MediaElement(canvas))}
               />
         }
         </ExtractFaces>
@@ -88,8 +88,8 @@ class DetectAndDrawFaceLandmarks extends React.Component<DetectAndDrawFaceLandma
 
 type FaceLandmarksPageState = {
   tabIndex: number
-  inputImg: ImageWrap
   drawLines: boolean
+  inputImg?: MediaElement
   overlay?: HTMLCanvasElement
 }
 
@@ -97,7 +97,6 @@ export default class extends React.Component<{}, FaceLandmarksPageState> {
 
   state: FaceLandmarksPageState = {
     tabIndex: 0,
-    inputImg: new ImageWrap(ALIGNED_FACE_IMAGES[30].url),
     drawLines: true
   }
 
@@ -106,11 +105,11 @@ export default class extends React.Component<{}, FaceLandmarksPageState> {
   }
 
   onTabIndexChanged = (_: any, tabIndex: number) => {
-    this.setState({ tabIndex, inputImg: new ImageWrap('none') })
+    this.setState({ tabIndex, inputImg: undefined })
   }
 
   isReadyForDetection = () => {
-    return !!this.state.inputImg && !!this.state.inputImg.img && !!this.state.overlay
+    return !!this.state.inputImg && !!this.state.overlay
   }
 
   public render() {
@@ -143,7 +142,7 @@ export default class extends React.Component<{}, FaceLandmarksPageState> {
                     <div>
                       <SelectableImage
                         items={ALIGNED_FACE_IMAGES}
-                        initialImageSrc={this.state.inputImg.imageSrc}
+                        initialImageSrc={ALIGNED_FACE_IMAGES[30].url}
                         onLoaded={({ img: inputImg, overlay }) => this.setState({ inputImg, overlay })}
                         maxImageWidth={150}
                         selectionType={SelectionTypes.SELECT}

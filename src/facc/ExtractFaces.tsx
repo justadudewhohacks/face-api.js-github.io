@@ -1,11 +1,11 @@
 import * as faceapi from 'face-api.js';
 
 import { withAsyncRendering } from '../hoc/withAsyncRendering';
-import { ImageWrap } from '../ImageWrap';
+import { MediaElement } from '../MediaElement';
 
 export interface ExtractFacesProps {
-  img: ImageWrap
   faceDetections: faceapi.FaceDetection[]
+  input?: MediaElement
 }
 
 export interface ExtractFacesState {
@@ -13,11 +13,9 @@ export interface ExtractFacesState {
 }
 
 async function extractFaces(props: ExtractFacesProps) {
-  const canvases = await faceapi.extractFaces(props.img.img, props.faceDetections)
-
-  return {
-    canvases
-  }
+  return props.input
+    ? { canvases: await faceapi.extractFaces(props.input.element, props.faceDetections) }
+    : null
 }
 
 export const ExtractFaces = withAsyncRendering<ExtractFacesProps, ExtractFacesState>(extractFaces)
