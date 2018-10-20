@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
     "outDir": "./dist/",
     "sourceMap": true,
     "module": "commonjs",
@@ -22,6 +23,7 @@
     "noUnusedParameters": true
   },
   "include": [
-    "src"
+    "src",
+    "face-api.js-react"
   ]
 }

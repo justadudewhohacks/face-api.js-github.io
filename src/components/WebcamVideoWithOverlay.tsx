@@ -1,87 +1,29 @@
-import * as faceapi from 'face-api.js';
+import { MediaElement } from 'face-api.js-react';
 import * as React from 'react';
 
-import { MediaElement } from '../MediaElement';
+import { VideoWithOverlay } from './VideoWithOverlay';
 
 export type WebcamVideoWithOverlayProps = {
   onLoaded: (refs: { video: MediaElement, overlay: HTMLCanvasElement }) => any
   maxVideoWidth?: number
 }
 
-export class WebcamVideoWithOverlay extends React.Component<WebcamVideoWithOverlayProps> {
-  video: HTMLVideoElement | undefined
-  overlay: HTMLCanvasElement | undefined
-  isLoaded: boolean = false
+type WebcamVideoWithOverlayState = {
+  srcObject?: MediaStream | MediaSource | Blob | null
+}
 
-  constructor(props: WebcamVideoWithOverlayProps) {
-    super(props)
-
-    this.onChange = this.onChange.bind(this)
-    this.onVideoRef = this.onVideoRef.bind(this)
-    this.onCanvasRef = this.onCanvasRef.bind(this)
-    this.onPlay = this.onPlay.bind(this)
+export class WebcamVideoWithOverlay extends React.Component<WebcamVideoWithOverlayProps, WebcamVideoWithOverlayState> {
+  state: WebcamVideoWithOverlayState = {
   }
 
-  onChange() {
-    const { video, overlay, isLoaded } = this
-
-    if (video && overlay && isLoaded) {
-      const { width, height } = faceapi.getMediaDimensions(this.video)
-      this.overlay.width = width,
-      this.overlay.height = height
-      this.props.onLoaded({ video: new MediaElement(video), overlay })
-    }
-  }
-
-  onVideoRef(el: HTMLVideoElement) {
-    this.video = el
-    this.onChange()
-    navigator.getUserMedia(
-      { video: {} },
-      stream => {
-        this.video.srcObject = stream
-      },
-      err => console.error(err)
-    )
-  }
-
-  onCanvasRef(el: HTMLCanvasElement) {
-    this.overlay = el
-    this.onChange()
-  }
-
-  onPlay() {
-    this.isLoaded = true
-    this.onChange()
-  }
-
-  shouldComponentUpdate() {
-    return false
-  }
-
-  componentDidUpdate() {
-    this.onChange()
-  }
-
-  componentDidMount() {
-    this.onChange()
+  onVideoRef = async () => {
+    const srcObject = await navigator.mediaDevices.getUserMedia({ video: {} })
+    this.setState({ srcObject })
   }
 
   public render() {
     return(
-      <div style={{ position: 'relative' }}>
-        <video
-          muted
-          autoPlay
-          style={{ maxWidth: this.props.maxVideoWidth }}
-          ref={this.onVideoRef}
-          onPlay={this.onPlay}
-        />
-        <canvas
-          style={{ position: 'absolute', top: 0, left: 0 }}
-          ref={this.onCanvasRef}
-        />
-      </div>
+      <VideoWithOverlay srcObject={this.state.srcObject} />
     )
   }
 }

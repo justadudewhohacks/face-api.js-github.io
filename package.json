@@ -17,6 +17,7 @@
     "@types/react": "^16.4.1",
     "@types/react-dom": "^16.0.6",
     "face-api.js": "^0.14.3",
+    "face-api.js-react": "./face-api.js-react",
     "gatsby": "^1.9.273",
     "gatsby-link": "^1.6.45",
     "gatsby-plugin-google-analytics": "^1.0.31",

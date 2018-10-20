@@ -1,11 +1,11 @@
 import * as Mui from '@material-ui/core';
+import { MediaElement } from 'face-api.js-react';
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { MediaElement } from '../MediaElement';
+import { ImageWithOverlay } from '../../face-api.js-react';
 import { SideBySide } from '../styled/SideBySide';
 import { ImageSelection, ImageSelectionItem } from './ImageSelection';
-import { ImageWithOverlay } from './ImageWithOverlay';
 
 const Container = styled.div`
   padding: 10px;
@@ -27,10 +27,11 @@ export enum SelectionTypes {
 
 export type SelectableImageProps = {
   onLoaded: (refs: { img: MediaElement, overlay: HTMLCanvasElement}) => any
+  imgId: string
   items?: ImageSelectionItem[]
   initialImageSrc?: string
-  maxImageWidth?: number
   selectionType?: SelectionTypes
+  imageStyle?: React.CSSProperties
 }
 
 export type SelectableImageState = {
@@ -39,7 +40,6 @@ export type SelectableImageState = {
 
 export class SelectableImage extends React.Component<SelectableImageProps, SelectableImageState> {
   static defaultProps: Partial<SelectableImageProps> = {
-    maxImageWidth: 800,
     selectionType: SelectionTypes.SELECT
   }
 
@@ -83,6 +83,7 @@ export class SelectableImage extends React.Component<SelectableImageProps, Selec
         <ImageWithOverlay
           {...this.props}
           imageSrc={this.state.imageSrc}
+          imageStyle={this.props.imageStyle}
         />
         <SideBySide>
         {
@@ -102,13 +103,13 @@ export class SelectableImage extends React.Component<SelectableImageProps, Selec
             <Margin>
               <input
                 accept="image/*"
-                id="raised-button-file"
+                id={this.props.imgId}
                 multiple
                 style={{ display: 'none' }}
                 onChange={this.onLoadFromDisk}
                 type="file"
               />
-              <label htmlFor="raised-button-file">
+              <label htmlFor={this.props.imgId}>
                 <Mui.Button variant="outlined" component="span">
                   From Disk
                 </Mui.Button>

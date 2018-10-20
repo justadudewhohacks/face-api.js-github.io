@@ -1,8 +1,5 @@
 import * as faceapi from 'face-api.js';
-import * as React from 'react';
-
-import { ModalLoader } from '../components/ModalLoader';
-import { withAsyncRendering } from '../hoc/withAsyncRendering';
+import { withAsyncRendering } from 'face-api.js-react';
 
 export type RefDescriptor = {
   label: string,
@@ -15,7 +12,6 @@ export type BestMatch = {
 }
 
 export interface ComputeRefDescriptorsProps {
-  faceRecognitionNet: faceapi.FaceRecognitionNet
   refDataSources: {
     label: string,
     url: string
@@ -31,7 +27,7 @@ async function initRefDescriptors(props: ComputeRefDescriptorsProps) {
   const refDescriptors = await Promise.all(
     props.refDataSources.map(async ({ label, url }) => {
       const img = await faceapi.bufferToImage(await (await fetch(url)).blob())
-      const descriptor = await props.faceRecognitionNet.computeFaceDescriptor(img) as Float32Array
+      const descriptor = await faceapi.nets.faceRecognitionNet.computeFaceDescriptor(img) as Float32Array
       return {
         label: label.replace('1.png', ''),
         descriptor
@@ -52,7 +48,5 @@ async function initRefDescriptors(props: ComputeRefDescriptorsProps) {
   }
 }
 
-export const ComputeRefDescriptors = withAsyncRendering<ComputeRefDescriptorsProps, ComputeRefDescriptorsState>(
-  initRefDescriptors,
-  () => <ModalLoader title="Computing Reference Descriptors"/>
-)
+export const ComputeRefDescriptors = 
+  withAsyncRendering<ComputeRefDescriptorsProps, ComputeRefDescriptorsState>(initRefDescriptors)
