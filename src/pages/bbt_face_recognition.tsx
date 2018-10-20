@@ -1,3 +1,4 @@
+import { TinyFaceDetectorOptions } from 'face-api.js';
 import { LoadModels, MediaElement } from 'face-api.js-react';
 import * as React from 'react';
 
@@ -17,7 +18,6 @@ import {
 import { ComputeRefDescriptors } from '../facc/ComputeRefDescriptors';
 import { SelectFaceDetector } from '../facc/SelectFaceDetector';
 import { Root } from '../Root';
-import { TinyFaceDetectorOptions } from 'face-api.js';
 
 const REF_DATA_SOURCES = ALIGNED_FACE_IMAGES_BY_CLASS.map(srcsByClass => srcsByClass[0])
 
@@ -51,8 +51,8 @@ export default class extends React.Component<{}, PageState> {
           imgId="img"
         />
         <LoadModels
-          faceLandmarkModelUrl="/models"
-          faceRecognitionModelUrl="/models"
+          faceLandmarkModelUrl={MODELS_URI}
+          faceRecognitionModelUrl={MODELS_URI}
           renderBusyComponent={() => <ModalLoader title={`Loading Models`} />}
         >
         {() =>

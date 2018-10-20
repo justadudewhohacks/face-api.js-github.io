@@ -43,7 +43,7 @@ export class FaceAndLandmarkDetection extends React.Component<Props, FaceAndLand
       {(detectorName, detectionOptions, renderFaceDetectorSelection, renderFaceDetectorControls) =>
         <LoadModels
           {...getFaceDetectionModelUri(detectorName, MODELS_URI)}
-          faceLandmarkModelUrl="/models"
+          faceLandmarkModelUrl={MODELS_URI}
           renderBusyComponent={() => <ModalLoader title={`Loading ${detectorName} Model`} />}
         >
         {() =>
