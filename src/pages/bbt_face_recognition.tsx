@@ -82,6 +82,7 @@ export default class extends React.Component<{}, PageState> {
                   >
                   {({ fullFaceDescriptions }) =>
                     <DisplayMatches
+                      input={this.state.inputImg}
                       fullFaceDescriptions={fullFaceDescriptions}
                       overlay={this.state.overlay}
                       getBestMatch={getBestMatch}

@@ -4,10 +4,12 @@ import * as React from 'react';
 import { BestMatch } from '../facc/ComputeRefDescriptors';
 import { BoxWithText } from 'face-api.js';
 import { DisplayResults, ReactElement } from '../../face-api.js-react';
+import { MediaElement } from '../../face-api.js-react/MediaElement';
 
 
 export interface DisplayMatchesProps {
   fullFaceDescriptions: faceapi.FullFaceDescription[]
+  input: MediaElement
   overlay: HTMLCanvasElement
   getBestMatch: (queryDescriptor: Float32Array) => BestMatch
   withScore?: boolean
@@ -17,7 +19,7 @@ export interface DisplayMatchesProps {
 
 export const DisplayMatches = (props: DisplayMatchesProps): any => {
 
-  const { fullFaceDescriptions, overlay, withScore, getBestMatch } = props
+  const { input, fullFaceDescriptions, overlay, withScore, getBestMatch } = props
 
   const boxesWithText = fullFaceDescriptions
     .map(fd => fd.forSize(overlay.width, overlay.height))
@@ -29,6 +31,7 @@ export const DisplayMatches = (props: DisplayMatchesProps): any => {
 
   return (
     <DisplayResults
+      input={input}
       results={boxesWithText}
       overlay={overlay}
       displayResultsOptions={{ withScore }}

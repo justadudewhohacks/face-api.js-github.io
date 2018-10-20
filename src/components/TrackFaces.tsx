@@ -26,7 +26,7 @@ export class TrackFaces extends React.Component<TrackFacesProps> {
     const { withLandmarks, withBoxes } = this.props.options
     const detectionTask = faceapi.detectAllFaces(this.props.input.element, this.props.detectionOptions)
     const results = await (withLandmarks ? detectionTask.withFaceLandmarks() : detectionTask)
-    displayResults(this.props.overlay, results, { withBoxes })
+    displayResults(this.props.input, this.props.overlay, results, { withBoxes })
 
     setTimeout(this.run, 0)
   }

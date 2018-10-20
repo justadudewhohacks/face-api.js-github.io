@@ -85,6 +85,7 @@ export default class extends React.Component<{}, PageState> {
                     {({ fullFaceDescriptions: results2 }) =>
                       <span>
                         <DisplayResults
+                          input={this.state.input1}
                           overlay={overlay1}
                           results={
                             faceMatcher.labeledDescriptors.map((ld, idx) =>
@@ -96,6 +97,7 @@ export default class extends React.Component<{}, PageState> {
                           }
                         />
                         <DisplayMatches
+                          input={this.state.input2}
                           fullFaceDescriptions={results2}
                           overlay={this.state.overlay2}
                           getBestMatch={(desc) => faceMatcher.findBestMatch(desc)}

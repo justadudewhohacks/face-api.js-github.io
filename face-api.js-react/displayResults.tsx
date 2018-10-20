@@ -1,6 +1,8 @@
 import { BoxWithText, FaceDetection, FaceDetectionWithLandmarks, FaceLandmarks68, ObjectDetection } from 'face-api.js';
 import * as faceapi from 'face-api.js';
 
+import { MediaElement } from './MediaElement';
+
 export type DisplayResultsOptions = {
   withBoxes?: boolean
   withScore?: boolean
@@ -8,11 +10,20 @@ export type DisplayResultsOptions = {
 }
 
 export function displayResults(
+  input: MediaElement,
   overlay: HTMLCanvasElement,
   results: Array<FaceDetection | FaceLandmarks68 | FaceDetectionWithLandmarks | BoxWithText>,
   options: DisplayResultsOptions
 ) {
+  if (!input || !overlay) {
+    return
+  }
+
   overlay.getContext('2d').clearRect(0, 0, overlay.width, overlay.height)
+
+  const { width, height } = input.element.getBoundingClientRect()
+  overlay.width = width
+  overlay.height = height
 
   const { withBoxes, withScore = true, drawLines = true } = options
 

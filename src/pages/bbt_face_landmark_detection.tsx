@@ -52,6 +52,7 @@ export default class extends React.Component<{}, PageState> {
             <DetectFaceLandmarks input={this.state.inputImg}>
             {({ faceLandmarks }) =>
               <DisplayResults
+                input={this.state.inputImg}
                 results={[faceLandmarks]}
                 overlay={this.state.overlay}
                 displayResultsOptions={{ drawLines: this.state.drawLines }}

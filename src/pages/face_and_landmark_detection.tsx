@@ -45,6 +45,7 @@ export default class extends React.Component<{}, PageState> {
               >
               {({ faceDetectionsWithLandmarks }) =>
                 <DisplayResults
+                  input={this.state.input}
                   overlay={this.state.overlay}
                   results={faceDetectionsWithLandmarks}
                   displayResultsOptions={{ withBoxes }}
@@ -58,6 +59,7 @@ export default class extends React.Component<{}, PageState> {
               >
               {({ faceDetections }) =>
                 <DisplayResults
+                  input={this.state.input}
                   overlay={this.state.overlay}
                   results={faceDetections}
                   displayResultsOptions={{ withBoxes }}
