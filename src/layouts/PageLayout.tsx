@@ -58,6 +58,7 @@ class PageLayoutComponent extends React.Component<PageLayoutProps, PageLayoutSta
         <IconButton
           aria-label="open drawer"
           onClick={this.toggleMenu}
+          style={{ zIndex: 999 }}
         >
           <MenuIcon />
         </IconButton>

@@ -10,6 +10,7 @@ export type WebcamVideoWithOverlayProps = {
 
 type WebcamVideoWithOverlayState = {
   srcObject?: MediaStream | MediaSource | Blob | null
+  error?: string
 }
 
 export class WebcamVideoWithOverlay extends React.Component<WebcamVideoWithOverlayProps, WebcamVideoWithOverlayState> {
@@ -17,13 +18,31 @@ export class WebcamVideoWithOverlay extends React.Component<WebcamVideoWithOverl
   }
 
   onVideoRef = async () => {
-    const srcObject = await navigator.mediaDevices.getUserMedia({ video: {} })
-    this.setState({ srcObject })
+    try {
+      const srcObject = await navigator.mediaDevices.getUserMedia({ video: {} })
+      this.setState({ srcObject })
+    } catch (err) {
+      this.setState({ error: err.toString() })
+    }
   }
 
   public render() {
+    if (this.state.error) {
+      return (
+        <div style={{ background: 'red', color: 'white' }}>
+          <h3> Error occured while requesting webcam access: </h3>
+          <p> { this.state.error } </p>
+        </div>
+      )
+    }
+
     return(
-      <VideoWithOverlay srcObject={this.state.srcObject} />
+      <VideoWithOverlay
+        srcObject={this.state.srcObject}
+        onLoaded={this.props.onLoaded}
+        maxVideoWidth={this.props.maxVideoWidth}
+        onVideoRef={this.onVideoRef}
+      />
     )
   }
 }

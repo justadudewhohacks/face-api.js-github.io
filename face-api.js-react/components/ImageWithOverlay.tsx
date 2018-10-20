@@ -67,7 +67,7 @@ export class ImageWithOverlay extends React.Component<ImageWithOverlayProps> {
         <img
           src={this.props.imageSrc}
           ref={this.onImageRef}
-          style={Object.assign({}, this.props.imageStyle)}
+          style={Object.assign({ width: '100%' }, this.props.imageStyle)}
           onLoad={this.onImageLoaded}
         />
         <canvas

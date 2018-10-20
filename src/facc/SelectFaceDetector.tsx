@@ -68,7 +68,7 @@ export class SelectFaceDetector extends React.Component<SelectFaceDetectorProps,
     } else if (isTinyFaceDetector(this.state.detector)) {
       return (
         <TinyFaceDetectorControls
-          inputSizes={[96, 128, 160, 224, 320, 416, 512, 608]}
+          inputSizes={[128, 160, 224, 320, 416, 512, 608]}
           initialDetectionParams={this.props.initialTinyFaceDetectorOptions}
         >
           { renderChildren }

@@ -25,7 +25,7 @@ export default class extends React.Component<{}, PageState> {
         <FaceAndLandmarkDetection
           {...this.state}
           initialFaceDetector={FACE_DETECTORS[0]}
-          initialTinyFaceDetectorOptions={new TinyFaceDetectorOptions({ inputSize: 416 })}
+          initialTinyFaceDetectorOptions={new TinyFaceDetectorOptions({ inputSize: 128 })}
         >
         {(detectionOptions, options) =>
           <TrackFaces

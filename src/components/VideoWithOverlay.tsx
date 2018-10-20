@@ -75,7 +75,7 @@ export class VideoWithOverlay extends React.Component<VideoWithOverlayProps> {
         <video
           muted
           autoPlay
-          style={{ maxWidth: this.props.maxVideoWidth }}
+          style={{ width: '100%', maxWidth: this.props.maxVideoWidth }}
           ref={this.onVideoRef}
           onPlay={this.onPlay}
           src={this.props.src}
