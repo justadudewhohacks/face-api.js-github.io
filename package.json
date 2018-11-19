@@ -7,17 +7,19 @@
     "dev": "gatsby develop",
     "build": "gatsby build --no-uglify=true --prefix-paths",
     "build-dev": "gatsby build --no-uglify=true",
-    "start": "gatsby serve"
+    "start": "gatsby serve",
+    "docs": "ts-node ./generateDocs.ts"
   },
   "dependencies": {
     "@material-ui/core": "^1.2.3",
     "@material-ui/icons": "^1.1.0",
     "@types/material-ui": "^0.21.3",
     "@types/node": "^10.3.5",
-    "@types/react": "^16.4.1",
+    "@types/react": "^16.7.6",
     "@types/react-dom": "^16.0.6",
-    "face-api.js": "^0.14.3",
+    "face-api.js": "^0.16.1",
     "face-api.js-react": "./face-api.js-react",
+    "fs-extra": "^7.0.1",
     "gatsby": "^1.9.273",
     "gatsby-link": "^1.6.45",
     "gatsby-plugin-google-analytics": "^1.0.31",
@@ -26,7 +28,8 @@
     "gatsby-source-filesystem": "^1.5.39",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "styled-components": "^3.3.3"
+    "styled-components": "^3.3.3",
+    "typedoc": "^0.13.0"
   },
   "devDependencies": {}
 }
