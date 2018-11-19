@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { PageLayout } from './layouts/PageLayout';
 
-const getPageContext = require('./getPageContext')
+const getPageContext = require('./getPageContext').default
 
 export class Root extends React.Component {
 

@@ -15,7 +15,7 @@ interface HtmlProps {
   headComponents: any
 }
 
-module.exports = class extends React.Component<HtmlProps, void> {
+export default class extends React.Component<HtmlProps, void> {
   render() {
     const css = (process.env.NODE_ENV === `production`) ?
       <style
