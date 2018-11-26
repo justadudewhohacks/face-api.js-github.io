@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import * as React from 'react';
 
+import { DOCS_URI } from '../const';
 import { StyledAbsLink, StyledLink } from '../styled/StyledLink';
 
 export type MenuItem = {
@@ -38,6 +39,10 @@ class SideMenuComponent extends React.Component<SideMenuProps> {
         }
         <StyledAbsLink href="https://github.com/justadudewhohacks/face-api.js">
           <h3 style={{ paddingLeft: 24 }}> face-api.js </h3>
+        </StyledAbsLink>
+        <Divider />
+        <StyledAbsLink href={DOCS_URI}>
+          <h3 style={{ paddingLeft: 24 }}> API Documentation </h3>
         </StyledAbsLink>
         <Divider />
         <List>

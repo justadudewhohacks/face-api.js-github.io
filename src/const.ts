@@ -1,5 +1,7 @@
 import { withPrefix } from 'gatsby-link';
 
+export const DOCS_URI = withPrefix('/docs/globals.html')
+
 export const EXAMPLE_IMAGES = [1, 2, 3, 4, 5]
   .map(idx => `bbt${idx}.jpg`)
   .map(label => ({
