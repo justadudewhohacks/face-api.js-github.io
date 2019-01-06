@@ -9,6 +9,21 @@ export const EXAMPLE_IMAGES = [1, 2, 3, 4, 5]
     url: withPrefix(`/images/${label}`)
   }))
 
+export const EXAMPLE_IMAGES_FACE_EXPRESSIONS = [
+  'happy',
+  'sad',
+  'angry',
+  'disgusted',
+  'surprised',
+  'fearful',
+  'neutral'
+]
+  .map(expression => `${expression}.jpg`)
+  .map(label => ({
+    label,
+    url: withPrefix(`/images/${label}`)
+  }))
+
 export const ALIGNED_FACE_IMAGES_BY_CLASS = ['amy', 'bernadette', 'howard', 'leonard', 'penny', 'raj', 'sheldon', 'stuart']
   .map(
     clazz => [1, 2, 3, 4, 5]

@@ -1,4 +1,3 @@
-import { TinyFaceDetectorOptions } from 'face-api.js';
 import { DisplayResults } from 'face-api.js-react/components/DisplayResults';
 import * as React from 'react';
 
@@ -33,8 +32,7 @@ export default class extends React.Component<{}, PageState> {
         />
         <FaceAndLandmarkDetection
           {...this.state}
-          initialFaceDetector={FACE_DETECTORS[0]}
-          initialTinyFaceDetectorOptions={new TinyFaceDetectorOptions({ inputSize: 512 })}
+          initialFaceDetector={FACE_DETECTORS[1]}
         >
         {(detectionOptions, withBoxes, withLandmarks) =>
           withLandmarks

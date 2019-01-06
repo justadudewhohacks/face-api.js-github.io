@@ -13,6 +13,7 @@ const PageHeader = styled.h3`
 
 const MENU_ITEMS = [
   { label: 'Face And Landmark Detection', linkTo: '/face_and_landmark_detection' },
+  { label: 'Face Expression Recognition', linkTo: '/face_expression_recognition' },
   { label: 'Face Recognition', linkTo: '/face_recognition' },
   { label: 'Video Face Tracking', linkTo: '/video_face_tracking' },
   { label: 'Webcam Face Tracking', linkTo: '/webcam_face_tracking' },
