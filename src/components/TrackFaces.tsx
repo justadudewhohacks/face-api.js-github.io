@@ -2,12 +2,13 @@ import * as faceapi from 'face-api.js';
 import * as React from 'react';
 
 import { displayResults } from '../../face-api.js-react';
+import { DisplayResultsOptions } from '../../face-api.js-react/displayResults';
 import { MediaElement } from '../../face-api.js-react/MediaElement';
 
 export type TrackFacesProps = {
   input?: MediaElement
   overlay?: HTMLCanvasElement
-  withBoxes: boolean
+  displayOptions?: DisplayResultsOptions
   runTask: () => Promise<
     faceapi.FaceDetection[]
     | faceapi.WithFaceLandmarks<faceapi.WithFaceDetection<{}>>[]
@@ -28,9 +29,8 @@ export class TrackFaces extends React.Component<TrackFacesProps> {
       return setTimeout(this.run, 0)
     }
 
-    const { withBoxes } = this.props
     const results = await this.props.runTask()
-    displayResults(this.props.input, this.props.overlay, results, { withBoxes })
+    displayResults(this.props.input, this.props.overlay, results, this.props.displayOptions)
 
     setTimeout(this.run, 0)
   }

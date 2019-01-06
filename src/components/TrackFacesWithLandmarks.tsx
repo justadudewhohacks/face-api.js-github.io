@@ -21,11 +21,12 @@ export class TrackFacesWithLandmarks extends React.Component<TrackFacesWithLandm
       }
       return task
     }
+    const { withBoxes } = this.props
 
     return (
       <TrackFaces
         {...this.props}
-        withBoxes={this.props.withBoxes}
+        displayOptions={{ withBoxes }}
         runTask={runTask}
       />
     )

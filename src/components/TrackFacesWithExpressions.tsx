@@ -13,10 +13,11 @@ export type TrackFacesWithExpressionsProps = {
 
 export class TrackFacesWithExpressions extends React.Component<TrackFacesWithExpressionsProps> {
   public render(): any {
+    const { withBoxes } = this.props
     return (
       <TrackFaces
         {...this.props}
-        withBoxes={this.props.withBoxes}
+        displayOptions={{ withBoxes, withScore: false }}
         runTask={async () => faceapi.detectAllFaces(this.props.input.element, this.props.detectionOptions).withFaceExpressions()}
       />
     )

@@ -9,6 +9,7 @@ export interface LoadModelsProps {
   mtcnnModelUrl?: string
   faceLandmarkModelUrl?: string
   faceRecognitionModelUrl?: string
+  faceExpessionModelUrl?: string
 }
 
 export interface LoadModelsState {}
@@ -19,7 +20,8 @@ async function loadModels(props: LoadModelsProps) {
     mtcnnModelUrl,
     tinyFaceDetectorModelUrl,
     faceLandmarkModelUrl,
-    faceRecognitionModelUrl
+    faceRecognitionModelUrl,
+    faceExpessionModelUrl
   } = props
 
   const load = async (net: NeuralNetwork<any>, url?: string) => {
@@ -33,7 +35,8 @@ async function loadModels(props: LoadModelsProps) {
     load(faceapi.nets.ssdMobilenetv1, ssdMobilenetv1ModelUrl),
     load(faceapi.nets.mtcnn, mtcnnModelUrl),
     load(faceapi.nets.faceLandmark68Net, faceLandmarkModelUrl),
-    load(faceapi.nets.faceRecognitionNet, faceRecognitionModelUrl)
+    load(faceapi.nets.faceRecognitionNet, faceRecognitionModelUrl),
+    load(faceapi.nets.faceExpressionNet, faceExpessionModelUrl)
   ])
 
   return {}
