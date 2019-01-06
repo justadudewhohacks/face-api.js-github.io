@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-let styles: string
+let styles: string = ''
+/*
 if (process.env.NODE_ENV === `production`) {
   try {
     styles = require("!raw-loader!../public/styles.css")
@@ -8,6 +9,7 @@ if (process.env.NODE_ENV === `production`) {
     console.log(err)
   }
 }
+*/
 
 interface HtmlProps {
   body: any

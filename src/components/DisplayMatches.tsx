@@ -8,7 +8,7 @@ import { MediaElement } from '../../face-api.js-react/MediaElement';
 
 
 export interface DisplayMatchesProps {
-  fullFaceDescriptions: faceapi.FullFaceDescription[]
+  fullFaceDescriptions: faceapi.WithFaceDescriptor<faceapi.WithFaceLandmarks<faceapi.WithFaceDetection<{}>>>[]
   input: MediaElement
   overlay: HTMLCanvasElement
   getBestMatch: (queryDescriptor: Float32Array) => BestMatch
@@ -21,8 +21,7 @@ export const DisplayMatches = (props: DisplayMatchesProps): any => {
 
   const { input, fullFaceDescriptions, overlay, withScore, getBestMatch } = props
 
-  const boxesWithText = fullFaceDescriptions
-    .map(fd => fd.forSize(overlay.width, overlay.height))
+  const boxesWithText = faceapi.resizeResults(fullFaceDescriptions, overlay)
     .map(fd => {
       const bestMatch = getBestMatch(fd.descriptor)
       const text = `${bestMatch.distance < 0.6 ? bestMatch.label : 'unknown'} (${faceapi.round(bestMatch.distance)})`

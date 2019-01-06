@@ -1,4 +1,13 @@
-import { BoxWithText, FaceDetection, FaceDetectionWithLandmarks, FaceLandmarks68, ObjectDetection } from 'face-api.js';
+import {
+  BoxWithText,
+  FaceDetection,
+  FaceLandmarks68,
+  ObjectDetection,
+  resizeResults,
+  WithFaceDetection,
+  WithFaceExpressions,
+  WithFaceLandmarks,
+} from 'face-api.js';
 import * as faceapi from 'face-api.js';
 
 import { MediaElement } from './MediaElement';
@@ -12,7 +21,7 @@ export type DisplayResultsOptions = {
 export function displayResults(
   input: MediaElement,
   overlay: HTMLCanvasElement,
-  results: Array<FaceDetection | FaceLandmarks68 | FaceDetectionWithLandmarks | BoxWithText>,
+  results: Array<FaceDetection | FaceLandmarks68 | BoxWithText | WithFaceLandmarks<WithFaceDetection<{}>> | WithFaceExpressions<WithFaceDetection<{}>>>,
   options: DisplayResultsOptions
 ) {
   if (!input || !overlay) {
@@ -25,7 +34,7 @@ export function displayResults(
   overlay.width = width
   overlay.height = height
 
-  const { withBoxes, withScore = true, drawLines = true } = options
+  const { withBoxes = true, withScore = true, drawLines = true } = options
 
   if (!results || !results.length) {
     return
@@ -35,16 +44,12 @@ export function displayResults(
     .map(res =>
       res instanceof BoxWithText
         ? res
-        : (
-          res instanceof FaceLandmarks68
-            ? res.forSize(overlay.width, overlay.height)
-            : res.forSize(overlay.width, overlay.height)
-        )
+        : resizeResults(res, overlay)
     )
 
   const detections = resizedResults
-    .filter(res => res instanceof ObjectDetection || res instanceof FaceDetectionWithLandmarks || res instanceof BoxWithText)
-    .map((res: ObjectDetection | FaceDetectionWithLandmarks | BoxWithText) =>
+    .filter(res => res instanceof ObjectDetection || res instanceof BoxWithText || (res as any).detection)
+    .map((res: ObjectDetection | WithFaceLandmarks<WithFaceDetection<{}>> | BoxWithText) =>
       (res instanceof BoxWithText || res instanceof ObjectDetection)
         ? res
         : res.detection
@@ -57,11 +62,18 @@ export function displayResults(
   }
 
   const faceLandmarks = resizedResults
-    .filter(res => res instanceof FaceLandmarks68 || res instanceof FaceDetectionWithLandmarks)
-    .map((res: FaceLandmarks68 | FaceDetectionWithLandmarks) =>
+    .filter(res => res instanceof FaceLandmarks68 || (res as any).landmarks)
+    .map((res: FaceLandmarks68 | WithFaceLandmarks<WithFaceDetection<{}>>) =>
       res instanceof FaceLandmarks68
         ? res
         : res.landmarks
+    )
+
+  const faceExpressions = resizedResults
+    .filter(res => (res as any).detection && (res as any).expressions)
+    .map(
+      ({ detection, expressions }: WithFaceExpressions<WithFaceDetection<{}>>) =>
+        ({ position: detection.box, expressions })
     )
 
 
@@ -71,8 +83,9 @@ export function displayResults(
     lineWidth: 2
   }
 
-  if (withBoxes || !faceLandmarks.length) {
+  if (withBoxes) {
     faceapi.drawDetection(overlay, detections, drawDetectionsOptions)
   }
   faceapi.drawLandmarks(overlay, faceLandmarks, drawLandmarksOptions)
+  faceapi.drawFaceExpressions(overlay, faceExpressions)
 }

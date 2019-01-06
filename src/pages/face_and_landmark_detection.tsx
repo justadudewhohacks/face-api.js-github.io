@@ -36,7 +36,7 @@ export default class extends React.Component<{}, PageState> {
           initialFaceDetector={FACE_DETECTORS[0]}
           initialTinyFaceDetectorOptions={new TinyFaceDetectorOptions({ inputSize: 512 })}
         >
-        {(detectionOptions, { withLandmarks, withBoxes }) =>
+        {(detectionOptions, withBoxes, withLandmarks) =>
           withLandmarks
             ?
               <DetectFacesWithLandmarks

@@ -16,6 +16,7 @@ const MENU_ITEMS = [
   { label: 'Face Recognition', linkTo: '/face_recognition' },
   { label: 'Video Face Tracking', linkTo: '/video_face_tracking' },
   { label: 'Webcam Face Tracking', linkTo: '/webcam_face_tracking' },
+  { label: 'Webcam Face Expression Recognition', linkTo: '/webcam_face_expression_recognition' },
   { label: 'BBT Face Landmark Detection', linkTo: '/bbt_face_landmark_detection' },
   { label: 'BBT Face Similarity', linkTo: '/bbt_face_similarity' },
   { label: 'BBT Face Recognition', linkTo: '/bbt_face_recognition' }

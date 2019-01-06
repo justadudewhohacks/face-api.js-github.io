@@ -1,4 +1,4 @@
-import { BoxWithText, FaceDetection, FaceDetectionWithLandmarks, FaceLandmarks68 } from 'face-api.js';
+import { BoxWithText, FaceDetection, FaceLandmarks68, WithFaceLandmarks, WithFaceDetection } from 'face-api.js';
 import { MediaElement, shallowEquals } from 'face-api.js-react';
 import * as React from 'react';
 
@@ -8,7 +8,7 @@ import { ReactElement } from '../types';
 export type DisplayResultsProps = {
   input: MediaElement
   overlay: HTMLCanvasElement
-  results?: Array<FaceDetection | FaceLandmarks68 | FaceDetectionWithLandmarks | BoxWithText>
+  results?: Array<FaceDetection | FaceLandmarks68 | WithFaceLandmarks<WithFaceDetection<{}>> | BoxWithText>
   displayResultsOptions?: DisplayResultsOptions
   children?: () => ReactElement
 }

@@ -2,8 +2,8 @@ import { TinyFaceDetectorOptions } from 'face-api.js';
 import * as React from 'react';
 
 import { MediaElement } from '../../face-api.js-react/MediaElement';
-import { FaceAndLandmarkDetection } from '../components/FaceAndLandmarkDetection';
-import { TrackFacesWithLandmarks } from '../components/TrackFacesWithLandmarks';
+import { FaceDetection } from '../components/FaceDetection';
+import { TrackFacesWithExpressions } from '../components/TrackFacesWithExpressions';
 import { WebcamVideoWithOverlay } from '../components/WebcamVideoWithOverlay';
 import { FACE_DETECTORS } from '../const';
 import { Root } from '../Root';
@@ -11,6 +11,7 @@ import { Root } from '../Root';
 type PageState = {
   input?: MediaElement
   overlay?: HTMLCanvasElement
+  withLandmarks: boolean
 }
 
 export default class extends React.Component<{}, PageState> {
@@ -26,20 +27,19 @@ export default class extends React.Component<{}, PageState> {
           onLoaded={({ video: input, overlay }) => this.setState({ input, overlay })}
           maxVideoWidth={800}
         />
-        <FaceAndLandmarkDetection
+        <FaceDetection
           {...this.state}
           initialFaceDetector={FACE_DETECTORS[0]}
           initialTinyFaceDetectorOptions={new TinyFaceDetectorOptions({ inputSize: 224 })}
         >
-        {(detectionOptions, withBoxes, withLandmarks) =>
-          <TrackFacesWithLandmarks
+        {(detectionOptions, withBoxes) =>
+          <TrackFacesWithExpressions
             detectionOptions={detectionOptions}
             withBoxes={withBoxes}
-            withLandmarks={withLandmarks}
             {...this.state}
           />
         }
-        </FaceAndLandmarkDetection>
+        </FaceDetection>
       </Root>
     )
   }
