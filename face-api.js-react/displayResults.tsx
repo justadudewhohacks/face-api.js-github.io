@@ -31,6 +31,11 @@ export function displayResults(
   overlay.getContext('2d').clearRect(0, 0, overlay.width, overlay.height)
 
   const { width, height } = input.element.getBoundingClientRect()
+
+  if (!width || !height) {
+    return
+  }
+
   overlay.width = width
   overlay.height = height
 
