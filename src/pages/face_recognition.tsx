@@ -74,6 +74,10 @@ export default class extends React.Component<{}, PageState> {
                   detectionOptions={detectionOptions}
                 >
                 {({ fullFaceDescriptions: results1 }) => {
+                  if (!results1.length) {
+                    return null
+                  }
+
                   const faceMatcher = new faceapi.FaceMatcher(results1)
                   const { overlay1 } = this.state
 
