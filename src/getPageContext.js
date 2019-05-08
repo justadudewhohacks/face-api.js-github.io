@@ -1,16 +1,15 @@
 import { SheetsRegistry } from 'jss';
 import { createMuiTheme, createGenerateClassName } from '@material-ui/core/styles';
-import cyan from '@material-ui/core/colors/cyan';
+import { lightBlue } from '@material-ui/core/colors';
 
 // A theme with custom primary and secondary color.
 // It's optional.
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: cyan[300],
-      main: cyan[500],
-      dark: cyan[700]
-    }
+      ...lightBlue,
+      contrastText: 'white'
+    },
   },
   sideMenuWidth: '240px'
 });

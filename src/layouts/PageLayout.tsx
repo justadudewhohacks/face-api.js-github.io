@@ -2,14 +2,9 @@ import { IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import * as React from 'react';
-import styled from 'styled-components';
 
-import { CenterContent } from '../styled/CenterContent';
 import { SideMenu } from '../components/SideMenu';
-
-const PageHeader = styled.h3`
-  text-align: center;
-`
+import { CenterContent } from '../components/styled/CenterContent';
 
 const MENU_ITEMS = [
   { label: 'Face And Landmark Detection', linkTo: '/face_and_landmark_detection' },
@@ -72,12 +67,7 @@ class PageLayoutComponent extends React.Component<PageLayoutProps, PageLayoutSta
         />
         <div className={this.props.classes.pageContent}>
           <CenterContent>
-            <div>
-              <PageHeader>
-                face-api.js playground
-              </PageHeader>
-              { this.props.children }
-              </div>
+            { this.props.children }
           </CenterContent>
         </div>
       </div>

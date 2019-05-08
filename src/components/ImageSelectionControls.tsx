@@ -1,18 +1,18 @@
 import { FormControl, FormHelperText, Input, MenuItem, Select } from '@material-ui/core';
 import * as React from 'react';
 
-export type ImageSelectionItem = {
+export type ImageSelectionControlsItem = {
   url: string
   label: string
 }
 
-type ImageSelectionProps = {
-  items: ImageSelectionItem[]
+type ImageSelectionControlsProps = {
+  items: ImageSelectionControlsItem[]
   selectedImage: string
   onChange: (value: string) => void
 }
 
-export const ImageSelection = ({ items, selectedImage, onChange }: ImageSelectionProps) =>
+export const ImageSelectionControls = ({ items, selectedImage, onChange }: ImageSelectionControlsProps) =>
   <FormControl>
     <Select
       value={selectedImage}

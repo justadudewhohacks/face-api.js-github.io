@@ -1,16 +1,7 @@
-import { Button, FormControl, Input, InputLabel } from '@material-ui/core';
+import * as Mui from '@material-ui/core';
 import * as React from 'react';
-import styled from 'styled-components';
-import { SideBySide } from '../styled/SideBySide';
 
-export const StyledFormControl = styled(FormControl)`
-  margin: 10px !important;
-`
-
-export const StyledButton = styled(Button)`
-  width: 40px;
-  height: 40px;
-`
+import { SideBySide } from './styled/SideBySide';
 
 export type AdjustableInputProps = {
   inputId: string
@@ -23,30 +14,30 @@ export type AdjustableInputProps = {
 }
 
 export const AdjustableInput = (props: AdjustableInputProps) =>
-  <StyledFormControl>
+  <Mui.FormControl>
     <SideBySide>
-      <InputLabel htmlFor={props.inputId}>
+      <Mui.InputLabel htmlFor={props.inputId}>
         { props.label }
-      </InputLabel>
-      <Input
+      </Mui.InputLabel>
+      <Mui.Input
         id={props.inputId}
         value={props.value}
       />
-      <StyledButton
+      <Mui.Button
         variant="outlined"
         onClick={
           () => props.onChange(Math.max(props.value - props.step, props.minValue))
         }
       >
         -
-      </StyledButton>
-      <StyledButton
+      </Mui.Button>
+      <Mui.Button
         variant="outlined"
         onClick={
           () => props.onChange(Math.min(props.value + props.step, props.maxValue))
         }
       >
         +
-      </StyledButton>
+      </Mui.Button>
     </SideBySide>
-  </StyledFormControl>
+  </Mui.FormControl>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { MediaElement } from '../';
+import { MediaElement } from '../MediaElement';
 
 export type ImageWithOverlayProps = {
   imageSrc: string

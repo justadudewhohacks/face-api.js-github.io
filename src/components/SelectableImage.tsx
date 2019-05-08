@@ -1,11 +1,11 @@
 import * as Mui from '@material-ui/core';
-import { MediaElement } from 'face-api.js-react';
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { ImageWithOverlay } from '../../face-api.js-react';
-import { SideBySide } from '../styled/SideBySide';
-import { ImageSelection, ImageSelectionItem } from './ImageSelection';
+import { MediaElement } from '../MediaElement';
+import { ImageSelectionControls, ImageSelectionControlsItem } from './ImageSelectionControls';
+import { ImageWithOverlay } from './ImageWithOverlay';
+import { SideBySide } from './styled/SideBySide';
 
 const Container = styled.div`
   padding: 10px;
@@ -26,9 +26,9 @@ export enum SelectionTypes {
 }
 
 export type SelectableImageProps = {
-  onLoaded: (refs: { img: MediaElement, overlay: HTMLCanvasElement}) => any
+  onLoaded: (refs: { img: MediaElement<HTMLImageElement>, overlay: HTMLCanvasElement}) => any
   imgId: string
-  items?: ImageSelectionItem[]
+  items?: ImageSelectionControlsItem[]
   initialImageSrc?: string
   selectionType?: SelectionTypes
   imageStyle?: React.CSSProperties
@@ -90,7 +90,7 @@ export class SelectableImage extends React.Component<SelectableImageProps, Selec
           (selectionType === SelectionTypes.SELECT || selectionType === SelectionTypes.BOTH)
             &&
             <Margin>
-              <ImageSelection
+              <ImageSelectionControls
                 items={this.props.items}
                 selectedImage={this.state.imageSrc}
                 onChange={this.onChangeSelection}
