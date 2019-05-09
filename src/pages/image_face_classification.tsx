@@ -7,7 +7,6 @@ import { FaceClassificationToggleControls } from '../components/FaceClassificati
 import { FaceDetectorSelection } from '../components/FaceDetectorSelection';
 import { getFaceDetectionNetFromName, getFaceDetectorNameFromOptions } from '../components/FaceDetectorSelection/const';
 import { SelectableImage, SelectionTypes } from '../components/SelectableImage';
-import { ShowBoxesSelection } from '../components/ShowBoxesSelection';
 import { SideBySide } from '../components/styled/SideBySide';
 import { EXAMPLE_IMAGES, EXAMPLE_IMAGES_FACE_EXPRESSIONS } from '../const';
 import { FaceClassificationPageState, getDefaultFaceClassificationPageState } from '../FaceClassificationPageState';
@@ -57,15 +56,11 @@ export default class extends React.Component<{}, FaceClassificationPageState<HTM
 
     return(
       <Root>
-        <SideBySide>
+        <SideBySide alignItems="baseline">
           <Mui.FormControl>
             <FaceDetectorSelection
               initialFaceDetectionOptions={this.state.faceDetectionOptions}
               onFaceDetectionOptionsChanged={this.onFaceDetectionOptionsChanged}
-            />
-            <ShowBoxesSelection
-              showBoxesOption={this.state.showBoxesOption}
-              onChange={showBoxesOption => this.setState({ showBoxesOption })}
             />
           </Mui.FormControl>
           <FaceClassificationToggleControls

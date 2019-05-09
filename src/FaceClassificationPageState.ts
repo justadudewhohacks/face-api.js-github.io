@@ -1,7 +1,6 @@
 import * as faceapi from 'face-api.js';
 
 import { FaceClassificationOptions } from './components/FaceClassificationToggleControls';
-import { ShowBoxesOption } from './components/ShowBoxesSelection';
 import { MediaElement } from './MediaElement';
 
 export function getDefaultFaceClassificationPageState<T extends faceapi.TMediaElement>(): FaceClassificationPageState<T> {
@@ -9,10 +8,11 @@ export function getDefaultFaceClassificationPageState<T extends faceapi.TMediaEl
     withFaceLandmarks: false,
     withFaceExpressions: false,
     withAgeAndGender: false,
+    withShowBoxes: true,
+    withShowFaceLandmarks: true,
     faceDetectionOptions: new faceapi.TinyFaceDetectorOptions(),
     isFaceDetectorLoaded: false,
-    areModelsLoaded: false,
-    showBoxesOption: ShowBoxesOption.SHOW_ALIGNED_BOXES
+    areModelsLoaded: false
   }
 }
 
@@ -22,5 +22,4 @@ export type FaceClassificationPageState<T extends faceapi.TMediaElement = faceap
   overlay?: HTMLCanvasElement
   isFaceDetectorLoaded: boolean
   areModelsLoaded: boolean
-  showBoxesOption: ShowBoxesOption
 }

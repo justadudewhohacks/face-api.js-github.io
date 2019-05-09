@@ -7,15 +7,12 @@ import { SideMenu } from '../components/SideMenu';
 import { CenterContent } from '../components/styled/CenterContent';
 
 const MENU_ITEMS = [
-  { label: 'Face And Landmark Detection', linkTo: '/face_and_landmark_detection' },
-  { label: 'Face Expression Recognition', linkTo: '/face_expression_recognition' },
-  { label: 'Face Recognition', linkTo: '/face_recognition' },
-  { label: 'Video Face Tracking', linkTo: '/video_face_tracking' },
-  { label: 'Webcam Face Tracking', linkTo: '/webcam_face_tracking' },
-  { label: 'Webcam Face Expression Recognition', linkTo: '/webcam_face_expression_recognition' },
-  { label: 'BBT Face Landmark Detection', linkTo: '/bbt_face_landmark_detection' },
-  { label: 'BBT Face Similarity', linkTo: '/bbt_face_similarity' },
-  { label: 'BBT Face Recognition', linkTo: '/bbt_face_recognition' }
+  { label: 'Image Face Classification', linkTo: '/image_face_classification' },
+  { label: 'Image Face Recognition', linkTo: '/image_face_recognition' },
+  { label: 'Video Face Classification', linkTo: '/video_face_classification' },
+  { label: 'Video Face Recognition', linkTo: '/video_face_recognition' },
+  { label: 'Webcam Face Classification', linkTo: '/webcam_face_classification' },
+  { label: 'Webcam Face Recognition', linkTo: '/webcam_face_recognition' },
 ]
 
 const styles = (theme: any) => ({

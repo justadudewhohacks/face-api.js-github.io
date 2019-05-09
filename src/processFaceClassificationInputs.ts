@@ -1,19 +1,22 @@
 import * as faceapi from 'face-api.js';
 
-import { ShowBoxesOption } from './components/ShowBoxesSelection';
 import { FaceClassificationPageState } from './FaceClassificationPageState';
 
-export async function processFaceClassificationInputs(pageState: FaceClassificationPageState) {
+export async function processFaceClassificationInputs(
+  pageState: FaceClassificationPageState,
+  targetDimensions?: faceapi.IDimensions
+) {
   const {
     mediaElement,
     overlay,
     isFaceDetectorLoaded,
     areModelsLoaded,
     faceDetectionOptions,
-    showBoxesOption,
     withFaceLandmarks,
     withFaceExpressions,
-    withAgeAndGender
+    withAgeAndGender,
+    withShowBoxes,
+    withShowFaceLandmarks
   } = pageState
 
   if (!mediaElement || !overlay || !isFaceDetectorLoaded || !areModelsLoaded) {
@@ -37,15 +40,15 @@ export async function processFaceClassificationInputs(pageState: FaceClassificat
   const detectionsAndLandmarks = await composedTask
   const classificationResults = classificationTask ? await classificationTask : null
 
-  const dimensions = faceapi.matchDimensions(overlay, element, element instanceof HTMLVideoElement)
+  const dimensions = faceapi.matchDimensions(overlay, overlay, element instanceof HTMLVideoElement)
 
   faceapi.resizeResults(detectionsAndLandmarks, dimensions).forEach(res => {
-    if (faceapi.isWithFaceLandmarks(res)) {
+    if (faceapi.isWithFaceLandmarks(res) && withShowFaceLandmarks) {
       faceapi.draw.drawFaceLandmarks(overlay, res)
     }
 
-    if (showBoxesOption !== ShowBoxesOption.HIDE_BOXES) {
-      if (faceapi.isWithFaceLandmarks(res) && showBoxesOption === ShowBoxesOption.SHOW_ALIGNED_BOXES) {
+    if (withShowBoxes) {
+      if (faceapi.isWithFaceLandmarks(res)) {
         faceapi.draw.drawDetections(overlay, res.alignedRect)
       } else {
         faceapi.draw.drawDetections(overlay, res)
@@ -70,7 +73,8 @@ export async function processFaceClassificationInputs(pageState: FaceClassificat
       }
 
       if (text.length) {
-        new faceapi.draw.DrawTextField(text, res.detection.box.bottomLeft).draw(overlay)
+        const { box } = faceapi.isWithFaceLandmarks(res) ? res.alignedRect : res.detection
+        new faceapi.draw.DrawTextField(text, box.bottomLeft).draw(overlay)
       }
     })
   }
