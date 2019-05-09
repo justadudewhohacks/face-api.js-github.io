@@ -2,9 +2,14 @@ import * as React from 'react';
 
 import { MediaElement } from '../MediaElement';
 
+export type ImageWithOverlayRefs = {
+  mediaElement: MediaElement<HTMLImageElement>,
+  overlay: HTMLCanvasElement
+}
+
 export type ImageWithOverlayProps = {
   imageSrc: string
-  onLoaded: (refs: { img: MediaElement, overlay: HTMLCanvasElement}) => any
+  onLoaded: (refs: ImageWithOverlayRefs) => any
   containerStyle?: React.CSSProperties
   imageStyle?: React.CSSProperties
   canvasStyle?: React.CSSProperties
@@ -30,7 +35,7 @@ export class ImageWithOverlay extends React.Component<ImageWithOverlayProps> {
     if (img && overlay && isLoaded) {
       this.overlay.height = this.img.height
       this.overlay.width = this.img.width
-      this.props.onLoaded({ img: new MediaElement(img), overlay })
+      this.props.onLoaded({ mediaElement: new MediaElement(img), overlay })
     }
   }
 
@@ -67,7 +72,7 @@ export class ImageWithOverlay extends React.Component<ImageWithOverlayProps> {
         <img
           src={this.props.imageSrc}
           ref={this.onImageRef}
-          style={Object.assign({ width: '100%' }, this.props.imageStyle)}
+          style={Object.assign({}, this.props.imageStyle)}
           onLoad={this.onImageLoaded}
         />
         <canvas

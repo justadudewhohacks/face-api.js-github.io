@@ -35,3 +35,16 @@ export function createDefaultFaceDetectorOptionsFromName(detectorName: string) {
   }
   throw new Error(`getFaceDetectorNameFromOptions - invalid detectorName: ${detectorName}`)
 }
+
+export function getFaceDetectionNetFromName(detectorName: string) {
+  if (detectorName === SSD_MOBILENET_V1) {
+    return faceapi.nets.ssdMobilenetv1
+  }
+  if (detectorName === TINY_FACE_DETECTOR) {
+    return faceapi.nets.tinyFaceDetector
+  }
+  if (detectorName === MTCNN) {
+    return faceapi.nets.mtcnn
+  }
+  throw new Error(`getFaceDetectionNetFromName - invalid detectorName: ${detectorName}`)
+}

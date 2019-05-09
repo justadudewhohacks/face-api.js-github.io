@@ -2,20 +2,19 @@ import * as Mui from '@material-ui/core';
 import * as faceapi from 'face-api.js';
 import * as React from 'react';
 
-import { MODELS_URI } from '../../tmp/src/const';
+import { EXAMPLE_VIDEO, MODELS_URI } from '../../tmp/src/const';
 import { FaceClassificationToggleControls } from '../components/FaceClassificationToggleControls';
 import { FaceDetectorSelection } from '../components/FaceDetectorSelection';
 import { getFaceDetectionNetFromName, getFaceDetectorNameFromOptions } from '../components/FaceDetectorSelection/const';
-import { SelectableImage, SelectionTypes } from '../components/SelectableImage';
 import { ShowBoxesSelection } from '../components/ShowBoxesSelection';
 import { SideBySide } from '../components/styled/SideBySide';
-import { EXAMPLE_IMAGES, EXAMPLE_IMAGES_FACE_EXPRESSIONS } from '../const';
+import { VideoWithOverlay } from '../components/VideoWithOverlay';
 import { FaceClassificationPageState, getDefaultFaceClassificationPageState } from '../FaceClassificationPageState';
 import { processFaceClassificationInputs } from '../processFaceClassificationInputs';
 import { Root } from '../Root';
 
-export default class extends React.Component<{}, FaceClassificationPageState<HTMLImageElement>> {
-  state = getDefaultFaceClassificationPageState<HTMLImageElement>()
+export default class extends React.Component<{}, FaceClassificationPageState<HTMLVideoElement>> {
+  state = getDefaultFaceClassificationPageState<HTMLVideoElement>()
 
   async loadFaceDetector(detectorName: string) {
     await getFaceDetectionNetFromName(detectorName).loadFromUri(MODELS_URI)
@@ -42,12 +41,14 @@ export default class extends React.Component<{}, FaceClassificationPageState<HTM
     this.setState({ faceDetectionOptions })
   }
 
-  componentDidUpdate() {
-    processFaceClassificationInputs(this.state)
+  processNextFrame = async () => {
+    await processFaceClassificationInputs(this.state)
+    setTimeout(this.processNextFrame, 16)
   }
 
   componentDidMount() {
     this.loadModels()
+    this.processNextFrame()
   }
 
   public render() {
@@ -72,13 +73,10 @@ export default class extends React.Component<{}, FaceClassificationPageState<HTM
             onChange={options => this.setState(options)}
           />
         </SideBySide>
-        <SelectableImage
-          items={[...EXAMPLE_IMAGES, ...EXAMPLE_IMAGES_FACE_EXPRESSIONS]}
-          initialImageSrc={EXAMPLE_IMAGES[0].url}
+        <VideoWithOverlay
           onLoaded={refs => this.setState(refs)}
-          selectionType={SelectionTypes.BOTH}
-          imageStyle={{ maxWidth: 800 }}
-          imgId="img"
+          maxVideoWidth={800}
+          src={EXAMPLE_VIDEO}
         />
       </Root>
     )

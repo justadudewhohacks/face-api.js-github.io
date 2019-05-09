@@ -8,15 +8,15 @@ import { SsdMobilenetv1Controls } from './SsdMobilenetv1Controls';
 import { TinyFaceDetectorControls } from './TinyFaceDetectorControls';
 
 export interface FaceDetectorSelectionDialogProps {
-  initialFaceDetectorOptions: faceapi.FaceDetectionOptions
-  onClose: (faceDetectionOptions: faceapi.FaceDetectionOptions) => void
+  initialFaceDetectionOptions: faceapi.FaceDetectionOptions
+  onClose: (faceDetectionOptions: faceapi.FaceDetectionOptions) => any
 }
 
 export interface FaceDetectorSelectionState {
   faceDetectionOptions: faceapi.FaceDetectionOptions
 }
 
-export class FaceDetectorSelectionDialog extends React.Component<FaceDetectorSelectionDialogProps> {
+export class FaceDetectorSelectionDialog extends React.Component<FaceDetectorSelectionDialogProps, FaceDetectorSelectionState> {
   constructor(props: FaceDetectorSelectionDialogProps) {
     super(props)
     this.state = {

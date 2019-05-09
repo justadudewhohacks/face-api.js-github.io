@@ -6,7 +6,8 @@ import { getFaceDetectorNameFromOptions } from './const';
 import { FaceDetectorSelectionDialog } from './FaceDetectorSelectionDialog';
 
 export interface FaceDetectorSelectionProps {
-  initialFaceDetectionOptions?: faceapi.FaceDetectionOptions
+  initialFaceDetectionOptions: faceapi.FaceDetectionOptions
+  onFaceDetectionOptionsChanged: (options: faceapi.FaceDetectionOptions) => any
 }
 
 export interface FaceDetectorSelectionState {
@@ -18,20 +19,20 @@ export class FaceDetectorSelection extends React.Component<FaceDetectorSelection
   constructor(props: FaceDetectorSelectionProps) {
     super(props)
     this.state = {
-      faceDetectionOptions: props.initialFaceDetectionOptions || new faceapi.TinyFaceDetectorOptions(),
+      faceDetectionOptions: props.initialFaceDetectionOptions,
       isDialogOpen: false
     }
   }
 
   onCloseDialog = (faceDetectionOptions: faceapi.FaceDetectionOptions) => {
     this.setState({ faceDetectionOptions, isDialogOpen: false })
+    if (this.state.faceDetectionOptions !== faceDetectionOptions) {
+      this.props.onFaceDetectionOptionsChanged(faceDetectionOptions)
+    }
   }
 
   onOpenDialog = () => {
     this.setState({ isDialogOpen: true })
-  }
-
-  renderDialog = () => {
   }
 
   render() {

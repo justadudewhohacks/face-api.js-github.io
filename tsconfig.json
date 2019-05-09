@@ -25,5 +25,12 @@
   "include": [
     "src",
     "face-api.js-react"
-  ]
+  ],
+  "exclude": [
+    ".cache",
+    "generated",
+    "node_modules",
+    "public",
+    "static"
+  ],
 }
