@@ -1,10 +1,9 @@
-import { MediaElement } from 'face-api.js-react';
 import * as React from 'react';
 
-import { VideoWithOverlay } from './VideoWithOverlay';
+import { VideoWithOverlay, VideoWithOverlayRefs } from './VideoWithOverlay';
 
 export type WebcamVideoWithOverlayProps = {
-  onLoaded: (refs: { video: MediaElement, overlay: HTMLCanvasElement }) => any
+  onLoaded: (refs: VideoWithOverlayRefs) => any
   maxVideoWidth?: number
 }
 

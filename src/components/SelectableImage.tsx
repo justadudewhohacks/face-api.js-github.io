@@ -1,11 +1,10 @@
 import * as Mui from '@material-ui/core';
-import { MediaElement } from 'face-api.js-react';
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { ImageWithOverlay } from '../../face-api.js-react';
-import { SideBySide } from '../styled/SideBySide';
-import { ImageSelection, ImageSelectionItem } from './ImageSelection';
+import { ImageSelectionControls, ImageSelectionControlsItem } from './ImageSelectionControls';
+import { ImageWithOverlay, ImageWithOverlayRefs } from './ImageWithOverlay';
+import { SideBySide } from './styled/SideBySide';
 
 const Container = styled.div`
   padding: 10px;
@@ -13,11 +12,17 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
 `
+const ImageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  width: 800px;
+`
 
 const Margin = styled.div`
   margin: 10px;
 `
-
 
 export enum SelectionTypes {
   SELECT = 'SELECT',
@@ -26,9 +31,9 @@ export enum SelectionTypes {
 }
 
 export type SelectableImageProps = {
-  onLoaded: (refs: { img: MediaElement, overlay: HTMLCanvasElement}) => any
+  onLoaded: (refs: ImageWithOverlayRefs) => any
   imgId: string
-  items?: ImageSelectionItem[]
+  items?: ImageSelectionControlsItem[]
   initialImageSrc?: string
   selectionType?: SelectionTypes
   imageStyle?: React.CSSProperties
@@ -80,17 +85,19 @@ export class SelectableImage extends React.Component<SelectableImageProps, Selec
     const { selectionType } = this.props
     return (
       <Container>
-        <ImageWithOverlay
-          {...this.props}
-          imageSrc={this.state.imageSrc}
-          imageStyle={this.props.imageStyle}
-        />
+        <ImageContainer>
+          <ImageWithOverlay
+            {...this.props}
+            imageSrc={this.state.imageSrc}
+            imageStyle={this.props.imageStyle}
+          />
+        </ImageContainer>
         <SideBySide>
         {
           (selectionType === SelectionTypes.SELECT || selectionType === SelectionTypes.BOTH)
             &&
             <Margin>
-              <ImageSelection
+              <ImageSelectionControls
                 items={this.props.items}
                 selectedImage={this.state.imageSrc}
                 onChange={this.onChangeSelection}

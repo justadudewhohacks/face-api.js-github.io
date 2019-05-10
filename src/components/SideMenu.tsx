@@ -4,7 +4,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import * as React from 'react';
 
 import { DOCS_URI } from '../const';
-import { StyledAbsLink, StyledLink } from '../styled/StyledLink';
+import { StyledAbsLink, StyledLink } from './styled/StyledLink';
 
 export type MenuItem = {
   label: string

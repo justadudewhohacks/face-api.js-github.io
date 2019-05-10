@@ -1,8 +1,14 @@
-import { MediaElement } from 'face-api.js-react';
 import * as React from 'react';
 
+import { MediaElement } from '../MediaElement';
+
+export type VideoWithOverlayRefs = {
+  mediaElement: MediaElement<HTMLVideoElement>,
+  overlay: HTMLCanvasElement
+}
+
 export type VideoWithOverlayProps = {
-  onLoaded?: (refs: { video: MediaElement, overlay: HTMLCanvasElement }) => any
+  onLoaded?: (refs: VideoWithOverlayRefs) => any
   onVideoRef?: () => any
   maxVideoWidth?: number
   src?: string
@@ -30,7 +36,7 @@ export class VideoWithOverlay extends React.Component<VideoWithOverlayProps> {
       const { width, height } = this.video.getBoundingClientRect()
       this.overlay.width = width,
       this.overlay.height = height
-      this.props.onLoaded({ video: new MediaElement(video), overlay })
+      this.props.onLoaded({ mediaElement: new MediaElement(video), overlay })
     }
   }
 

@@ -2,25 +2,13 @@ import { IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import * as React from 'react';
-import styled from 'styled-components';
 
-import { CenterContent } from '../styled/CenterContent';
 import { SideMenu } from '../components/SideMenu';
-
-const PageHeader = styled.h3`
-  text-align: center;
-`
+import { CenterContent } from '../components/styled/CenterContent';
 
 const MENU_ITEMS = [
-  { label: 'Face And Landmark Detection', linkTo: '/face_and_landmark_detection' },
-  { label: 'Face Expression Recognition', linkTo: '/face_expression_recognition' },
-  { label: 'Face Recognition', linkTo: '/face_recognition' },
-  { label: 'Video Face Tracking', linkTo: '/video_face_tracking' },
-  { label: 'Webcam Face Tracking', linkTo: '/webcam_face_tracking' },
-  { label: 'Webcam Face Expression Recognition', linkTo: '/webcam_face_expression_recognition' },
-  { label: 'BBT Face Landmark Detection', linkTo: '/bbt_face_landmark_detection' },
-  { label: 'BBT Face Similarity', linkTo: '/bbt_face_similarity' },
-  { label: 'BBT Face Recognition', linkTo: '/bbt_face_recognition' }
+  { label: 'Face Classification', linkTo: '/face_classification' },
+  { label: 'Face Recognition', linkTo: '/face_recognition' }
 ]
 
 const styles = (theme: any) => ({
@@ -72,12 +60,7 @@ class PageLayoutComponent extends React.Component<PageLayoutProps, PageLayoutSta
         />
         <div className={this.props.classes.pageContent}>
           <CenterContent>
-            <div>
-              <PageHeader>
-                face-api.js playground
-              </PageHeader>
-              { this.props.children }
-              </div>
+            { this.props.children }
           </CenterContent>
         </div>
       </div>

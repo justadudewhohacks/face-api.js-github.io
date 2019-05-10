@@ -6,6 +6,6 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
     fromPath: '/',
     isPermanent: true,
     redirectInBrowser: true,
-    toPath: '/face_and_landmark_detection'
+    toPath: '/face_classification'
   })
 }

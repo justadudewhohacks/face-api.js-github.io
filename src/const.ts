@@ -40,31 +40,3 @@ export const MODELS_URI = withPrefix(`/models`)
 
 export const ALIGNED_FACE_IMAGES = ALIGNED_FACE_IMAGES_BY_CLASS
   .reduce((flat, arr) => flat.concat(arr), [])
-
-export const FACE_DETECTORS = ['Tiny Face Detector', 'SSD Mobilenet V1', 'MTCNN']
-
-export function isTinyFaceDetector(detectorName: string) {
-  return detectorName === FACE_DETECTORS[0]
-}
-
-export function isSsdMobilenetv1(detectorName: string) {
-  return detectorName === FACE_DETECTORS[1]
-}
-
-export function isMtcnn(detectorName: string) {
-  return detectorName === FACE_DETECTORS[2]
-}
-
-export function getFaceDetectionModelUri(detectorName: string, modelUri: string) {
-  if (isTinyFaceDetector(detectorName)) {
-    return { tinyFaceDetectorModelUrl: modelUri }
-  }
-  if (isSsdMobilenetv1(detectorName)) {
-    return { ssdMobilenetv1ModelUrl: modelUri }
-  }
-  if (isMtcnn(detectorName)) {
-    return { mtcnnModelUrl: modelUri }
-  }
-
-  throw new Error(`getLoadModelsUriFromFaceDetector - invalid face detector: ${detectorName}`)
-}
