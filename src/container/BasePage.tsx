@@ -1,6 +1,7 @@
 import * as Mui from '@material-ui/core';
 import * as faceapi from 'face-api.js';
 import * as React from 'react';
+import styled from 'styled-components';
 
 import { MODELS_URI } from '../../tmp/src/const';
 import { FaceDetectorSelection } from '../components/FaceDetectorSelection';
@@ -8,15 +9,25 @@ import { getFaceDetectionNetFromName, getFaceDetectorNameFromOptions } from '../
 import { InputComponent } from '../components/InputComponent';
 import { InputType, InputTypeTabs } from '../components/InputTypeTabs';
 import { ModalLoader } from '../components/ModalLoader';
+import { CenterContent } from '../components/styled/CenterContent';
 import { SideBySide } from '../components/styled/SideBySide';
 import { MediaElement } from '../MediaElement';
 import { Root } from '../Root';
 import { ReactElement } from '../types';
 
+const AppBarContainer = styled(CenterContent)`
+  width: 100%;
+  margin-bottom: 20px;
+`
+
+const ControlsContainer = styled.div`
+  width: 100%;
+`
+
 export type BasePageProps = {
   loadAdditionalModels: () => Promise<any>
   processInputs: (state: BasePageState) => Promise<any>
-  renderControls: () => ReactElement
+  renderControls: (state: BasePageState) => ReactElement
   renderChildren?: (state: BasePageState) => ReactElement
 }
 
@@ -92,19 +103,25 @@ export class BasePage extends React.Component<BasePageProps, BasePageState> {
     return(
       <Root>
         { !this.state.areModelsLoaded || !this.state.isFaceDetectorLoaded ? <ModalLoader title="Loading Models" /> : null }
-        <InputTypeTabs
-          inputType={this.state.inputType}
-          onChange={inputType => this.setState({ inputType })}
-        />
-        <SideBySide alignItems="baseline">
-          <Mui.FormControl>
-            <FaceDetectorSelection
-              initialFaceDetectionOptions={this.state.faceDetectionOptions}
-              onFaceDetectionOptionsChanged={this.onFaceDetectionOptionsChanged}
+        <AppBarContainer>
+          <div>
+            <InputTypeTabs
+              inputType={this.state.inputType}
+              onChange={inputType => this.setState({ inputType })}
             />
-          </Mui.FormControl>
-          { this.props.renderControls() }
-        </SideBySide>
+          </div>
+        </AppBarContainer>
+        <ControlsContainer>
+          <SideBySide alignItems="baseline">
+            <Mui.FormControl>
+              <FaceDetectorSelection
+                initialFaceDetectionOptions={this.state.faceDetectionOptions}
+                onFaceDetectionOptionsChanged={this.onFaceDetectionOptionsChanged}
+              />
+            </Mui.FormControl>
+            { this.props.renderControls(this.state) }
+          </SideBySide>
+        </ControlsContainer>
         { this.props.renderChildren ? this.props.renderChildren(this.state) : null }
         <InputComponent
           inputType={this.state.inputType}

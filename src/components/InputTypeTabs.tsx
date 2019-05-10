@@ -23,12 +23,10 @@ export type InputTypeTabsProps = {
 }
 
 export const InputTypeTabs = ({ inputType, onChange }: InputTypeTabsProps) =>
-  <div>
-    <Mui.AppBar position="static">
-      <Mui.Tabs value={inputType} onChange={(_: any, inputType: InputType) => onChange(inputType)}>
-        <Mui.Tab icon={<TabComponent><span>Image</span> <MuiIcons.Image /></TabComponent>} />
-        <Mui.Tab icon={<TabComponent><span>Webcam</span><MuiIcons.Videocam /></TabComponent>} />
-        <Mui.Tab icon={<TabComponent><span>Video</span><MuiIcons.VideoLibrary /></TabComponent>} />
-      </Mui.Tabs>
-    </Mui.AppBar>
-  </div>
+  <Mui.AppBar position="static">
+    <Mui.Tabs value={inputType} onChange={(_: any, inputType: InputType) => onChange(inputType)}>
+      <Mui.Tab icon={<TabComponent><span>Image</span> <MuiIcons.Image /></TabComponent>} />
+      <Mui.Tab icon={<TabComponent><span>Webcam</span><MuiIcons.Videocam /></TabComponent>} />
+      <Mui.Tab icon={<TabComponent><span>Video</span><MuiIcons.VideoLibrary /></TabComponent>} />
+    </Mui.Tabs>
+  </Mui.AppBar>
