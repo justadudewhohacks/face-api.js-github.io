@@ -7,12 +7,8 @@ import { SideMenu } from '../components/SideMenu';
 import { CenterContent } from '../components/styled/CenterContent';
 
 const MENU_ITEMS = [
-  { label: 'Image Face Classification', linkTo: '/image_face_classification' },
-  { label: 'Image Face Recognition', linkTo: '/image_face_recognition' },
-  { label: 'Video Face Classification', linkTo: '/video_face_classification' },
-  { label: 'Video Face Recognition', linkTo: '/video_face_recognition' },
-  { label: 'Webcam Face Classification', linkTo: '/webcam_face_classification' },
-  { label: 'Webcam Face Recognition', linkTo: '/webcam_face_recognition' },
+  { label: 'Face Classification', linkTo: '/face_classification' },
+  { label: 'Face Recognition', linkTo: '/face_recognition' }
 ]
 
 const styles = (theme: any) => ({

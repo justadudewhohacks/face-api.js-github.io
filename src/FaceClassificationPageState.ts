@@ -1,9 +1,10 @@
 import * as faceapi from 'face-api.js';
 
 import { FaceClassificationOptions } from './components/FaceClassificationToggleControls';
+import { InputType } from './components/InputTypeTabs';
 import { MediaElement } from './MediaElement';
 
-export function getDefaultFaceClassificationPageState<T extends faceapi.TMediaElement>(): FaceClassificationPageState<T> {
+export function getDefaultFaceClassificationPageState(): FaceClassificationPageState {
   return {
     withFaceLandmarks: false,
     withFaceExpressions: false,
@@ -12,14 +13,16 @@ export function getDefaultFaceClassificationPageState<T extends faceapi.TMediaEl
     withShowFaceLandmarks: true,
     faceDetectionOptions: new faceapi.TinyFaceDetectorOptions(),
     isFaceDetectorLoaded: false,
-    areModelsLoaded: false
+    areModelsLoaded: false,
+    inputType: InputType.IMAGE
   }
 }
 
-export type FaceClassificationPageState<T extends faceapi.TMediaElement = faceapi.TMediaElement> = FaceClassificationOptions & {
+export type FaceClassificationPageState = FaceClassificationOptions & {
   faceDetectionOptions: faceapi.FaceDetectionOptions
-  mediaElement?: MediaElement<T>
-  overlay?: HTMLCanvasElement
   isFaceDetectorLoaded: boolean
   areModelsLoaded: boolean
+  inputType: InputType
+  mediaElement?: MediaElement
+  overlay?: HTMLCanvasElement
 }

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es5"
+  },
+  "exclude": [
+    ".cache",
+    "generated",
+    "node_modules",
+    "public",
+    "static"
+  ],
+}

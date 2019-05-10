@@ -6,14 +6,19 @@ import { EXAMPLE_VIDEO, MODELS_URI } from '../../tmp/src/const';
 import { FaceClassificationToggleControls } from '../components/FaceClassificationToggleControls';
 import { FaceDetectorSelection } from '../components/FaceDetectorSelection';
 import { getFaceDetectionNetFromName, getFaceDetectorNameFromOptions } from '../components/FaceDetectorSelection/const';
+import { InputType, InputTypeTabs } from '../components/InputTypeTabs';
+import { SelectableImage, SelectionTypes } from '../components/SelectableImage';
 import { SideBySide } from '../components/styled/SideBySide';
 import { VideoWithOverlay } from '../components/VideoWithOverlay';
+import { WebcamVideoWithOverlay } from '../components/WebcamVideoWithOverlay';
+import { EXAMPLE_IMAGES, EXAMPLE_IMAGES_FACE_EXPRESSIONS } from '../const';
 import { FaceClassificationPageState, getDefaultFaceClassificationPageState } from '../FaceClassificationPageState';
 import { processFaceClassificationInputs } from '../processFaceClassificationInputs';
 import { Root } from '../Root';
 
-export default class extends React.Component<{}, FaceClassificationPageState<HTMLVideoElement>> {
-  state = getDefaultFaceClassificationPageState<HTMLVideoElement>()
+export default class extends React.Component<{}, FaceClassificationPageState> {
+  state = getDefaultFaceClassificationPageState()
+  processId: number = null
 
   async loadFaceDetector(detectorName: string) {
     await getFaceDetectionNetFromName(detectorName).loadFromUri(MODELS_URI)
@@ -40,14 +45,59 @@ export default class extends React.Component<{}, FaceClassificationPageState<HTM
     this.setState({ faceDetectionOptions })
   }
 
-  processNextFrame = async () => {
+  processFrames = async (processId: number) => {
     await processFaceClassificationInputs(this.state)
-    setTimeout(this.processNextFrame, 16)
+    if (this.processId === processId) {
+      setTimeout(this.processFrames.bind(this, processId), 16)
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.inputType === InputType.IMAGE) {
+      this.processId = null
+      processFaceClassificationInputs(this.state)
+      return
+    }
+
+    this.processId = Date.now()
+    this.processFrames(this.processId)
   }
 
   componentDidMount() {
     this.loadModels()
-    this.processNextFrame()
+  }
+
+  renderInputComponent = () => {
+    if (this.state.inputType === InputType.IMAGE) {
+      return (
+        <SelectableImage
+          items={[...EXAMPLE_IMAGES, ...EXAMPLE_IMAGES_FACE_EXPRESSIONS]}
+          initialImageSrc={EXAMPLE_IMAGES[0].url}
+          onLoaded={refs => this.setState(refs)}
+          selectionType={SelectionTypes.BOTH}
+          imageStyle={{ maxWidth: 800 }}
+          imgId="img"
+        />
+      )
+    }
+    if (this.state.inputType === InputType.VIDEO) {
+      return (
+        <VideoWithOverlay
+          onLoaded={refs => this.setState(refs)}
+          maxVideoWidth={800}
+          src={EXAMPLE_VIDEO}
+        />
+      )
+    }
+    if (this.state.inputType === InputType.WEBCAM) {
+      return (
+        <WebcamVideoWithOverlay
+          onLoaded={refs => this.setState(refs)}
+          maxVideoWidth={800}
+        />
+      )
+    }
+    return null
   }
 
   public render() {
@@ -57,6 +107,10 @@ export default class extends React.Component<{}, FaceClassificationPageState<HTM
 
     return(
       <Root>
+        <InputTypeTabs
+          inputType={this.state.inputType}
+          onChange={inputType => this.setState({ inputType })}
+        />
         <SideBySide alignItems="baseline">
           <Mui.FormControl>
             <FaceDetectorSelection
@@ -68,11 +122,9 @@ export default class extends React.Component<{}, FaceClassificationPageState<HTM
             onChange={options => this.setState(options)}
           />
         </SideBySide>
-        <VideoWithOverlay
-          onLoaded={refs => this.setState(refs)}
-          maxVideoWidth={800}
-          src={EXAMPLE_VIDEO}
-        />
+        {
+          this.renderInputComponent()
+        }
       </Root>
     )
   }
