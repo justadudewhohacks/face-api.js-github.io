@@ -34,7 +34,12 @@ export const ALIGNED_FACE_IMAGES_BY_CLASS = ['amy', 'bernadette', 'howard', 'leo
       }))
   )
 
-export const EXAMPLE_VIDEO = withPrefix(`/media/bbt.mp4`)
+export const EXAMPLE_VIDEOS = [
+  `bbt.mp4`
+].map(label => ({
+  label,
+  url: withPrefix(`/media/${label}`)
+}))
 
 export const MODELS_URI = withPrefix(`/models`)
 

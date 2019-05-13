@@ -39,7 +39,7 @@ export class WebcamVideoWithOverlay extends React.Component<WebcamVideoWithOverl
       <VideoWithOverlay
         srcObject={this.state.srcObject}
         onLoaded={this.props.onLoaded}
-        maxVideoWidth={this.props.maxVideoWidth}
+        videoStyle={{ maxWidth: this.props.maxVideoWidth }}
         onVideoRef={this.onVideoRef}
       />
     )

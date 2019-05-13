@@ -3,7 +3,6 @@ import * as faceapi from 'face-api.js';
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { MODELS_URI } from '../../tmp/src/const';
 import { FaceDetectorSelection } from '../components/FaceDetectorSelection';
 import { getFaceDetectionNetFromName, getFaceDetectorNameFromOptions } from '../components/FaceDetectorSelection/const';
 import { InputComponent } from '../components/InputComponent';
@@ -11,6 +10,7 @@ import { InputType, InputTypeTabs } from '../components/InputTypeTabs';
 import { ModalLoader } from '../components/ModalLoader';
 import { CenterContent } from '../components/styled/CenterContent';
 import { SideBySide } from '../components/styled/SideBySide';
+import { MODELS_URI } from '../const';
 import { MediaElement } from '../MediaElement';
 import { Root } from '../Root';
 import { ReactElement } from '../types';

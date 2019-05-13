@@ -10,7 +10,7 @@ export type VideoWithOverlayRefs = {
 export type VideoWithOverlayProps = {
   onLoaded?: (refs: VideoWithOverlayRefs) => any
   onVideoRef?: () => any
-  maxVideoWidth?: number
+  videoStyle?: React.CSSProperties
   src?: string
   srcObject?: MediaStream | MediaSource | Blob | null
 }
@@ -63,8 +63,8 @@ export class VideoWithOverlay extends React.Component<VideoWithOverlayProps> {
     }
   }
 
-  shouldComponentUpdate() {
-    return false
+  shouldComponentUpdate(nextProps: VideoWithOverlayProps) {
+    return nextProps.src !== this.props.src
   }
 
   componentDidUpdate() {
@@ -81,7 +81,7 @@ export class VideoWithOverlay extends React.Component<VideoWithOverlayProps> {
         <video
           muted
           autoPlay
-          style={{ width: '100%', maxWidth: this.props.maxVideoWidth }}
+          style={Object.assign({ width: '100%' }, this.props.videoStyle)}
           ref={this.onVideoRef}
           onPlay={this.onPlay}
           src={this.props.src}

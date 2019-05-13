@@ -1,8 +1,8 @@
 import * as faceapi from 'face-api.js';
 import * as React from 'react';
 
-import { MODELS_URI } from '../../tmp/src/const';
 import { FaceClassificationOptions, FaceClassificationToggleControls } from '../components/FaceClassificationToggleControls';
+import { MODELS_URI } from '../const';
 import { BasePage, BasePageState } from '../container/BasePage';
 
 export type PageState = FaceClassificationOptions

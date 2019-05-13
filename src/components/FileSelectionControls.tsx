@@ -1,21 +1,21 @@
 import { FormControl, FormHelperText, Input, MenuItem, Select } from '@material-ui/core';
 import * as React from 'react';
 
-export type ImageSelectionControlsItem = {
+export type FileSelectionControlsItem = {
   url: string
   label: string
 }
 
-type ImageSelectionControlsProps = {
-  items: ImageSelectionControlsItem[]
-  selectedImage: string
+type FileSelectionControlsProps = {
+  items: FileSelectionControlsItem[]
+  selectedFile: string
   onChange: (value: string) => void
 }
 
-export const ImageSelectionControls = ({ items, selectedImage, onChange }: ImageSelectionControlsProps) =>
+export const FileSelectionControls = ({ items, selectedFile, onChange }: FileSelectionControlsProps) =>
   <FormControl>
     <Select
-      value={selectedImage}
+      value={selectedFile}
       onChange={e => onChange(e.target.value)}
       input={<Input />}
     >
@@ -30,5 +30,5 @@ export const ImageSelectionControls = ({ items, selectedImage, onChange }: Image
         )
       }
     </Select>
-    <FormHelperText>Pick an image</FormHelperText>
+    <FormHelperText>Pick a file</FormHelperText>
   </FormControl>

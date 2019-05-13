@@ -1,10 +1,12 @@
 import * as React from 'react';
 
-import { EXAMPLE_IMAGES, EXAMPLE_IMAGES_FACE_EXPRESSIONS, EXAMPLE_VIDEO } from '../../tmp/src/const';
+import { EXAMPLE_IMAGES, EXAMPLE_IMAGES_FACE_EXPRESSIONS, EXAMPLE_VIDEOS } from '../const';
 import { ImageWithOverlayRefs } from './ImageWithOverlay';
 import { InputType } from './InputTypeTabs';
-import { SelectableImage, SelectionTypes } from './SelectableImage';
-import { VideoWithOverlay, VideoWithOverlayRefs } from './VideoWithOverlay';
+import { SelectableImage } from './SelectableImage';
+import { SelectionTypes } from './SelectableInputElement';
+import { SelectableVideo } from './SelectableVideo';
+import { VideoWithOverlayRefs } from './VideoWithOverlay';
 import { WebcamVideoWithOverlay } from './WebcamVideoWithOverlay';
 
 export type InputComponentProps = {
@@ -17,20 +19,23 @@ export const InputComponent = ({ inputType, onLoaded }: InputComponentProps) => 
     return (
       <SelectableImage
         items={[...EXAMPLE_IMAGES, ...EXAMPLE_IMAGES_FACE_EXPRESSIONS]}
-        initialImageSrc={EXAMPLE_IMAGES[0].url}
+        initialSrc={EXAMPLE_IMAGES[0].url}
         onLoaded={onLoaded}
         selectionType={SelectionTypes.BOTH}
-        imageStyle={{ maxWidth: 800 }}
-        imgId="img"
+        mediaElementStyle={{ maxWidth: 800 }}
+        mediaElementId="img"
       />
     )
   }
   if (inputType === InputType.VIDEO) {
     return (
-      <VideoWithOverlay
+      <SelectableVideo
+        items={EXAMPLE_VIDEOS}
+        initialSrc={EXAMPLE_VIDEOS[0].url}
         onLoaded={onLoaded}
-        maxVideoWidth={800}
-        src={EXAMPLE_VIDEO}
+        selectionType={SelectionTypes.BOTH}
+        mediaElementStyle={{ maxWidth: 800 }}
+        mediaElementId="video"
       />
     )
   }

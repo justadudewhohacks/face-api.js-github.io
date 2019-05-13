@@ -4,9 +4,9 @@ import * as faceapi from 'face-api.js';
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { MODELS_URI } from '../../tmp/src/const';
 import { FacePreview } from '../components/FacePreview';
 import { InputType } from '../components/InputTypeTabs';
+import { MODELS_URI } from '../const';
 import { BasePage, BasePageState } from '../container/BasePage';
 
 const Container = styled.div`
