@@ -22,7 +22,7 @@ export const InputComponent = ({ inputType, onLoaded }: InputComponentProps) => 
         initialSrc={EXAMPLE_IMAGES[0].url}
         onLoaded={onLoaded}
         selectionType={SelectionTypes.BOTH}
-        mediaElementStyle={{ maxWidth: 800 }}
+        mediaElementStyle={{ maxWidth: 800, maxHeight: 500 }}
         mediaElementId="img"
       />
     )
@@ -34,7 +34,7 @@ export const InputComponent = ({ inputType, onLoaded }: InputComponentProps) => 
         initialSrc={EXAMPLE_VIDEOS[0].url}
         onLoaded={onLoaded}
         selectionType={SelectionTypes.BOTH}
-        mediaElementStyle={{ maxWidth: 800 }}
+        mediaElementStyle={{ maxWidth: 800, maxHeight: 500 }}
         mediaElementId="video"
       />
     )

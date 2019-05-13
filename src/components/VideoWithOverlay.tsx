@@ -81,7 +81,7 @@ export class VideoWithOverlay extends React.Component<VideoWithOverlayProps> {
         <video
           muted
           autoPlay
-          style={Object.assign({ width: '100%' }, this.props.videoStyle)}
+          style={Object.assign({}, this.props.videoStyle)}
           ref={this.onVideoRef}
           onPlay={this.onPlay}
           src={this.props.src}

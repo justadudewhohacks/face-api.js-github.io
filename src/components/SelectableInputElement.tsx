@@ -14,7 +14,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
 `
-const ImageContainer = styled.div`
+const MediaElement = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,6 +50,7 @@ export type SelectableInputElementProps = SelectableInputElementBaseProps & {
     onLoaded: OnRefsLoadedCallback,
     mediaElementStyle?: React.CSSProperties
   }) => ReactElement
+  renderAdditionalControls?: () => ReactElement
 }
 
 export type SelectableInputElementState = {
@@ -95,13 +96,13 @@ export class SelectableInputElement extends React.Component<SelectableInputEleme
   }
 
   render() {
-    const { selectionType, onLoaded, mediaElementStyle } = this.props
+    const { selectionType, onLoaded, mediaElementStyle, renderMediaElement, renderAdditionalControls } = this.props
     const { src } = this.state
     return (
       <Container>
-        <ImageContainer>
-          { this.props.renderMediaElement({ src, onLoaded, mediaElementStyle }) }
-        </ImageContainer>
+        <MediaElement>
+          { renderMediaElement({ src, onLoaded, mediaElementStyle }) }
+        </MediaElement>
         <SideBySide>
         {
           (selectionType === SelectionTypes.SELECT || selectionType === SelectionTypes.BOTH)
@@ -133,6 +134,7 @@ export class SelectableInputElement extends React.Component<SelectableInputEleme
               </label>
             </Margin>
         }
+        { renderAdditionalControls ? renderAdditionalControls() : null }
         </SideBySide>
       </Container>
     )
