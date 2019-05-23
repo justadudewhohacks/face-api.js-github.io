@@ -14,6 +14,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
 `
+
 const MediaElement = styled.div`
   display: flex;
   align-items: center;
@@ -41,6 +42,7 @@ export type SelectableInputElementBaseProps = {
   initialSrc?: string
   selectionType?: SelectionTypes
   mediaElementStyle?: React.CSSProperties
+  getFps?: () => number
 }
 
 export type SelectableInputElementProps = SelectableInputElementBaseProps & {

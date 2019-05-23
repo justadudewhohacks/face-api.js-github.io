@@ -12,9 +12,10 @@ import { WebcamVideoWithOverlay } from './WebcamVideoWithOverlay';
 export type InputComponentProps = {
   inputType: InputType
   onLoaded: (refs: ImageWithOverlayRefs | VideoWithOverlayRefs) => any
+  getFps: () => number
 }
 
-export const InputComponent = ({ inputType, onLoaded }: InputComponentProps) => {
+export const InputComponent = ({ inputType, onLoaded, getFps }: InputComponentProps) => {
   if (inputType === InputType.IMAGE) {
     return (
       <SelectableImage
@@ -36,6 +37,7 @@ export const InputComponent = ({ inputType, onLoaded }: InputComponentProps) => 
         selectionType={SelectionTypes.BOTH}
         mediaElementStyle={{ maxWidth: 800, maxHeight: 500 }}
         mediaElementId="video"
+        getFps={getFps}
       />
     )
   }

@@ -6,12 +6,11 @@ import { getFaceDetectorNameFromOptions } from './const';
 import { FaceDetectorSelectionDialog } from './FaceDetectorSelectionDialog';
 
 export interface FaceDetectorSelectionProps {
-  initialFaceDetectionOptions: faceapi.FaceDetectionOptions
+  faceDetectionOptions: faceapi.FaceDetectionOptions
   onFaceDetectionOptionsChanged: (options: faceapi.FaceDetectionOptions) => any
 }
 
 export interface FaceDetectorSelectionState {
-  faceDetectionOptions: faceapi.FaceDetectionOptions
   isDialogOpen: boolean
 }
 
@@ -19,14 +18,13 @@ export class FaceDetectorSelection extends React.Component<FaceDetectorSelection
   constructor(props: FaceDetectorSelectionProps) {
     super(props)
     this.state = {
-      faceDetectionOptions: props.initialFaceDetectionOptions,
       isDialogOpen: false
     }
   }
 
   onCloseDialog = (faceDetectionOptions: faceapi.FaceDetectionOptions) => {
-    this.setState({ faceDetectionOptions, isDialogOpen: false })
-    if (this.state.faceDetectionOptions !== faceDetectionOptions) {
+    this.setState({ isDialogOpen: false })
+    if (this.props.faceDetectionOptions !== faceDetectionOptions) {
       this.props.onFaceDetectionOptionsChanged(faceDetectionOptions)
     }
   }
@@ -39,7 +37,7 @@ export class FaceDetectorSelection extends React.Component<FaceDetectorSelection
     const dialog = this.state.isDialogOpen
       ?
         <FaceDetectorSelectionDialog
-          initialFaceDetectionOptions={this.state.faceDetectionOptions}
+          initialFaceDetectionOptions={this.props.faceDetectionOptions}
           onClose={this.onCloseDialog}
         />
       : null
@@ -48,7 +46,7 @@ export class FaceDetectorSelection extends React.Component<FaceDetectorSelection
       <div>
         { dialog }
         <Mui.Button variant='outlined' onClick={this.onOpenDialog}>
-          { getFaceDetectorNameFromOptions(this.state.faceDetectionOptions) }
+          { getFaceDetectorNameFromOptions(this.props.faceDetectionOptions) }
         </Mui.Button>
       </div>
     )

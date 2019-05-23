@@ -36,21 +36,25 @@ export type BasePageState = {
   isFaceDetectorLoaded: boolean
   areModelsLoaded: boolean
   inputType: InputType
+  currentFps: number
   mediaElement?: MediaElement
   overlay?: HTMLCanvasElement
 }
 
 export class BasePage extends React.Component<BasePageProps, BasePageState> {
   state = {
-    faceDetectionOptions: new faceapi.TinyFaceDetectorOptions(),
+    faceDetectionOptions: new faceapi.SsdMobilenetv1Options(),
     isFaceDetectorLoaded: false,
     areModelsLoaded: false,
-    inputType: InputType.IMAGE
+    inputType: InputType.IMAGE,
+    currentFps: 0
   }
   processId: number
+  fpsMeter: number[] = []
 
   async loadFaceDetector(detectorName: string) {
-    await getFaceDetectionNetFromName(detectorName).loadFromUri(MODELS_URI)
+    const faceDetector = getFaceDetectionNetFromName(detectorName)
+    faceDetector.isLoaded || faceDetector.loadFromUri(MODELS_URI)
     this.setState({ isFaceDetectorLoaded: true })
   }
 
@@ -63,36 +67,82 @@ export class BasePage extends React.Component<BasePageProps, BasePageState> {
     this.setState({ areModelsLoaded: true })
   }
 
-  onFaceDetectionOptionsChanged = async (faceDetectionOptions: faceapi.FaceDetectionOptions) => {
+  changeFaceDetector = async (faceDetectionOptions: faceapi.FaceDetectionOptions) => {
     const detectorName = getFaceDetectorNameFromOptions(faceDetectionOptions)
     const prevDetectorName = getFaceDetectorNameFromOptions(this.state.faceDetectionOptions)
     if (detectorName !== prevDetectorName) {
       await this.loadFaceDetector(detectorName)
-      getFaceDetectionNetFromName(prevDetectorName).dispose()
+      //getFaceDetectionNetFromName(prevDetectorName).dispose()
     }
+  }
+
+  onFaceDetectionOptionsChanged = async (faceDetectionOptions: faceapi.FaceDetectionOptions) => {
+    await this.changeFaceDetector(faceDetectionOptions)
     this.setState({ faceDetectionOptions })
   }
 
-  processFrames = async (processId: number) => {
-    await this.props.processInputs(this.state)
-    if (this.processId === processId) {
-      setTimeout(this.processFrames.bind(this, processId), 16)
+  onInputTypeChanged = async (inputType: InputType) => {
+    this.setState({ inputType })
+    const faceDetectionOptions = inputType === InputType.IMAGE
+      ? new faceapi.SsdMobilenetv1Options()
+      : (
+        inputType === InputType.WEBCAM
+          ? new faceapi.TinyFaceDetectorOptions({ inputSize: 160 })
+          : new faceapi.TinyFaceDetectorOptions()
+      )
+
+    await this.changeFaceDetector(faceDetectionOptions)
+    this.setState({ faceDetectionOptions })
+  }
+
+  updateFpsMeter = (ts: number) => {
+    this.fpsMeter = [ts, ...this.fpsMeter].slice(0, 30)
+  }
+
+  getFps = () => {
+    const avgTimeInMs = this.fpsMeter.reduce((total, t) => total + t) / this.fpsMeter.length
+    return (1000 / avgTimeInMs) || null
+  }
+
+  processInputs = async () => {
+    const detector = getFaceDetectionNetFromName(getFaceDetectorNameFromOptions(this.state.faceDetectionOptions))
+    if (!detector.isLoaded) {
+      setTimeout(this.processInputs, 100)
+      return
     }
+    await this.props.processInputs(this.state)
+  }
+
+  processFrames = async (processId: number) => {
+    const ts = Date.now()
+    await this.processInputs()
+    this.updateFpsMeter(Date.now() - ts)
+    if (this.processId !== null && this.processId === processId) {
+      setTimeout(this.processFrames.bind(this, processId), 0)
+    }
+  }
+
+  startProcessingFrames = () => {
+    this.processId = Date.now()
+    this.processFrames(this.processId)
   }
 
   componentDidUpdate() {
     if (this.state.inputType === InputType.IMAGE) {
       this.processId = null
-      this.props.processInputs(this.state)
+      this.processInputs()
       return
     }
 
-    this.processId = Date.now()
-    this.processFrames(this.processId)
+    this.startProcessingFrames()
   }
 
   componentDidMount() {
     this.loadModels()
+  }
+
+  componentWillUnmount() {
+    this.processId = null
   }
 
   public render() {
@@ -107,7 +157,7 @@ export class BasePage extends React.Component<BasePageProps, BasePageState> {
           <div>
             <InputTypeTabs
               inputType={this.state.inputType}
-              onChange={inputType => this.setState({ inputType })}
+              onChange={this.onInputTypeChanged}
             />
           </div>
         </AppBarContainer>
@@ -115,7 +165,7 @@ export class BasePage extends React.Component<BasePageProps, BasePageState> {
           <SideBySide alignItems="baseline">
             <Mui.FormControl>
               <FaceDetectorSelection
-                initialFaceDetectionOptions={this.state.faceDetectionOptions}
+                faceDetectionOptions={this.state.faceDetectionOptions}
                 onFaceDetectionOptionsChanged={this.onFaceDetectionOptionsChanged}
               />
             </Mui.FormControl>
@@ -126,6 +176,7 @@ export class BasePage extends React.Component<BasePageProps, BasePageState> {
         <InputComponent
           inputType={this.state.inputType}
           onLoaded={refs => this.setState(refs)}
+          getFps={this.getFps}
         />
       </Root>
     )
