@@ -23,7 +23,7 @@
     "face-api.js": "^0.20.0",
     "face-api.js-react": "./face-api.js-react",
     "fs-extra": "^7.0.1",
-    "gatsby": "^2.3.22",
+    "gatsby": "^2.32.13",
     "gatsby-link": "^2.0.16",
     "gatsby-plugin-google-analytics": "^2.0.18",
     "gatsby-plugin-styled-components": "^3.0.7",
